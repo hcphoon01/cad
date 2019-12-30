@@ -1,14 +1,115 @@
-@extends('layouts.home')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@section('content')
-<div class="center">
-    <h1>Welcome to EmergencyRP</h1>
-    <div class="row justify-content-md-center">
-        <a class="btn btn-primary btn-lg" href="{{route('register')}}" role="button">Apply Now</a>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ config('app.name') }}</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
+    <!-- Styles -->
+    <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <style>
+        html,
+        body {
+            color: #eee;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 200;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            background: url('img/landing_bg.png') no-repeat;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+        }
+
+        .full-height {
+            height: 100vh;
+        }
+
+        .flex-center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .position-ref {
+            position: relative;
+        }
+
+        .top-right {
+            position: absolute;
+            right: 10px;
+            top: 18px;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 84px;
+        }
+
+        .text-links>a {
+            color: #ccc;
+            padding: 0 25px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            -webkit-text-stroke: 0.5px #eee;
+        }
+
+        .icon-links>a {
+            color: #ccc;
+            margin: 0 25px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .m-b-md {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a>
+        <a class="navbar-brand" href="{{route('landing')}}">EmergencyRP</a>
+    </nav>
+    <div class="bg-image">
+        <div class="flex-center position-ref full-height">
+            <div class="content">
+                <div class="title m-b-md">
+                    Welcome to EmergencyRP
+                </div>
+
+                <div class="text-links">
+                    <div class="row justify-content-md-center">
+                        <a class="btn btn-primary btn-lg" href="{{route('register')}}" role="button">Apply Now</a>
+                    </div>
+                    <br>
+                    <div class="row justify-content-md-center">
+                        <a class="btn btn-primary" href="{{route('login')}}" role="button">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <br>
-    <div class="row justify-content-md-center">
-        <a class="btn btn-primary" href="{{route('login')}}" role="button">Log In</a>
-    </div>
-</div>
-@endsection
+</body>
+
+</html>
