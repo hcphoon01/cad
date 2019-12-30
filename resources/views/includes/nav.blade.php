@@ -15,8 +15,8 @@
       <li class="nav-item">
         <a class="nav-link" href="#">CAD</a>
       </li>
-      <li class="nav-item {{ Request::is('civillian') ? 'active' : '' }}">
-        <a class="nav-link" href="#">Civillian</a>
+      <li class="nav-item {{ Request::is('civilian') ? 'active' : '' }}">
+        <a class="nav-link" href="#">Civilian</a>
       </li>
       @can('Assign Duty Listings')
       <li class="nav-item {{ Request::is('listing') ? 'active' : '' }}">
@@ -34,7 +34,13 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Action</a>
           <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            {{ __('Logout') }}
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
         </div>
       </li>
     </ul>

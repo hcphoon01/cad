@@ -9,11 +9,10 @@
     <title>{{ config('app.name', 'EmergencyRP') }}</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a> 
         <a class="navbar-brand" href="#">EmergencyRP</a>
     </nav>

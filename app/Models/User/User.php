@@ -53,4 +53,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\Models\User\Applicant');
     }
+
+    /**
+     * Get the display name for user
+     * 
+     * @return string
+     */
+    public function displayName()
+    {
+        $first_name = substr($this->name, 0, 1);
+        $last_name = explode(' ', $this->name)[1];
+        return $first_name . "." . $last_name;
+    }
 }
