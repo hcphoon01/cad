@@ -1,2 +1,2 @@
-# erp
+# EmergencyRP
 A website for EmergencyRP
