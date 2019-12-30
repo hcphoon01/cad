@@ -12,7 +12,7 @@ class UserData extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'shoulder_number', 'qualifications', 'last_patrol',
+        'user_id', 'shoulder_number', 'qualifications', 'last_patrol', 'gc_commendation',
     ];
 
     /**
@@ -22,6 +22,7 @@ class UserData extends Model
      */
     protected $casts = [
         'qualifications' => 'array',
+        'gc_commendation' => 'boolean',
     ];
 
     /**

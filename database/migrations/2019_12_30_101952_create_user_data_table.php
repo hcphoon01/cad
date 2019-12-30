@@ -19,6 +19,7 @@ class CreateUserDataTable extends Migration
             $table->string('shoulder_number', 4)->nullable();
             $table->text('qualifications')->nullable();
             $table->timestamp('last_patrol')->nullable();
+            $table->boolean('gc_commendation')->nullable()->default(false);
             $table->timestamps();
         });
 
