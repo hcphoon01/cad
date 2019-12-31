@@ -80,5 +80,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function qualifications()
     {
         return $this->belongsToMany('App\Models\Helper\Qualification', 'qualification_user', 'user_id', 'qualification_id');
-    }
+	}
+	
+	/**
+	 * Get the unit the user is assigned to
+	 */
+	public function unit()
+	{
+		return $this->belongsTo('App\FMS\Unit');
+	}
 }

@@ -24,6 +24,4 @@ Route::group([
     Route::post('announcement/create', 'Admin\AnnouncementController@create')->name('create-announcement');
 });
 
-Route::get('/fms', 'FMS\CADController@index');
-
 Route::get('/fms/{vue_capture?}', 'FMS\CADController@index')->where('vue_capture', '[\/\w\.-]*')->middleware('auth');

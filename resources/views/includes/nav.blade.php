@@ -13,7 +13,7 @@
         <a class="nav-link " href="#">MDT</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">CAD</a>
+        <a class="nav-link" href="{{url('/fms/cad')}}">CAD</a>
       </li>
       <li class="nav-item {{ Request::is('civilian') ? 'active' : '' }}">
         <a class="nav-link" href="#">Civilian</a>
