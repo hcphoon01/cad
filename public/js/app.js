@@ -11939,6 +11939,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -78187,7 +78190,12 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row no-gutters" }, [
       _c("div", { staticClass: "col border" }, [
-        _c("h6", { staticClass: "pl-2" }, [_vm._v("Assigned: G101")])
+        _c("h6", { staticClass: "pl-2" }, [
+          _vm._v("Assigned: \n                              "),
+          _c("span", { staticClass: "text-success" }, [_vm._v("TJ1")]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [_vm._v("903")])
+        ])
       ])
     ])
   },

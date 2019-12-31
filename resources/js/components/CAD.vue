@@ -200,7 +200,10 @@
                           </div>
                           <div class="row no-gutters">
                             <div class="col border">
-                              <h6 class="pl-2">Assigned: G101</h6>
+                              <h6 class="pl-2">Assigned: 
+                                <span class="text-success">TJ1</span>
+                                <span class="text-secondary">903</span>
+                              </h6>
                             </div>
                           </div>
                           <div class="row no-gutters pb-4">
