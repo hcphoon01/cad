@@ -73,4 +73,12 @@ class User extends Authenticatable implements MustVerifyEmail
         $last_name = explode(' ', $this->name)[1];
         return $first_name . "." . $last_name;
     }
+
+    /**
+     * Get the users qualifications
+     */
+    public function qualifications()
+    {
+        return $this->belongsToMany('App\Models\Helper\Qualification', 'qualification_user', 'user_id', 'qualification_id');
+    }
 }

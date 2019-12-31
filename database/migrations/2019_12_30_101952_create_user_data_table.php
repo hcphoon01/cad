@@ -18,7 +18,6 @@ class CreateUserDataTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('shoulder_number', 4)->nullable();
             $table->unsignedBigInteger('division_id')->nullable();
-            $table->text('qualifications')->nullable();
             $table->timestamp('last_patrol')->nullable();
             $table->boolean('gc_commendation')->nullable()->default(false);
             $table->timestamps();

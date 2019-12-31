@@ -13,11 +13,12 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a> 
+        <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a>
         <a class="navbar-brand" href="{{route('landing')}}">EmergencyRP</a>
     </nav>
     <main class="py-4 container">
         @yield('content')
     </main>
 </body>
+
 </html>

@@ -13,14 +13,14 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id='app'>
         @include('includes.nav')
         <main class="py-4 container-fluid">
             @yield('content')
         </main>
     </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="{{asset('js/app.js')}}"></script>
     @yield('scripts')
 
     @yield('footer')
