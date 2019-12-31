@@ -17,12 +17,14 @@ class CreateEventParticipantsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('event_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('division_id');
             $table->timestamps();
         });
 
         Schema::table('event_participants', function (Blueprint $table) {
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
         });
     }
 

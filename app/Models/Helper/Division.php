@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Event;
+namespace App\Models\Helper;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EventParticipant extends Model
+class Division extends Model
 {
     //
 }

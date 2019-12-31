@@ -17,6 +17,7 @@ class CreateUserDataTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('shoulder_number', 4)->nullable();
+            $table->unsignedBigInteger('division_id')->nullable();
             $table->text('qualifications')->nullable();
             $table->timestamp('last_patrol')->nullable();
             $table->boolean('gc_commendation')->nullable()->default(false);
@@ -25,6 +26,7 @@ class CreateUserDataTable extends Migration
 
         Schema::table('user_data', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
         });
     }
 
