@@ -20,19 +20,20 @@
             </div>
             <ul class="list-group list-group-flush collapse show" id="unitList">
               <li class="list-group-item">
-                <div class="card shadow">
+                <div class="card shadow bg-success">
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
                         <h3>G101</h3>
+                        <p>Available</p>
                         <div>
-                          <font-awesome-icon icon="user" /> R.Buckland
+                          <font-awesome-icon icon="user" />&nbsp;R.Buckland
                         </div>
                         <div>
-                          <font-awesome-icon icon="user" /> R.Langdon
+                          <font-awesome-icon icon="user" />&nbsp;R.Langdon
                         </div>
                         <div>
-                          <font-awesome-icon icon="car" /> GX69 MJH (GC)
+                          <font-awesome-icon icon="car" />&nbsp;GX69 MJH (GC)
                         </div>
                       </div>
                       <div class="col">
@@ -44,21 +45,47 @@
                 </div>
               </li>
               <li class="list-group-item">
-                <div class="card shadow">
+                <div class="card shadow bg-warning">
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
                         <h3>TJ1</h3>
+                        <p>En-Route</p>
                         <div>
-                          <font-awesome-icon icon="user" /> D.Pickard
+                          <font-awesome-icon icon="user" />&nbsp;D.Pickard
                         </div>
                         <div>
-                          <font-awesome-icon icon="car" /> GX69 BNT (X5)
+                          <font-awesome-icon icon="car" />&nbsp;GX69 BNT (X5)
                         </div>
                       </div>
                       <div class="col">
                         <span class="badge badge-pill badge-primary">Tactical</span>
                         <span class="badge badge-pill badge-danger">Firearms</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="card shadow bg-secondary">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h3>903</h3>
+                        <p>At Scene</p>
+                        <div>
+                          <font-awesome-icon icon="user" />&nbsp;C.McGarel
+                        </div>
+                        <div>
+                          <font-awesome-icon icon="user" />&nbsp;L.Livermore
+                        </div>
+                        <div>
+                          <font-awesome-icon icon="car" />&nbsp;GX69 OLT (Focus)
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="badge badge-pill badge-primary">Response</span>
+                        <span class="badge badge-pill badge-warning">Taser</span>
                       </div>
                     </div>
                   </div>
@@ -74,7 +101,11 @@
                 <a class="btn btn-primary" href="#" role="button">Create CAD</a>
               </div>
               <div class="px-2">
-                <button type="button" class="btn btn-primary">Start Pursuit Timer</button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  v-on:click="triggerTimer"
+                >Start/Stop Pursuit Timer</button>
               </div>
               <div class="vw-10 px-2">
                 <input
@@ -82,7 +113,7 @@
                   class="form-control"
                   name="timer"
                   id="timer"
-                  placeholder="04:34"
+                  :placeholder="time"
                   readonly
                 />
               </div>
@@ -186,8 +217,20 @@
                         </div>
                         <div class="col">
                           <div class="card">
-                            <div class="card-header">CAD Remarks</div>
-                            <table class="table table-sm">
+                            <div class="card-header">
+                              CAD Remarks
+                              <a
+                                role="button"
+                                data-toggle="collapse"
+                                data-target="#remarks"
+                                aria-expanded="true"
+                                aria-controls="remarks"
+                                class="float-right"
+                              >
+                                <font-awesome-icon icon="window-minimize" />
+                              </a>
+                            </div>
+                            <table class="table table-sm collapse show" id="remarks">
                               <thead>
                                 <tr></tr>
                                 <tr></tr>
@@ -206,6 +249,15 @@
                                 </tr>
                               </tbody>
                             </table>
+                            <div class="form-group px-3">
+                              <input
+                                class="form-control form-inline"
+                                type="text"
+                                name="remark"
+                                id="remark"
+                                placeholder="Type to add a remark"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -245,10 +297,17 @@
                     <tbody>
                       <tr v-on:click="clickList()">
                         <td>20200101-0002</td>
-                        <td>Immediate</td>
+                        <td class="bg-danger text-white">Immediate</td>
                         <td>INC2</td>
                         <td>Some more memes have been made</td>
                         <td>Grove Street</td>
+                      </tr>
+                      <tr v-on:click="clickList()">
+                        <td>20200101-0003</td>
+                        <td class="bg-warning text-dark">Standard</td>
+                        <td>INC3</td>
+                        <td>Even more memes have been made</td>
+                        <td>Airportos</td>
                       </tr>
                     </tbody>
                   </table>
@@ -264,7 +323,81 @@
 
 <script>
 export default {
+  data: function() {
+    return {
+      time: "00:00:00:000"
+    };
+  },
+  mounted: function() {
+    (this.timeBegan = null),
+      (this.timeStopped = null),
+      (this.stoppedDuration = 0),
+      (this.started = null),
+      (this.running = false);
+  },
+  destroyed: function() {
+    this.reset();
+  },
   methods: {
+    triggerTimer: function() {
+      if (this.running) return this.stop();
+      if (this.timeStopped) return this.reset();
+      return this.start();
+    },
+    start: function() {
+      if (this.running) return;
+
+      if (this.timeBegan === null) {
+        this.reset();
+        this.timeBegan = new Date();
+      }
+      if (this.timeStopped !== null) {
+        this.stoppedDuration += new Date() - this.timeStopped;
+      }
+
+      this.started = setInterval(this.clockRunning, 10);
+      this.running = true;
+    },
+    stop: function() {
+      this.running = false;
+      this.timeStopped = new Date();
+      clearInterval(this.started);
+    },
+    reset: function() {
+      this.running = false;
+      clearInterval(this.started);
+      this.stoppedDuration = 0;
+      this.timeBegan = null;
+      this.timeStopped = null;
+      this.time = "00:00:00.000";
+    },
+    clockRunning: function() {
+      var currentTime = new Date(),
+        timeElapsed = new Date(
+          currentTime - this.timeBegan - this.stoppedDuration
+        ),
+        hour = timeElapsed.getUTCHours(),
+        min = timeElapsed.getUTCMinutes(),
+        sec = timeElapsed.getUTCSeconds(),
+        ms = timeElapsed.getUTCMilliseconds();
+
+      this.time =
+        this.zeroPrefix(hour, 2) +
+        ":" +
+        this.zeroPrefix(min, 2) +
+        ":" +
+        this.zeroPrefix(sec, 2) +
+        "." +
+        this.zeroPrefix(ms, 3);
+    },
+
+    zeroPrefix: function(num, digit) {
+      var zero = "";
+      for (var i = 0; i < digit; i++) {
+        zero += "0";
+      }
+      return (zero + num).slice(-digit);
+    },
     clickList: function() {
       console.log("Clicked on a cad");
     }
@@ -273,4 +406,8 @@ export default {
 </script>
 
 <style scoped>
+.scroll {
+  max-height: 100px;
+  overflow-y: auto;
+}
 </style>

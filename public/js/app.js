@@ -11878,8 +11878,129 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      time: "00:00:00:000"
+    };
+  },
+  mounted: function mounted() {
+    this.timeBegan = null, this.timeStopped = null, this.stoppedDuration = 0, this.started = null, this.running = false;
+  },
+  destroyed: function destroyed() {
+    this.reset();
+  },
   methods: {
+    triggerTimer: function triggerTimer() {
+      if (this.running) return this.stop();
+      if (this.timeStopped) return this.reset();
+      return this.start();
+    },
+    start: function start() {
+      if (this.running) return;
+
+      if (this.timeBegan === null) {
+        this.reset();
+        this.timeBegan = new Date();
+      }
+
+      if (this.timeStopped !== null) {
+        this.stoppedDuration += new Date() - this.timeStopped;
+      }
+
+      this.started = setInterval(this.clockRunning, 10);
+      this.running = true;
+    },
+    stop: function stop() {
+      this.running = false;
+      this.timeStopped = new Date();
+      clearInterval(this.started);
+    },
+    reset: function reset() {
+      this.running = false;
+      clearInterval(this.started);
+      this.stoppedDuration = 0;
+      this.timeBegan = null;
+      this.timeStopped = null;
+      this.time = "00:00:00.000";
+    },
+    clockRunning: function clockRunning() {
+      var currentTime = new Date(),
+          timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration),
+          hour = timeElapsed.getUTCHours(),
+          min = timeElapsed.getUTCMinutes(),
+          sec = timeElapsed.getUTCSeconds(),
+          ms = timeElapsed.getUTCMilliseconds();
+      this.time = this.zeroPrefix(hour, 2) + ":" + this.zeroPrefix(min, 2) + ":" + this.zeroPrefix(sec, 2) + "." + this.zeroPrefix(ms, 3);
+    },
+    zeroPrefix: function zeroPrefix(num, digit) {
+      var zero = "";
+
+      for (var i = 0; i < digit; i++) {
+        zero += "0";
+      }
+
+      return (zero + num).slice(-digit);
+    },
     clickList: function clickList() {
       console.log("Clicked on a cad");
     }
@@ -45206,6 +45327,25 @@ exports.push([module.i, "/*!\n * Bootstrap v4.4.1 (https://getbootstrap.com/)\n 
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.scroll[data-v-04d67eaa] {\r\n  max-height: 100px;\r\n  overflow-y: auto;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
@@ -76692,6 +76832,36 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -77369,11 +77539,13 @@ var render = function() {
               },
               [
                 _c("li", { staticClass: "list-group-item" }, [
-                  _c("div", { staticClass: "card shadow" }, [
+                  _c("div", { staticClass: "card shadow bg-success" }, [
                     _c("div", { staticClass: "card-body" }, [
                       _c("div", { staticClass: "row" }, [
                         _c("div", { staticClass: "col" }, [
                           _c("h3", [_vm._v("G101")]),
+                          _vm._v(" "),
+                          _c("p", [_vm._v("Available")]),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -77381,7 +77553,7 @@ var render = function() {
                               _c("font-awesome-icon", {
                                 attrs: { icon: "user" }
                               }),
-                              _vm._v(" R.Buckland\n                      ")
+                              _vm._v(" R.Buckland\n                      ")
                             ],
                             1
                           ),
@@ -77392,7 +77564,7 @@ var render = function() {
                               _c("font-awesome-icon", {
                                 attrs: { icon: "user" }
                               }),
-                              _vm._v(" R.Langdon\n                      ")
+                              _vm._v(" R.Langdon\n                      ")
                             ],
                             1
                           ),
@@ -77403,7 +77575,7 @@ var render = function() {
                               _c("font-awesome-icon", {
                                 attrs: { icon: "car" }
                               }),
-                              _vm._v(" GX69 MJH (GC)\n                      ")
+                              _vm._v(" GX69 MJH (GC)\n                      ")
                             ],
                             1
                           )
@@ -77416,11 +77588,13 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("li", { staticClass: "list-group-item" }, [
-                  _c("div", { staticClass: "card shadow" }, [
+                  _c("div", { staticClass: "card shadow bg-warning" }, [
                     _c("div", { staticClass: "card-body" }, [
                       _c("div", { staticClass: "row" }, [
                         _c("div", { staticClass: "col" }, [
                           _c("h3", [_vm._v("TJ1")]),
+                          _vm._v(" "),
+                          _c("p", [_vm._v("En-Route")]),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -77428,7 +77602,7 @@ var render = function() {
                               _c("font-awesome-icon", {
                                 attrs: { icon: "user" }
                               }),
-                              _vm._v(" D.Pickard\n                      ")
+                              _vm._v(" D.Pickard\n                      ")
                             ],
                             1
                           ),
@@ -77439,13 +77613,64 @@ var render = function() {
                               _c("font-awesome-icon", {
                                 attrs: { icon: "car" }
                               }),
-                              _vm._v(" GX69 BNT (X5)\n                      ")
+                              _vm._v(" GX69 BNT (X5)\n                      ")
                             ],
                             1
                           )
                         ]),
                         _vm._v(" "),
                         _vm._m(1)
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "list-group-item" }, [
+                  _c("div", { staticClass: "card shadow bg-secondary" }, [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col" }, [
+                          _c("h3", [_vm._v("903")]),
+                          _vm._v(" "),
+                          _c("p", [_vm._v("At Scene")]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            [
+                              _c("font-awesome-icon", {
+                                attrs: { icon: "user" }
+                              }),
+                              _vm._v(" C.McGarel\n                      ")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            [
+                              _c("font-awesome-icon", {
+                                attrs: { icon: "user" }
+                              }),
+                              _vm._v(" L.Livermore\n                      ")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            [
+                              _c("font-awesome-icon", {
+                                attrs: { icon: "car" }
+                              }),
+                              _vm._v(
+                                " GX69 OLT (Focus)\n                      "
+                              )
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(2)
                       ])
                     ])
                   ])
@@ -77456,7 +77681,40 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col" }, [
-          _vm._m(2),
+          _c("div", { staticClass: "row justify-content-between" }, [
+            _c("div", { staticClass: "d-flex" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "px-2" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.triggerTimer }
+                  },
+                  [_vm._v("Start/Stop Pursuit Timer")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vw-10 px-2" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "timer",
+                    id: "timer",
+                    placeholder: _vm.time,
+                    readonly: ""
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(4),
+            _vm._v(" "),
+            _vm._m(5)
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "row py-4" }, [
             _c("div", { staticClass: "col" }, [
@@ -77496,18 +77754,18 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "card" }, [
-                      _vm._m(3),
+                      _vm._m(6),
                       _vm._v(" "),
                       _c("div", { staticClass: "card-body" }, [
                         _c("div", { staticClass: "row" }, [
                           _c("div", { staticClass: "col-6 border" }, [
-                            _vm._m(4),
-                            _vm._v(" "),
-                            _vm._m(5),
-                            _vm._v(" "),
-                            _vm._m(6),
-                            _vm._v(" "),
                             _vm._m(7),
+                            _vm._v(" "),
+                            _vm._m(8),
+                            _vm._v(" "),
+                            _vm._m(9),
+                            _vm._v(" "),
+                            _vm._m(10),
                             _vm._v(" "),
                             _c("div", { staticClass: "row no-gutters pb-4" }, [
                               _c(
@@ -77552,7 +77810,38 @@ var render = function() {
                             ])
                           ]),
                           _vm._v(" "),
-                          _vm._m(8)
+                          _c("div", { staticClass: "col" }, [
+                            _c("div", { staticClass: "card" }, [
+                              _c("div", { staticClass: "card-header" }, [
+                                _vm._v(
+                                  "\n                            CAD Remarks\n                            "
+                                ),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "float-right",
+                                    attrs: {
+                                      role: "button",
+                                      "data-toggle": "collapse",
+                                      "data-target": "#remarks",
+                                      "aria-expanded": "true",
+                                      "aria-controls": "remarks"
+                                    }
+                                  },
+                                  [
+                                    _c("font-awesome-icon", {
+                                      attrs: { icon: "window-minimize" }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(11),
+                              _vm._v(" "),
+                              _vm._m(12)
+                            ])
+                          ])
                         ])
                       ])
                     ])
@@ -77602,7 +77891,7 @@ var render = function() {
                   },
                   [
                     _c("table", { staticClass: "table" }, [
-                      _vm._m(9),
+                      _vm._m(13),
                       _vm._v(" "),
                       _c("tbody", [
                         _c(
@@ -77617,7 +77906,9 @@ var render = function() {
                           [
                             _c("td", [_vm._v("20200101-0002")]),
                             _vm._v(" "),
-                            _c("td", [_vm._v("Immediate")]),
+                            _c("td", { staticClass: "bg-danger text-white" }, [
+                              _vm._v("Immediate")
+                            ]),
                             _vm._v(" "),
                             _c("td", [_vm._v("INC2")]),
                             _vm._v(" "),
@@ -77626,6 +77917,32 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("td", [_vm._v("Grove Street")])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "tr",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.clickList()
+                              }
+                            }
+                          },
+                          [
+                            _c("td", [_vm._v("20200101-0003")]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "bg-warning text-dark" }, [
+                              _vm._v("Standard")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("INC3")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v("Even more memes have been made")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("Airportos")])
                           ]
                         )
                       ])
@@ -77673,66 +77990,60 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-between" }, [
-      _c("div", { staticClass: "d-flex" }, [
-        _c("div", { staticClass: "pr-2" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { href: "#", role: "button" }
-            },
-            [_vm._v("Create CAD")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "px-2" }, [
-          _c(
-            "button",
-            { staticClass: "btn btn-primary", attrs: { type: "button" } },
-            [_vm._v("Start Pursuit Timer")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "vw-10 px-2" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              type: "text",
-              name: "timer",
-              id: "timer",
-              placeholder: "04:34",
-              readonly: ""
-            }
-          })
-        ])
+    return _c("div", { staticClass: "col" }, [
+      _c("span", { staticClass: "badge badge-pill badge-primary" }, [
+        _vm._v("Response")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "px-2" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-danger",
-            attrs: { role: "button", href: "#" }
-          },
-          [_vm._v("Book Off")]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "px-2" }, [
-        _c(
-          "span",
-          {
-            staticClass: "badge badge-pill badge-primary text-wrap",
-            staticStyle: { width: "8rem" }
-          },
-          [
-            _vm._v(
-              "\n              01/01/2020 19:44\n              H.Cameron Oscar 1\n            "
-            )
-          ]
-        )
+      _c("span", { staticClass: "badge badge-pill badge-warning" }, [
+        _vm._v("Taser")
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pr-2" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { href: "#", role: "button" }
+        },
+        [_vm._v("Create CAD")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "px-2" }, [
+      _c(
+        "a",
+        { staticClass: "btn btn-danger", attrs: { role: "button", href: "#" } },
+        [_vm._v("Book Off")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "px-2" }, [
+      _c(
+        "span",
+        {
+          staticClass: "badge badge-pill badge-primary text-wrap",
+          staticStyle: { width: "8rem" }
+        },
+        [
+          _vm._v(
+            "\n              01/01/2020 19:44\n              H.Cameron Oscar 1\n            "
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -77828,32 +78139,46 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("CAD Remarks")]),
+    return _c(
+      "table",
+      { staticClass: "table table-sm collapse show", attrs: { id: "remarks" } },
+      [
+        _c("thead", [_c("tr"), _vm._v(" "), _c("tr"), _vm._v(" "), _c("tr")]),
         _vm._v(" "),
-        _c("table", { staticClass: "table table-sm" }, [
-          _c("thead", [_c("tr"), _vm._v(" "), _c("tr"), _vm._v(" "), _c("tr")]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", { staticClass: "border" }, [
-              _c("td", [_vm._v("19:40:42")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Oscar 1")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("CAD Created")])
-            ]),
+        _c("tbody", [
+          _c("tr", { staticClass: "border" }, [
+            _c("td", [_vm._v("19:40:42")]),
             _vm._v(" "),
-            _c("tr", { staticClass: "border" }, [
-              _c("td", [_vm._v("19:40:45")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Oscar 1")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("G102 Attached")])
-            ])
+            _c("td", [_vm._v("Oscar 1")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("CAD Created")])
+          ]),
+          _vm._v(" "),
+          _c("tr", { staticClass: "border" }, [
+            _c("td", [_vm._v("19:40:45")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("Oscar 1")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("G102 Attached")])
           ])
         ])
-      ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group px-3" }, [
+      _c("input", {
+        staticClass: "form-control form-inline",
+        attrs: {
+          type: "text",
+          name: "remark",
+          id: "remark",
+          placeholder: "Type to add a remark"
+        }
+      })
     ])
   },
   function() {
@@ -93173,7 +93498,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CAD_vue_vue_type_template_id_04d67eaa_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CAD.vue?vue&type=template&id=04d67eaa&scoped=true& */ "./resources/js/components/CAD.vue?vue&type=template&id=04d67eaa&scoped=true&");
 /* harmony import */ var _CAD_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CAD.vue?vue&type=script&lang=js& */ "./resources/js/components/CAD.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& */ "./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -93181,7 +93508,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _CAD_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _CAD_vue_vue_type_template_id_04d67eaa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _CAD_vue_vue_type_template_id_04d67eaa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -93210,6 +93537,22 @@ component.options.__file = "resources/js/components/CAD.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CAD.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CAD.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CAD.vue?vue&type=style&index=0&id=04d67eaa&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CAD_vue_vue_type_style_index_0_id_04d67eaa_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
