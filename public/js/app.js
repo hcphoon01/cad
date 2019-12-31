@@ -11937,6 +11937,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -12003,6 +12005,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     clickList: function clickList() {
       console.log("Clicked on a cad");
+    },
+    addRemark: function addRemark(event) {
+      console.log(event.target.value);
+    },
+    assignUnit: function assignUnit(event) {
+      console.log(event.target.value);
     }
   }
 });
@@ -77763,7 +77771,37 @@ var render = function() {
                             _vm._v(" "),
                             _vm._m(8),
                             _vm._v(" "),
-                            _vm._m(9),
+                            _c("div", { staticClass: "row no-gutters" }, [
+                              _vm._m(9),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "col border" }, [
+                                _c("input", {
+                                  staticClass: "form-control input-lg",
+                                  attrs: {
+                                    type: "text",
+                                    name: "assignUnit",
+                                    id: "assignUnit"
+                                  },
+                                  on: {
+                                    keyup: function($event) {
+                                      if (
+                                        !$event.type.indexOf("key") &&
+                                        _vm._k(
+                                          $event.keyCode,
+                                          "enter",
+                                          13,
+                                          $event.key,
+                                          "Enter"
+                                        )
+                                      ) {
+                                        return null
+                                      }
+                                      return _vm.assignUnit($event)
+                                    }
+                                  }
+                                })
+                              ])
+                            ]),
                             _vm._v(" "),
                             _vm._m(10),
                             _vm._v(" "),
@@ -77839,7 +77877,34 @@ var render = function() {
                               _vm._v(" "),
                               _vm._m(11),
                               _vm._v(" "),
-                              _vm._m(12)
+                              _c("div", { staticClass: "form-group px-3" }, [
+                                _c("input", {
+                                  staticClass: "form-control form-inline",
+                                  attrs: {
+                                    type: "text",
+                                    name: "remark",
+                                    id: "remark",
+                                    placeholder: "Type to add a remark"
+                                  },
+                                  on: {
+                                    keyup: function($event) {
+                                      if (
+                                        !$event.type.indexOf("key") &&
+                                        _vm._k(
+                                          $event.keyCode,
+                                          "enter",
+                                          13,
+                                          $event.key,
+                                          "Enter"
+                                        )
+                                      ) {
+                                        return null
+                                      }
+                                      return _vm.addRemark($event)
+                                    }
+                                  }
+                                })
+                              ])
                             ])
                           ])
                         ])
@@ -77891,7 +77956,7 @@ var render = function() {
                   },
                   [
                     _c("table", { staticClass: "table" }, [
-                      _vm._m(13),
+                      _vm._m(12),
                       _vm._v(" "),
                       _c("tbody", [
                         _c(
@@ -78112,17 +78177,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row no-gutters" }, [
-      _c("div", { staticClass: "col border" }, [
-        _c("p", { staticClass: "pl-2" }, [_vm._v("Assign Units")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col border" }, [
-        _c("input", {
-          staticClass: "form-control input-lg",
-          attrs: { type: "text", name: "assignUnit", id: "assignUnit" }
-        })
-      ])
+    return _c("div", { staticClass: "col border" }, [
+      _c("p", { staticClass: "pl-2" }, [_vm._v("Assign Units")])
     ])
   },
   function() {
@@ -78164,22 +78220,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group px-3" }, [
-      _c("input", {
-        staticClass: "form-control form-inline",
-        attrs: {
-          type: "text",
-          name: "remark",
-          id: "remark",
-          placeholder: "Type to add a remark"
-        }
-      })
-    ])
   },
   function() {
     var _vm = this

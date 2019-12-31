@@ -194,6 +194,7 @@
                                 type="text"
                                 name="assignUnit"
                                 id="assignUnit"
+                                v-on:keyup.enter="assignUnit"
                               />
                             </div>
                           </div>
@@ -256,6 +257,7 @@
                                 name="remark"
                                 id="remark"
                                 placeholder="Type to add a remark"
+                                v-on:keyup.enter="addRemark"
                               />
                             </div>
                           </div>
@@ -400,6 +402,12 @@ export default {
     },
     clickList: function() {
       console.log("Clicked on a cad");
+    },
+    addRemark: function(event) {
+      console.log(event.target.value);
+    },
+    assignUnit: function(event) {
+      console.log(event.target.value);
     }
   }
 };
