@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav w-100">
       <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
-        <a class="nav-link" href="#">Home</a>
+      <a class="nav-link" href="{{route('home')}}">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link " href="#">MDT</a>

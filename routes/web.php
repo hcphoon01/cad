@@ -14,5 +14,12 @@
 Route::get('/', 'Home\HomeController@landing')->name('landing')->middleware('guest');
 
 Auth::routes(['verify' => true]);
-
 Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('auth');
+
+// gold command routes
+Route::group([
+    'as' => 'admin.',
+    'prefix' => 'admin'
+], function () {
+    Route::post('announcement/create', 'Admin\AnnouncementController@create')->name('create-announcement');
+});

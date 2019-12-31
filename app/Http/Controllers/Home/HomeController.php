@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Home;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\General\Announcement;
 
 class HomeController extends Controller
 {
     /**
-     * Show the application dashboard.
+     * Display the dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @returns \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('dashboard');
+        $announcements = Announcement::paginate(5);
+        return view('dashboard', [
+            'announcements' => $announcements
+        ]);
     }
 
     /**

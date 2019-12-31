@@ -55,6 +55,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * The announcements that belong to the user.
+     */
+    public function announcements()
+    {
+        return $this->hasMany('App\Models\General\Announcement', 'posted_by');
+    }
+
+    /**
      * Get the display name for user
      * 
      * @return string
