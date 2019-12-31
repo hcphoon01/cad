@@ -15,6 +15,9 @@ class CreateQualificationsTable extends Migration
     {
         Schema::create('qualifications', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->boolean('active')->default(true);
+            $table->string('type');
             $table->timestamps();
         });
     }

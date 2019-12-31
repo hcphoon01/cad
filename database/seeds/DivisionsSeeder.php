@@ -13,13 +13,41 @@ class DivisionsSeeder extends Seeder
     public function run()
     {
         $data = array(
-            array('name' => 'Neighbourhood Policing Team'),
-            array('name' => 'Roads Crime Team'),
-            array('name' => 'Tactical Firearms Team'),
-            array('name' => 'Fire & Rescue'),
-            array('name' => 'Ambulance Service'),
-            array('name' => 'Force Communications Hub'),
-            array('name' => 'Civilian Team'),
+            array(
+                'name' => 'Neighbourhood Policing Team',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Roads Crime Team',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Tactical Firearms Team',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Fire & Rescue',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Ambulance Service',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Force Communications Hub',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Civilian Team',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
         );
 
         DB::table('divisions')->insert($data);
