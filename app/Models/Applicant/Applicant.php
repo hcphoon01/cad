@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models\Applicant;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,5 +46,29 @@ class Applicant extends Model
         } elseif ($this->gc_review) {
             return '33';
         }
+    }
+
+    /**
+     * Return the text for the stage of the application process the applicant is.
+     */
+    public function applicationStageText()
+    {
+        if ($this->interview) {
+            return 'Congratulations, you have been accepted into EmergencyRP';
+        } elseif ($this->hr_review) {
+            return 'Congratulations, you have been invited for an interview.';
+        } elseif ($this->gc_review) {
+            return 'Your application is undergoing a review by HR';
+        } else {
+            return 'Your application is undergoing a review by Gold Command';
+        }
+    }
+
+    /**
+     * The application form the applicant filled out
+     */
+    public function form()
+    {
+        return $this->hasOne('App\Models\Applicant\Applicant');
     }
 }

@@ -26,7 +26,7 @@ Route::group([
 });
 
 Auth::routes(['verify' => true]);
-Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('auth');
+Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('role:Member');
 
 // admin routes
 Route::group([

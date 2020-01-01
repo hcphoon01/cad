@@ -16,6 +16,10 @@ class CreateApplicationFormsTable extends Migration
         Schema::create('application_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('applicant_id');
+            $table->string('dob');
+            $table->string('age');
+            $table->longText('join_reason');
+            $table->longText('previous_community');
             $table->unsignedBigInteger('division_id');
             $table->timestamps();
         });

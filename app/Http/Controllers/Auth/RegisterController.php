@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User\User;
 use Illuminate\Support\Str;
-use App\Models\User\Applicant;
+use App\Models\Applicant\Applicant;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;

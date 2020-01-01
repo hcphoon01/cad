@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\HR;
 
 use Illuminate\Http\Request;
-use App\Models\User\Applicant;
+use App\Models\Helper\Division;
+use App\Models\Applicant\Applicant;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Applicant\ApplicationForm;
 
 class ApplicationController extends Controller
 {
     /**
      * Return the application status page
+     * 
+     * @return \Illuminate\Http\Response
      */
     public function status()
     {
@@ -19,5 +23,49 @@ class ApplicationController extends Controller
         return view('application.status', [
             'applicant' => $applicant
         ]);
+    }
+
+    /**
+     * Return the form page
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function form()
+    {
+        $applicant = Applicant::where('id', Auth::user()->id)->first();
+        $divisions = Division::get();
+
+        return view('application.form', [
+            'applicant' => $applicant,
+            'divisions' => $divisions
+        ]);
+    }
+
+    /**
+     * Store a form
+     * 
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createForm(Request $request)
+    {
+        $request->validate([
+            'age' => 'required|numeric|min:13',
+            'dob' => 'required|date|before:-13 years|date_format:d/m/Y',
+            'join_reason' => 'required',
+            'previous_community' => 'required',
+            'division_id' => 'required|numeric|exists:divisions,id'
+        ]);
+
+        $applicationForm = new ApplicationForm();
+        $applicationForm->age = $request->age;
+        $applicationForm->dob = $request->dob;
+        $applicationForm->join_reason = $request->join_reason;
+        $applicationForm->division_id = $request->division_id;
+        $applicationForm->previous_community = $request->previous_community;
+        $applicationForm->save();
+
+        return redirect()->route('application.status');
     }
 }
