@@ -10,7 +10,7 @@
                 </div>
                 <div class="card-body">
                     <div class="card-text">
-                        <form action="post" class="form">
+                        <form class="form" action="{{route('application.create-form')}}" method="POST">
                             @csrf
                             @method('POST')
                             <div class="form-group">
@@ -29,13 +29,28 @@
                             </div>
                             <div class="form-group">
                                 <label for="age">Age</label>
-                                <input type="text" class="form-control" name="age" id="age"
-                                    placeholder="Enter your age">
-                                <small id="ageHelp" class="form-text text-muted">You must be over 13 to join.</small>
+                                <input type="text" class="form-control {{ $errors->has('age') ? 'border-danger' : '' }}"
+                                    name="age" id="age" placeholder="Enter your age">
+                                <small id="ageHelp"
+                                    class="form-text {{ $errors->has('age') ? 'text-danger' : 'text-muted' }}">You must
+                                    be over 13 to join.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input class="form-control {{ $errors->has('dob') ? 'border-danger' : '' }}" type="date"
+                                    id="dob" name="dob" placeholder="dd/mm/yyy">
+                                <small id="ageHelp" class="form-text text-muted">You must
+                                    be over 13 to join.</small>
+                                @if($errors->has('dob'))
+                                <p class="help text-danger">
+                                    {{ $errors->first('dob') }}
+                                </p>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="division">Division</label>
-                                <select id="division" class="form-control">
+                                <select id="division" name="division"
+                                    class="form-control {{ $errors->has('division') ? 'border-danger' : '' }}">
                                     <option selected>Choose a Division...</option>
                                     @foreach ($divisions as $division)
                                     @if ($division->is_open)
@@ -49,15 +64,35 @@
                                     @endif
                                     @endforeach
                                 </select>
+                                @if($errors->has('division'))
+                                <p class="help text-danger">
+                                    {{ $errors->first('division') }}
+                                </p>
+                                @endif
                             </div>
                             <div class="form-group">
-                                <label for="joinReason">Why would you like to join EmergencyRP?</label>
-                                <textarea class="form-control" id="join_eason" rows="3"></textarea>
+                                <label for="join_reason">Why would you like to join EmergencyRP?</label>
+                                <textarea class="form-control {{ $errors->has('join_reason') ? 'border-danger' : '' }}"
+                                    id="join_reason" rows="3" name="join_reason"></textarea>
+                                @if($errors->has('join_reason'))
+                                <p class="help text-danger">
+                                    {{ $errors->first('join_reason') }}
+                                </p>
+                                @endif
                             </div>
                             <div class="form-group">
-                                <label for="previousCommunity">What roleplay communities have you been in previously? Include any training and positions of responsability, if applicable.</label>
-                                <textarea class="form-control" id="previous_community" rows="3"></textarea>
+                                <label for="previousCommunity">What roleplay communities have you been in previously?
+                                    Include any training and positions of responsibility, if applicable.</label>
+                                <textarea
+                                    class="form-control {{ $errors->has('previous_community') ? 'border-danger' : '' }}"
+                                    id="previous_community" rows="3" name="previous_community"></textarea>
+                                @if($errors->has('previous_community'))
+                                <p class="help text-danger">
+                                    {{ $errors->first('previous_community') }}
+                                </p>
+                                @endif
                             </div>
+                            <button type="submit" class="btn btn-primary">Submit Application</button>
                         </form>
                     </div>
                 </div>

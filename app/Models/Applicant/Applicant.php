@@ -59,8 +59,10 @@ class Applicant extends Model
             return 'Congratulations, you have been invited for an interview.';
         } elseif ($this->gc_review) {
             return 'Your application is undergoing a review by HR';
-        } else {
+        } elseif ($this->form) {
             return 'Your application is undergoing a review by Gold Command';
+        } else {
+            return 'You have not yet submitted an application form. Please click the button below to get started.';
         }
     }
 
@@ -69,6 +71,6 @@ class Applicant extends Model
      */
     public function form()
     {
-        return $this->hasOne('App\Models\Applicant\Applicant');
+        return $this->hasOne('App\Models\Applicant\ApplicationForm');
     }
 }

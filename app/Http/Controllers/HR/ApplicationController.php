@@ -52,20 +52,21 @@ class ApplicationController extends Controller
     {
         $request->validate([
             'age' => 'required|numeric|min:13',
-            'dob' => 'required|date|before:-13 years|date_format:d/m/Y',
+            'dob' => 'required|date',
             'join_reason' => 'required',
             'previous_community' => 'required',
-            'division_id' => 'required|numeric|exists:divisions,id'
+            'division' => 'required|numeric|exists:divisions,id'
         ]);
 
         $applicationForm = new ApplicationForm();
+        $applicationForm->applicant_id = Auth::user()->id;
         $applicationForm->age = $request->age;
         $applicationForm->dob = $request->dob;
         $applicationForm->join_reason = $request->join_reason;
-        $applicationForm->division_id = $request->division_id;
+        $applicationForm->division_id = $request->division;
         $applicationForm->previous_community = $request->previous_community;
         $applicationForm->save();
 
-        return redirect()->route('application.status');
+        return redirect()->route('application.status')->with('success', 'formComplete');
     }
 }
