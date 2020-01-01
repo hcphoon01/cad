@@ -13,13 +13,26 @@
 
 Route::get('/', 'Home\HomeController@landing')->name('landing')->middleware('guest');
 
+// applicant routes
+Route::group([
+    'as' => 'application.',
+    'prefix' => 'application',
+    'middleware' => ['role:Applicant']
+], function() {
+    Route::get('status', 'HR\ApplicationController@status')->name('status');
+
+    Route::get('form', 'HR\ApplicationController@form')->name('form');
+    Route::post('form', 'HR\ApplicationController@createForm')->name('create-form');
+});
+
 Auth::routes(['verify' => true]);
 Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('auth');
 
 // admin routes
 Route::group([
     'as' => 'admin.',
-    'prefix' => 'admin'
+    'prefix' => 'admin',
+    'middleware' => ['role:Gold']
 ], function () {
     Route::post('announcement/create', 'Admin\AnnouncementController@create')->name('create-announcement');
     Route::delete('announcement/{id}', 'Admin\AnnouncementController@destroy')->name('delete-announcement');
@@ -28,7 +41,8 @@ Route::group([
 // profile routes
 Route::group([
     'as' => 'profile.',
-    'prefix' => 'profile'
+    'prefix' => 'profile',
+    'middleware' => 'auth'
 ], function() {
     Route::get('index', 'Profile\ProfileController@index')->name('index');
 });

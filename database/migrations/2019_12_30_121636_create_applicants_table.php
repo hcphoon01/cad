@@ -16,7 +16,7 @@ class CreateApplicantsTable extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->boolean('qc_review')->nullable()->default(false);
+            $table->boolean('gc_review')->nullable()->default(false);
             $table->boolean('hr_review')->nullable()->default(false);
             $table->boolean('interview')->nullable()->default(false);
             $table->timestamps();

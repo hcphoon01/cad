@@ -31,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/application/status';
 
     /**
      * Create a new controller instance.
@@ -72,6 +72,8 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'api_token' => Str::random(60),
         ]);
+
+        $user->assignRole('Applicant');
 
         Applicant::create([
             'user_id' => $user->id

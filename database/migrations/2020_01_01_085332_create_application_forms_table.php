@@ -15,7 +15,13 @@ class CreateApplicationFormsTable extends Migration
     {
         Schema::create('application_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('division_id');
             $table->timestamps();
+        });
+
+        Schema::table('application_forms', function (Blueprint $table) {
+            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
         });
     }
 
