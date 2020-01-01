@@ -51,7 +51,7 @@ class ApplicationController extends Controller
     public function createForm(Request $request)
     {
         $request->validate([
-            'age' => 'required|numeric|min:13',
+            'age' => 'required|numeric|min:15',
             'dob' => 'required|date',
             'join_reason' => 'required',
             'previous_community' => 'required',

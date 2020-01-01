@@ -33,14 +33,14 @@
                                     name="age" id="age" placeholder="Enter your age">
                                 <small id="ageHelp"
                                     class="form-text {{ $errors->has('age') ? 'text-danger' : 'text-muted' }}">You must
-                                    be over 13 to join.</small>
+                                    be over 15 to join.</small>
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
                                 <input class="form-control {{ $errors->has('dob') ? 'border-danger' : '' }}" type="date"
                                     id="dob" name="dob" placeholder="dd/mm/yyy">
                                 <small id="ageHelp" class="form-text text-muted">You must
-                                    be over 13 to join.</small>
+                                    be over 15 to join.</small>
                                 @if($errors->has('dob'))
                                 <p class="help text-danger">
                                     {{ $errors->first('dob') }}

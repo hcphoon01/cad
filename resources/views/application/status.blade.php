@@ -12,7 +12,7 @@
                     <h3>View your application status</h3>
                 </div>
                 @if (Session::has('formComplete'))
-                <div class="alert alert-success text-center alert-dismissible" role="alert">
+                <div class="alert alert-success text-center alert-dismissible show fade" role="alert">
                     Your application has been submitted, it is now undergoing review by Gold Command and you will
                     receive emails updating you on its progress.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
