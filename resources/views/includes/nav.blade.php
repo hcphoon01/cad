@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo" src="img/logo.png">EmergencyRP</a>
+  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo"
+      src="{{asset('img/logo.png')}}">EmergencyRP</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -7,7 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav w-100">
       <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
-      <a class="nav-link" href="{{route('home')}}">Home</a>
+        <a class="nav-link" href="{{route('home')}}">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link " href="#">MDT</a>
@@ -32,7 +33,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="{{route('profile.index')}}">Profile</a>
           <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="{{ route('logout') }}"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -40,7 +41,7 @@
           </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
-        </form>
+          </form>
         </div>
       </li>
     </ul>

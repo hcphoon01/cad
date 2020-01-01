@@ -51,7 +51,24 @@
                 </h2>
                 @foreach ($announcements as $announcement)
                 <div class="card-body">
-                    <h5 class="card-title">{{$announcement->title}}</h5>
+                    <div class="row px-3 justify-content-between">
+                        <div>
+                            <h5 class="card-title">{{$announcement->title}}</h5>
+                        </div>
+                        <div>
+                            @role('Gold')
+                            <form action="{{ route('admin.delete-announcement', ['id' => $announcement->id]) }}"
+                                method="post" class="is-hidden">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger text-right">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </form>
+                            @endrole
+                        </div>
+
+                    </div>
                     <p class="card-text">{{$announcement->body}}</p>
                     <footer>Posted By: {{$announcement->user->displayName()}}</footer>
                 </div>
@@ -65,16 +82,16 @@
             <div class="card flex-grow-1">
                 <h2 class="card-header">Stats</h2>
                 <div class="card-body">
-                    <h5 class="card-title">Patrol Numbers</h5>
-                    <p class="card-text">1</p>
+                    <h5 class="card-title">Total Patrols</h5>
+                    <p class="card-text">{{$eventCount}}</p>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Fleet Count</h5>
-                    <p class="card-text">50</p>
+                    <p class="card-text">{{$fleetCount}}</p>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Total Calls</h5>
-                    <p class="card-text">50</p>
+                    <p class="card-text">{{$cadCount}}</p>
                 </div>
             </div>
         </div>
@@ -82,9 +99,14 @@
             <div class="card flex-grow-1">
                 <h2 class="card-header">Events</h2>
                 <div class="card-body">
-                    <h5 class="card-title">Daily Patrol</h5>
-                    <p class="card-text">19:00 - 22:00</p>
+                    @if ($event)
+                    <h5 class="card-title">{{$event->name}}</h5>
+                    <h6 class="card-title">{{$event->description}}</h6>
+                    <p class="card-text">{{$event->displayDateTime()}}</p>
                     <a href="#" class="btn btn-success">Book On</a>
+                    @else
+                    <h5 class="card-title">No event has been created yet</h5>
+                    @endif
                 </div>
             </div>
             <div class="card mt-3 flex-grow-1">

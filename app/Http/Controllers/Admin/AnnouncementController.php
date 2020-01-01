@@ -31,4 +31,20 @@ class AnnouncementController extends Controller
 
         return redirect()->back();
     }
+    
+    /**
+     * Remove the specified announcement.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        // delete
+        $nerd = Announcement::find($id);
+        $nerd->delete();
+
+        // redirect
+        return redirect()->back();
+    }
 }
