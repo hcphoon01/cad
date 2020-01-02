@@ -30,7 +30,7 @@
                                             <td>{{$gc->id}}</td>
                                             <td>{{$gc->user->name}}</td>
                                             <td><a type="button" class="btn btn-primary"
-                                                    href="{{ route('hr.view',['id'=>$gc->id])}}"><i class=" fa
+                                                    href="{{ route('hr.view', ['id'=>$gc->id])}}"><i class=" fa
                                                     fa-eye"></i>
                                                     View</a>
                                             </td>
@@ -57,18 +57,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($hrReview as $hr)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Harry Cameron</td>
-                                            <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i>
-                                                    View</button></td>
+                                            <td>{{$hr->id}}</td>
+                                            <td>{{$hr->user->name}}</td>
+                                            <td><a type="button" class="btn btn-primary"
+                                                    href="{{ route('hr.view', ['id'=>$hr->id])}}"><i class=" fa
+                                                    fa-eye"></i>
+                                                    View</a>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Jeff Bezos</td>
-                                            <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i>
-                                                    View</button></td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -89,18 +88,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($interviews as $interview)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Harry Cameron</td>
-                                            <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i>
-                                                    View</button></td>
+                                            <td>{{$interview->id}}</td>
+                                            <td>{{$interview->user->name}}</td>
+                                            <td><a type="button" class="btn btn-primary"
+                                                    href="{{ route('hr.view', ['id'=>$interview->id])}}"><i class=" fa
+                                                    fa-eye"></i>
+                                                    View</a>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Jeff Bezos</td>
-                                            <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i>
-                                                    View</button></td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

@@ -8,7 +8,7 @@ use App\Models\Applicant\Applicant;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ApplicationSubmitted extends Mailable
+class InterviewInvite extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -36,6 +36,6 @@ class ApplicationSubmitted extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.application.submit');
+        return $this->view('emails.application.interview');
     }
 }

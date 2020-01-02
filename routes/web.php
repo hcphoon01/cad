@@ -33,6 +33,7 @@ Route::group([
 ], function() {
     Route::get('index', 'HR\HRController@index')->name('index');
     Route::get('view/{id}', 'HR\HRController@show')->name('view');
+    Route::get('progress/{applicant}', 'HR\HRController@progress')->name('progress');
 });
 
 Auth::routes(['verify' => true]);

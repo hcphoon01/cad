@@ -4,9 +4,11 @@ namespace App\Http\Controllers\HR;
 
 use Illuminate\Http\Request;
 use App\Models\Helper\Division;
+use App\Mail\ApplicationSubmitted;
 use App\Models\Applicant\Applicant;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Applicant\ApplicationForm;
 
 class ApplicationController extends Controller
@@ -66,6 +68,8 @@ class ApplicationController extends Controller
         $applicationForm->division_id = $request->division;
         $applicationForm->previous_community = $request->previous_community;
         $applicationForm->save();
+
+        Mail::to(Auth::user()->email)->queue(new ApplicationSubmitted($applicationForm->applicant));
 
         return redirect()->route('application.status')->with('success', 'formComplete');
     }

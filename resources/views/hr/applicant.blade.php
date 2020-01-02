@@ -69,7 +69,8 @@
                                                 <div class="container">
                                                     <div class="row justify-content-md-center">
                                                         <div class="col">
-                                                            <a class="btn btn-success" href="#">
+                                                            <a class="btn btn-success"
+                                                                href="{{route('hr.progress', ['applicant'=>$applicant])}}">
                                                                 <i class="fa fa-check"></i> Progress</a>
                                                         </div>
                                                         <div class="col">
