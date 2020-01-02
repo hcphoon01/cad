@@ -18,6 +18,7 @@ class CreateApplicationFormsTable extends Migration
             $table->unsignedBigInteger('applicant_id');
             $table->string('dob');
             $table->string('age');
+            $table->string('discord');
             $table->longText('join_reason');
             $table->longText('previous_community');
             $table->unsignedBigInteger('division_id');

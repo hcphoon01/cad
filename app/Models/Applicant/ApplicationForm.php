@@ -13,7 +13,7 @@ class ApplicationForm extends Model
      * @var array
      */
     protected $fillable = [
-        'applicant_id', 'division_id', 'join_reason', 'age', 'dob', 'previous_community'
+        'applicant_id', 'division_id', 'join_reason', 'age', 'dob', 'previous_community', 'discord'
     ];
 
     /**

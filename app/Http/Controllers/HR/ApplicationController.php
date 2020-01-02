@@ -55,6 +55,7 @@ class ApplicationController extends Controller
         $request->validate([
             'age' => 'required|numeric|min:15',
             'dob' => 'required|date',
+            'discord' => 'required|regex:/([a-z]*)(#)([0-9]{4})/g',
             'join_reason' => 'required',
             'previous_community' => 'required',
             'division' => 'required|numeric|exists:divisions,id'
@@ -64,6 +65,7 @@ class ApplicationController extends Controller
         $applicationForm->applicant_id = Auth::user()->id;
         $applicationForm->age = $request->age;
         $applicationForm->dob = $request->dob;
+        $applicationForm->discord = $request->discord;
         $applicationForm->join_reason = $request->join_reason;
         $applicationForm->division_id = $request->division;
         $applicationForm->previous_community = $request->previous_community;

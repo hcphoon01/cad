@@ -48,6 +48,19 @@
                                 @endif
                             </div>
                             <div class="form-group">
+                                <label for="discord">Full Discord Tag</label>
+                                <input class="form-control {{ $errors->has('discord') ? 'border-danger' : '' }}"
+                                    type="text" id="discord" name="discord" placeholder="dd/mm/yyy">
+                                <small id="discordHelp" class="form-text text-muted">This is in the form Username#4
+                                    Digits. For example Test#1234, this can be found on the front page of the Discord
+                                    settings.</small>
+                                @if($errors->has('discord'))
+                                <p class="help text-danger">
+                                    {{ $errors->first('discord') }}
+                                </p>
+                                @endif
+                            </div>
+                            <div class="form-group">
                                 <label for="division">Division</label>
                                 <select id="division" name="division"
                                     class="form-control {{ $errors->has('division') ? 'border-danger' : '' }}">
