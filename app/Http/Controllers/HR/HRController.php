@@ -61,6 +61,9 @@ class HRController extends Controller
 
             Mail::to(Auth::user()->email)->queue(new InterviewInvite($applicant));
 
+            $applicant->user()->assignRole('Member');
+            $applicant->user()->removeRole('Applicant');
+
             return redirect()->back();
 
         } elseif ($applicant->gc_review) {
