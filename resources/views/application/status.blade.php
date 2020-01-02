@@ -21,7 +21,7 @@
                 </div>
                 @endif
                 <div class="text-center">
-                    <h4>{{$applicant->applicationStageText()}}</h4>
+                    <h4>{{$applicant->applicationStageTextLong()}}</h4>
                 </div>
                 <div class="progress">
                     <div class="progress-bar {{$applicant->applicationStage() == '100' ? 'bg-success' : ''}}"

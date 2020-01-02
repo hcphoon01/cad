@@ -37,7 +37,7 @@ class HRController extends Controller
     {
         $applicant = Applicant::where('id', $id)->first();
 
-        return view('hr.show', [
+        return view('hr.applicant', [
             'applicant' => $applicant
         ]);
     }

@@ -25,7 +25,7 @@
       </li>
       @endcan
       @role('Human Resources|Gold')
-      <li class="nav-item {{ Request::is('hr') ? 'active' : '' }}">
+      <li class="nav-item {{ Request::is('hr/*') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('hr.index')}}">HR</a>
       </li>
       @endrole

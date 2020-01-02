@@ -42,16 +42,18 @@ class Applicant extends Model
         if ($this->interview) {
             return '100';
         } elseif ($this->hr_review) {
-            return '66';
+            return '75';
         } elseif ($this->gc_review) {
-            return '33';
+            return '50';
+        } elseif ($this->form) {
+            return '25';
         }
     }
 
     /**
-     * Return the text for the stage of the application process the applicant is.
+     * Return the long text for the stage of the application process the applicant is.
      */
-    public function applicationStageText()
+    public function applicationStageTextLong()
     {
         if ($this->interview) {
             return 'Congratulations, you have been accepted into EmergencyRP';
@@ -63,6 +65,24 @@ class Applicant extends Model
             return 'Your application is undergoing a review by Gold Command';
         } else {
             return 'You have not yet submitted an application form. Please click the button below to get started.';
+        }
+    }
+
+    /**
+     * Return the long text for the stage of the application process the applicant is.
+     */
+    public function applicationStageText()
+    {
+        if ($this->interview) {
+            return 'Accepted';
+        } elseif ($this->hr_review) {
+            return 'Interview';
+        } elseif ($this->gc_review) {
+            return 'HR Review';
+        } elseif ($this->form) {
+            return 'GC Review';
+        } else {
+            return 'No Form Submitted';
         }
     }
 
