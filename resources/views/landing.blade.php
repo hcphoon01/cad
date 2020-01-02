@@ -60,7 +60,6 @@
         }
 
         .text-links>a {
-            color: #ccc;
             padding: 0 25px;
             font-size: 15px;
             font-weight: 800;

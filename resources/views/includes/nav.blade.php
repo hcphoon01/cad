@@ -24,15 +24,15 @@
         <a class="nav-link" href="#">Duty Listings</a>
       </li>
       @endcan
-      @role('HR')
+      @role('Human Resources|Gold')
       <li class="nav-item {{ Request::is('hr') ? 'active' : '' }}">
-        <a class="nav-link" href="#">HR</a>
+        <a class="nav-link" href="{{route('hr.index')}}">HR</a>
       </li>
       @endrole
       <li class="nav-item dropdown ml-auto">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">{{ Auth::user()->name }}</a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
           <a class="dropdown-item" href="{{route('profile.index')}}">Profile</a>
           <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="{{ route('logout') }}"

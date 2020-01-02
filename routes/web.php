@@ -25,6 +25,16 @@ Route::group([
     Route::post('form', 'HR\ApplicationController@createForm')->name('create-form');
 });
 
+// hr routes
+Route::group([
+    'as' => 'hr.',
+    'prefix' => 'hr',
+    'middleware' => ['role:Human Resources|Gold']
+], function() {
+    Route::get('index', 'HR\HRController@index')->name('index');
+    Route::get('view/{id}', 'HR\HRController@show')->name('view');
+});
+
 Auth::routes(['verify' => true]);
 Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('role:Member');
 
