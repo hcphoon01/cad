@@ -11614,6 +11614,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -11942,11 +11944,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       time: "00:00:00:000"
     };
+  },
+  created: function created() {
+    this.fetchData();
   },
   mounted: function mounted() {
     this.timeBegan = null, this.timeStopped = null, this.stoppedDuration = 0, this.started = null, this.running = false;
@@ -11955,6 +11962,11 @@ __webpack_require__.r(__webpack_exports__);
     this.reset();
   },
   methods: {
+    fetchData: function fetchData() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/cad/index').then(function (response) {
+        console.log(response);
+      });
+    },
     triggerTimer: function triggerTimer() {
       if (this.running) return this.stop();
       if (this.timeStopped) return this.reset();
@@ -78191,7 +78203,9 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row no-gutters" }, [
       _c("div", { staticClass: "col border" }, [
         _c("h6", { staticClass: "pl-2" }, [
-          _vm._v("Assigned: \n                              "),
+          _vm._v(
+            "\n                              Assigned:\n                              "
+          ),
           _c("span", { staticClass: "text-success" }, [_vm._v("TJ1")]),
           _vm._v(" "),
           _c("span", { staticClass: "text-secondary" }, [_vm._v("903")])

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\FMS;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\FMS\CAD;
+use App\Models\FMS\Unit;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CADController extends Controller
 {
@@ -25,5 +28,14 @@ class CADController extends Controller
     public function create(Request $request)
     {
 
+    }
+
+    /**
+     * Return all the information for the CAD display
+     */
+    public function show()
+    {
+        $cads = CAD::whereDate('created_at', Carbon::today())->get();
+        $units = Unit::all();
     }
 }

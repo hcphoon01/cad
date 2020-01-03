@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.0",
         "invisnik/laravel-steam-auth": "^4.1",
         "laravel/framework": "^6.2",
+        "laravel/passport": "^8.1",
         "laravel/tinker": "^2.0",
         "spatie/laravel-permission": "^3.4"
     },

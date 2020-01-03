@@ -53,9 +53,9 @@ Route::group([
 Route::group([
     'as' => 'profile.',
     'prefix' => 'profile',
-    'middleware' => 'auth'
+    'middleware' => ['role:Member']
 ], function() {
     Route::get('index', 'Profile\ProfileController@index')->name('index');
 });
 
-Route::get('/fms/{vue_capture?}', 'FMS\CADController@index')->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
+Route::get('/fms/{vue_capture?}', 'FMS\CADController@index')->where('vue_capture', '[\/\w\.-]*')->middleware('role:Member');

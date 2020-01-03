@@ -200,7 +200,8 @@
                           </div>
                           <div class="row no-gutters">
                             <div class="col border">
-                              <h6 class="pl-2">Assigned: 
+                              <h6 class="pl-2">
+                                Assigned:
                                 <span class="text-success">TJ1</span>
                                 <span class="text-secondary">903</span>
                               </h6>
@@ -327,11 +328,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data: function() {
     return {
       time: "00:00:00:000"
     };
+  },
+  created: function() {
+    this.fetchData();
   },
   mounted: function() {
     (this.timeBegan = null),
@@ -344,6 +349,13 @@ export default {
     this.reset();
   },
   methods: {
+    fetchData: function() {
+      axios
+        .get('/api/cad/index')
+        .then(response => {
+          console.log(response);
+        })
+    },
     triggerTimer: function() {
       if (this.running) return this.stop();
       if (this.timeStopped) return this.reset();

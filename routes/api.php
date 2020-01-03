@@ -13,4 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/cad/create', 'FMS\CADController@create');
+Route::group([
+    'as' => 'cad.',
+    'prefix' => 'cad',
+    'middleware' => 'auth:api'
+], function () {
+    Route::get('/index', 'FMS\CADController@show')->name('show');
+    Route::get('/create', 'FMS\CADController@create')->name('create');
+    Route::get('/{unit}/assign', 'FMS\CADController@assign')->name('assign');
+});

@@ -17,11 +17,13 @@ class CreateUnitsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vehicle_id');
             $table->string('callsign');
+            $table->unsignedBigInteger('assigned_cad');
             $table->timestamps();
         });
 
         Schema::table('units', function (Blueprint $table) {
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->foreign('assigned_cad')->references('id')->on('cads')->onDelete('cascade');
         });
     }
 
