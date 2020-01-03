@@ -18,6 +18,7 @@ class CreateCADSTable extends Migration
             $table->unsignedBigInteger('caller_id');
             $table->string('location');
             $table->string('response_level');
+            $table->string('display_name');
             $table->string('inc_channel')->nullable();
             $table->longText('description');
             $table->timestamps();

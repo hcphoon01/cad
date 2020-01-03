@@ -37,5 +37,10 @@ class CADController extends Controller
     {
         $cads = CAD::whereDate('created_at', Carbon::today())->get();
         $units = Unit::all();
+
+        return [
+            'cads' => $cads,
+            'units' => $units
+        ];
     }
 }

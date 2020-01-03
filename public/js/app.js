@@ -11949,6 +11949,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      cads: [],
       time: "00:00:00:000"
     };
   },
@@ -11963,8 +11964,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchData: function fetchData() {
+      var _this = this;
+
+      this.cads = this.units = null;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/cad/index').then(function (response) {
-        console.log(response);
+        _this.cads = [response.data.cads];
+        _this.units = response.data.units;
+        console.log(_this.cads);
       });
     },
     triggerTimer: function triggerTimer() {
@@ -77973,59 +77979,72 @@ var render = function() {
                     _c("table", { staticClass: "table" }, [
                       _vm._m(12),
                       _vm._v(" "),
-                      _c("tbody", [
-                        _c(
-                          "tr",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.clickList()
+                      _c(
+                        "tbody",
+                        [
+                          _vm._l(this.cads, function(cad, i) {
+                            return _c(
+                              "tr",
+                              {
+                                key: i,
+                                on: {
+                                  click: function($event) {
+                                    return _vm.clickList()
+                                  }
+                                }
+                              },
+                              [
+                                _c("td", [_vm._v(_vm._s(cad[i].display_name))]),
+                                _vm._v(" "),
+                                cad[i].response == "Immediate"
+                                  ? _c(
+                                      "td",
+                                      { staticClass: "bg-danger text-white" },
+                                      [_vm._v("Immediate")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(cad[i].response_level))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(cad[i].description))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(cad[i].location))])
+                              ]
+                            )
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "tr",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.clickList()
+                                }
                               }
-                            }
-                          },
-                          [
-                            _c("td", [_vm._v("20200101-0002")]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "bg-danger text-white" }, [
-                              _vm._v("Immediate")
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v("INC2")]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v("Some more memes have been made")
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v("Grove Street")])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "tr",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.clickList()
-                              }
-                            }
-                          },
-                          [
-                            _c("td", [_vm._v("20200101-0003")]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "bg-warning text-dark" }, [
-                              _vm._v("Standard")
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v("INC3")]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v("Even more memes have been made")
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v("Airportos")])
-                          ]
-                        )
-                      ])
+                            },
+                            [
+                              _c("td", [_vm._v("20200101-0003")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "bg-warning text-dark" },
+                                [_vm._v("Standard")]
+                              ),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("INC3")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v("Even more memes have been made")
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Airportos")])
+                            ]
+                          )
+                        ],
+                        2
+                      )
                     ])
                   ]
                 )

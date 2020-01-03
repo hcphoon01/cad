@@ -301,12 +301,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-on:click="clickList()">
-                        <td>20200101-0002</td>
-                        <td class="bg-danger text-white">Immediate</td>
-                        <td>INC2</td>
-                        <td>Some more memes have been made</td>
-                        <td>Grove Street</td>
+                      <tr v-on:click="clickList()" v-for="(cad,i) in this.cads" :key="i">
+                        <td>{{cad[i].display_name}}</td>
+                        <td v-if="cad[i].response == 'Immediate'" class="bg-danger text-white">Immediate</td>
+                        <td>{{cad[i].response_level}}</td>
+                        <td>{{cad[i].description}}</td>
+                        <td>{{cad[i].location}}</td>
                       </tr>
                       <tr v-on:click="clickList()">
                         <td>20200101-0003</td>
@@ -332,6 +332,7 @@ import axios from 'axios';
 export default {
   data: function() {
     return {
+      cads: [],
       time: "00:00:00:000"
     };
   },
@@ -350,10 +351,13 @@ export default {
   },
   methods: {
     fetchData: function() {
+      this.cads = this.units = null
       axios
         .get('/api/cad/index')
         .then(response => {
-          console.log(response);
+          this.cads = [response.data.cads];
+          this.units = response.data.units;
+          console.log(this.cads)
         })
     },
     triggerTimer: function() {
