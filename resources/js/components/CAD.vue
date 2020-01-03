@@ -194,20 +194,23 @@
                               <p class="pl-2">Assign Units</p>
                             </div>
                             <div class="col border">
-                              <input
-                                class="form-control input-lg"
-                                type="text"
-                                name="assignUnit"
-                                id="assignUnit"
-                                v-on:keyup.enter="assignUnit"
-                              />
+                              <v-select label="callsign" :options="this.units">
+                                <input
+                                  class="form-control input-lg"
+                                  type="text"
+                                  name="assignUnit"
+                                  id="assignUnit"
+                                  v-on:keyup.enter="assignUnit"
+                                />
+                              </v-select>
                             </div>
                           </div>
                           <div class="row no-gutters">
                             <div class="col border">
                               <h6 class="pl-2">
                                 Assigned:
-                                <span v-bind:class="stateTextColour(unit.state)"
+                                <span
+                                  v-bind:class="stateTextColour(unit.state)"
                                   v-for="(unit, index) in this.activeCad.units"
                                   :key="index"
                                 >{{unit.callsign}}</span>
@@ -308,7 +311,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-on:click="clickList(cad.id)" v-for="(cad,i) in this.cads" :key="i">
+                      <tr v-on:click="clickList(cad, i)" v-for="(cad,i) in this.cads" :key="i">
                         <td>{{cad.display_name}}</td>
                         <td
                           v-bind:class="{'bg-danger text-white': cad.response_level == 'Immediate', 'bg-warning': cad.response_level == 'Standard'}"
@@ -334,6 +337,7 @@ export default {
   data: function() {
     return {
       time: "00:00:00:000",
+      units: [],
       cads: [],
       activeCad: []
     };
@@ -405,6 +409,7 @@ export default {
       this.cads = this.units = null;
       this.$api.get("/api/cad/index").then(response => {
         this.cads = response.data.cads;
+        this.cads.shift();
         this.units = response.data.units;
       });
     },
@@ -467,8 +472,11 @@ export default {
       }
       return (zero + num).slice(-digit);
     },
-    clickList: function() {
-      console.log("Clicked on cad " + cad.id);
+    clickList: function(cad, index) {
+      console.log(cad);
+      this.cads.splice(index, 1);
+      this.cads.push(this.activeCad);
+      this.activeCad = cad;
     },
     clickUnit: function() {
       console.log("Clicked a unit");
