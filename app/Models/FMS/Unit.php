@@ -11,6 +11,14 @@ class Unit extends Model
 	 */
 	public function users()
 	{
-		return $this->hasMany('App\Models\User\User');
+		return $this->hasMany('App\Models\User\UserData');
+	}
+
+	/**
+	 * Get the cad the unit belongs to
+	 */
+	public function cad()
+	{
+		return $this->belongsTo('App\Models\FMS\CAD');
 	}
 }

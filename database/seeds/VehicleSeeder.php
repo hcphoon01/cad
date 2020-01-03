@@ -42,7 +42,7 @@ class VehicleSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
-                'model' => 'Audi Ar',
+                'model' => 'Audi A3',
                 'model_abbreviation' => 'A3',
                 'vrm' => 'FH18 RCY',
                 'created_at' => date('Y-m-d H:i:s'),

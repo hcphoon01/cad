@@ -148,11 +148,13 @@
                   <div class="card">
                     <div class="card-header">
                       <div class="row justify-content-between">
-                        <div class="d-flex">
-                          <h5>CAD: 20200101-0001</h5>
+                        <div class="d-flex px-2">
+                          <h5>CAD: {{this.activeCad.display_name}}</h5>
                         </div>
                         <div class="float-right">
-                          <p class="pull-right">Last Updated: 01/01/2020 19:40</p>
+                          <p
+                            class="pull-right"
+                          >Last Updated: {{this.formatDate(this.activeCad.updated_at, 'DD/MM/YYYY HH:mm')}}</p>
                         </div>
                       </div>
                     </div>
@@ -161,17 +163,20 @@
                         <div class="col-6 border">
                           <div class="row pt-4 no-gutters">
                             <div class="col border">
-                              <p class="pl-2">Location</p>
+                              <p class="pl-2">Location: {{this.activeCad.location}}</p>
                             </div>
-                            <div class="col border">
-                              <p class="pl-2">Response Level</p>
+                            <div
+                              class="col border"
+                              v-bind:class="{'bg-danger text-white': this.activeCad.response_level == 'Immediate', 'bg-warning': this.activeCad.response_level == 'Standard'}"
+                            >
+                              <p class="pl-2">Response Level: {{this.activeCad.response_level}}</p>
                             </div>
                             <div class="w-100"></div>
                             <div class="col border">
-                              <p class="pl-2">INC Channel</p>
+                              <p class="pl-2">INC Channel: {{this.activeCad.inc_channel}}</p>
                             </div>
                             <div class="col border">
-                              <p class="pl-2">Caller Name</p>
+                              <p class="pl-2">Caller Name: {{this.activeCad.caller_name}}</p>
                             </div>
                           </div>
                           <div class="row py-4">
@@ -179,7 +184,7 @@
                               <div class="card">
                                 <div class="card-body">
                                   <h5 class="card-title">Call Description</h5>
-                                  <div class="card-text">The caller reported an abundence of memes</div>
+                                  <div class="card-text">{{this.activeCad.description}}</div>
                                 </div>
                               </div>
                             </div>
@@ -202,8 +207,10 @@
                             <div class="col border">
                               <h6 class="pl-2">
                                 Assigned:
-                                <span class="text-success">TJ1</span>
-                                <span class="text-secondary">903</span>
+                                <span v-bind:class="stateTextColour(unit.state)"
+                                  v-for="(unit, index) in this.activeCad.units"
+                                  :key="index"
+                                >{{unit.callsign}}</span>
                               </h6>
                             </div>
                           </div>
@@ -301,19 +308,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-on:click="clickList()" v-for="(cad,i) in this.cads" :key="i">
-                        <td>{{cad[i].display_name}}</td>
-                        <td v-if="cad[i].response == 'Immediate'" class="bg-danger text-white">Immediate</td>
-                        <td>{{cad[i].response_level}}</td>
-                        <td>{{cad[i].description}}</td>
-                        <td>{{cad[i].location}}</td>
-                      </tr>
-                      <tr v-on:click="clickList()">
-                        <td>20200101-0003</td>
-                        <td class="bg-warning text-dark">Standard</td>
-                        <td>INC3</td>
-                        <td>Even more memes have been made</td>
-                        <td>Airportos</td>
+                      <tr v-on:click="clickList(cad.id)" v-for="(cad,i) in this.cads" :key="i">
+                        <td>{{cad.display_name}}</td>
+                        <td
+                          v-bind:class="{'bg-danger text-white': cad.response_level == 'Immediate', 'bg-warning': cad.response_level == 'Standard'}"
+                        >{{cad.response_level}}</td>
+                        <td>{{cad.inc_channel}}</td>
+                        <td>{{cad.description}}</td>
+                        <td>{{cad.location}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -328,16 +330,17 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data: function() {
     return {
+      time: "00:00:00:000",
       cads: [],
-      time: "00:00:00:000"
+      activeCad: []
     };
   },
   created: function() {
     this.fetchData();
+    this.getActiveCad();
   },
   mounted: function() {
     (this.timeBegan = null),
@@ -350,15 +353,60 @@ export default {
     this.reset();
   },
   methods: {
+    stateTextColour: function(state) {
+      switch (state) {
+        case 0:
+          return "text-danger";
+        case 2:
+          return "text-success";
+        case 4:
+          return "text-primary";
+        case 5:
+          return "text-warning";
+        case 6:
+          return "text-secondary";
+        case 9:
+          return "text-secondary";
+      }
+    },
+    stateBgColour: function(state) {
+      switch (state) {
+        case 0:
+          return "bg-danger text-white";
+        case 2:
+          return "bg-success text-white";
+        case 4:
+          return "bg-primary text-white";
+        case 5:
+          return "bg-warning text-dark";
+        case 6:
+          return "bg-secondary text-white";
+        case 9:
+          return "bg-secondary text-white";
+      }
+    },
+    formatDate: function(date, format) {
+      if (date) {
+        return this.$moment(String(date)).format(format);
+      }
+    },
+    getActiveCad: function(id = null) {
+      let url;
+      if (id) {
+        url = `/api/cad/${id}`;
+      } else {
+        url = "/api/cad";
+      }
+      this.$api.get(url).then(response => {
+        this.activeCad = response.data;
+      });
+    },
     fetchData: function() {
-      this.cads = this.units = null
-      axios
-        .get('/api/cad/index')
-        .then(response => {
-          this.cads = [response.data.cads];
-          this.units = response.data.units;
-          console.log(this.cads)
-        })
+      this.cads = this.units = null;
+      this.$api.get("/api/cad/index").then(response => {
+        this.cads = response.data.cads;
+        this.units = response.data.units;
+      });
     },
     triggerTimer: function() {
       if (this.running) return this.stop();
@@ -420,7 +468,10 @@ export default {
       return (zero + num).slice(-digit);
     },
     clickList: function() {
-      console.log("Clicked on a cad");
+      console.log("Clicked on cad " + cad.id);
+    },
+    clickUnit: function() {
+      console.log("Clicked a unit");
     },
     addRemark: function(event) {
       console.log(event.target.value);

@@ -43,4 +43,22 @@ class CADController extends Controller
             'units' => $units
         ];
     }
+
+    /**
+     * Return a cad
+     */
+    public function getCad($id=null)
+    {
+        if($id)
+        {
+            $cad = CAD::with('units.users.user')->find($id);
+        }
+        else
+        {
+            $cad = CAD::whereDate('created_at', Carbon::today())->first()->load('units.users.user');
+        }
+
+        return $cad;
+
+    }
 }

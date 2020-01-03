@@ -14,7 +14,7 @@ class CADSeeder extends Seeder
     {
         $data = array(
             array(
-                'caller_id' => '1',
+                'caller_name' => 'Joe Bloggs',
                 'location' => 'Vinewood',
                 'response_level' => 'Immediate',
                 'inc_channel' => 'INC 1',
@@ -24,7 +24,7 @@ class CADSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
-                'caller_id' => '1',
+                'caller_id' => 'Joseph Bloggs',
                 'location' => 'Somewhere',
                 'response_level' => 'Standard',
                 'inc_channel' => null,
@@ -34,7 +34,7 @@ class CADSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
-                'caller_id' => '1',
+                'caller_id' => 'Jeff Bloggs',
                 'location' => 'Somewhere Else',
                 'response_level' => 'Immediate',
                 'inc_channel' => 'INC 2',

@@ -20,4 +20,12 @@ class CAD extends Model
         $date = Carbon::parse($this->created_at)->format('Ymd');
         $number = CAD::whereDate('created_at', Carbon::today())->count();
     }
+
+    /**
+     * Return the units attached to the CAD
+     */
+    public function units()
+    {
+        return $this->hasMany('App\Models\FMS\Unit', 'assigned_cad');
+    }
 }

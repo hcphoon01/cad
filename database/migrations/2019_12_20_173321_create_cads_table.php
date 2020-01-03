@@ -15,17 +15,13 @@ class CreateCADSTable extends Migration
     {
         Schema::create('cads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('caller_id');
+            $table->string('caller_name');
             $table->string('location');
             $table->string('response_level');
             $table->string('display_name');
             $table->string('inc_channel')->nullable();
             $table->longText('description');
             $table->timestamps();
-        });
-
-        Schema::table('cads', function (Blueprint $table) {
-            $table->foreign('caller_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -36,6 +32,6 @@ class CreateCADSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('c_a_d_s');
+        Schema::dropIfExists('cads');
     }
 }
