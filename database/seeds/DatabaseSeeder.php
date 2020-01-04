@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CADSeeder::class);
         $this->call(UnitSeeder::class);
         $this->call(UserDataSeeder::class);
+        $this->call(QualificationSeeder::class);
     }
 }

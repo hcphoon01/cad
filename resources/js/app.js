@@ -9,14 +9,12 @@ require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import BootstrapVue from 'bootstrap-vue';
-import vSelect from 'vue-select';
 import axios from "axios";
 import moment from 'moment';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faWindowMinimize, faTimes, faEdit, faUser, faCar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import 'vue-select/dist/vue-select.css';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -24,7 +22,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 library.add(faWindowMinimize, faTimes, faEdit, faUser, faCar);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component('v-select', vSelect);
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -36,6 +33,8 @@ Vue.use({
 
 moment.locale('nl');
 Vue.prototype.$moment = moment;
+
+Vue.prototype.log = console.log;
 
 import App from  './components/App';
 import CAD from './components/CAD';

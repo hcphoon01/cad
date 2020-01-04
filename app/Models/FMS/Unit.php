@@ -21,4 +21,12 @@ class Unit extends Model
 	{
 		return $this->belongsTo('App\Models\FMS\CAD');
 	}
+
+	/**
+	 * Get the vehicle assigned to the unit
+	 */
+	public function vehicle()
+	{
+		return $this->hasOne('App\Models\Helper\Vehicle', 'id', 'vehicle_id');
+	}
 }

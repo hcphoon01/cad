@@ -19,73 +19,29 @@
               </a>
             </div>
             <ul class="list-group list-group-flush collapse show" id="unitList">
-              <li class="list-group-item">
-                <div class="card shadow bg-success">
+              <li class="list-group-item" v-for="(unit, i) in sortByState(this.units)" :key="i">
+                <div class="card shadow" :class="stateBgColour(unit.state)">
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
-                        <h3>G101</h3>
-                        <p>Available</p>
-                        <div>
-                          <font-awesome-icon icon="user" />&nbsp;R.Buckland
+                        <h3>{{unit.callsign}}</h3>
+                        <p>{{stateName(unit.state)}}</p>
+                        <div v-for="(user, i) in unit.users" :key="i">
+                          <font-awesome-icon icon="user" />
+                          &nbsp;{{displayName(user.user.name)}}
                         </div>
                         <div>
-                          <font-awesome-icon icon="user" />&nbsp;R.Langdon
-                        </div>
-                        <div>
-                          <font-awesome-icon icon="car" />&nbsp;GX69 MJH (GC)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <span class="badge badge-pill badge-primary">Advanced</span>
-                        <span class="badge badge-pill badge-warning">Taser</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="card shadow bg-warning">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col">
-                        <h3>TJ1</h3>
-                        <p>En-Route</p>
-                        <div>
-                          <font-awesome-icon icon="user" />&nbsp;D.Pickard
-                        </div>
-                        <div>
-                          <font-awesome-icon icon="car" />&nbsp;GX69 BNT (X5)
+                          <font-awesome-icon icon="car" />
+                          &nbsp;{{unit.vehicle.vrm}} ({{unit.vehicle.model_abbreviation}})
                         </div>
                       </div>
                       <div class="col">
-                        <span class="badge badge-pill badge-primary">Tactical</span>
-                        <span class="badge badge-pill badge-danger">Firearms</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="card shadow bg-secondary">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col">
-                        <h3>903</h3>
-                        <p>At Scene</p>
-                        <div>
-                          <font-awesome-icon icon="user" />&nbsp;C.McGarel
-                        </div>
-                        <div>
-                          <font-awesome-icon icon="user" />&nbsp;L.Livermore
-                        </div>
-                        <div>
-                          <font-awesome-icon icon="car" />&nbsp;GX69 OLT (Focus)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <span class="badge badge-pill badge-primary">Response</span>
-                        <span class="badge badge-pill badge-warning">Taser</span>
+                        <span
+                          class="badge badge-pill text-wrap"
+                          v-for="(qual, i) in getQualsFromUsers(unit.users)"
+                          :key="i"
+                          :class="qualBgColour(qual)"
+                        >{{qual.name}}</span>
                       </div>
                     </div>
                   </div>
@@ -123,7 +79,7 @@
             </div>
             <div class="px-2">
               <span class="badge badge-pill badge-primary text-wrap" style="width: 8rem;">
-                01/01/2020 19:44
+                {{dateNow}}
                 H.Cameron Oscar 1
               </span>
             </div>
@@ -194,15 +150,13 @@
                               <p class="pl-2">Assign Units</p>
                             </div>
                             <div class="col border">
-                              <v-select label="callsign" :options="this.units">
-                                <input
-                                  class="form-control input-lg"
-                                  type="text"
-                                  name="assignUnit"
-                                  id="assignUnit"
-                                  v-on:keyup.enter="assignUnit"
-                                />
-                              </v-select>
+                              <input
+                                class="form-control input-lg"
+                                type="text"
+                                name="assignUnit"
+                                id="assignUnit"
+                                v-on:keyup.enter="assignUnit"
+                              />
                             </div>
                           </div>
                           <div class="row no-gutters">
@@ -339,7 +293,8 @@ export default {
       time: "00:00:00:000",
       units: [],
       cads: [],
-      activeCad: []
+      activeCad: [],
+      dateNow: ''
     };
   },
   created: function() {
@@ -352,11 +307,48 @@ export default {
       (this.stoppedDuration = 0),
       (this.started = null),
       (this.running = false);
+      this.currentTime()
   },
   destroyed: function() {
     this.reset();
   },
   methods: {
+    getQualsFromUsers: function(users) {
+      if (users) {
+        const qualList = [];
+        users.forEach(user => {
+          user.user.qualifications.forEach(qual => {
+            if (qualList.filter(e => e.id === qual.id).length == 0) {
+              qualList.push(qual);
+            }
+          });
+        });
+        return qualList;
+      }
+    },
+    sortByState: function(arr) {
+      if (arr) {
+        return arr.slice().sort(function(a, b) {
+          return a.state - b.state;
+        });
+      }
+    },
+    stateName: function(state) {
+      switch (state) {
+        case 0:
+          return "Emergency Assistance";
+        case 2:
+          return "On Patrol";
+        case 4:
+          return "Refreshments";
+        case 5:
+          return "En Route";
+        case 6:
+          return "At Scene";
+        case 9:
+          return "Prisioner Escort";
+      }
+    },
     stateTextColour: function(state) {
       switch (state) {
         case 0:
@@ -389,6 +381,18 @@ export default {
           return "bg-secondary text-white";
       }
     },
+    qualBgColour: function(qual) {
+      switch (qual.type) {
+        case "Driver":
+          return "badge-primary";
+        case "Firearms":
+          return "badge-danger";
+        case "Other":
+          return "badge-success text-dark";
+        case "Public Order":
+          return "badge-info";
+      }
+    },
     formatDate: function(date, format) {
       if (date) {
         return this.$moment(String(date)).format(format);
@@ -401,17 +405,33 @@ export default {
       } else {
         url = "/api/cad";
       }
-      this.$api.get(url).then(response => {
-        this.activeCad = response.data;
-      });
+      this.$api
+        .get(url)
+        .then(response => {
+          this.activeCad = response.data;
+        })
+        .catch(error => {
+          this.activeCad = [];
+        });
     },
     fetchData: function() {
       this.cads = this.units = null;
-      this.$api.get("/api/cad/index").then(response => {
-        this.cads = response.data.cads;
-        this.cads.shift();
-        this.units = response.data.units;
-      });
+      this.$api
+        .get("/api/cad/index")
+        .then(response => {
+          this.cads = response.data.cads;
+          this.cads.shift();
+          this.units = response.data.units;
+        })
+        .catch(error => {
+          this.cads = [];
+          this.units = [];
+        });
+    },
+    displayName: function(name) {
+      const initial = name.substr(0, 1);
+      const lastName = name.split(" ")[1];
+      return `${initial}.${lastName}`;
     },
     triggerTimer: function() {
       if (this.running) return this.stop();
@@ -464,7 +484,11 @@ export default {
         "." +
         this.zeroPrefix(ms, 3);
     },
+    currentTime: function() {
+      this.dateNow = this.$moment().format("DD/MM/YYYY HH:mm");
 
+      setTimeout(this.currentTime, 1000);
+    },
     zeroPrefix: function(num, digit) {
       var zero = "";
       for (var i = 0; i < digit; i++) {

@@ -36,7 +36,7 @@ class CADController extends Controller
     public function show()
     {
         $cads = CAD::whereDate('created_at', Carbon::today())->get();
-        $units = Unit::all();
+        $units = Unit::all()->load('users.user.qualifications', 'vehicle');
 
         return [
             'cads' => $cads,
@@ -51,11 +51,11 @@ class CADController extends Controller
     {
         if($id)
         {
-            $cad = CAD::with('units.users.user')->find($id);
+            $cad = CAD::with('units')->find($id);
         }
         else
         {
-            $cad = CAD::whereDate('created_at', Carbon::today())->first()->load('units.users.user');
+            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units');
         }
 
         return $cad;
