@@ -44,6 +44,18 @@
                         >{{qual.name}}</span>
                       </div>
                     </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col">
+                        <span
+                          class="badge badge-pill"
+                          v-for="(state, i) in displayStateList(unit)"
+                          :key="i"
+                          v-on:click="stateSelect(state)"
+                          :class="stateBgColour(state)"
+                        >State {{state}}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -294,7 +306,8 @@ export default {
       units: [],
       cads: [],
       activeCad: [],
-      dateNow: ''
+      dateNow: "",
+      states: ["0", "2", "4", "5", "6", "9", "11"]
     };
   },
   created: function() {
@@ -307,7 +320,7 @@ export default {
       (this.stoppedDuration = 0),
       (this.started = null),
       (this.running = false);
-      this.currentTime()
+    this.currentTime();
   },
   destroyed: function() {
     this.reset();
@@ -366,7 +379,7 @@ export default {
       }
     },
     stateBgColour: function(state) {
-      switch (state) {
+      switch (parseInt(state, 10)) {
         case 0:
           return "bg-danger text-white";
         case 2:
@@ -379,7 +392,22 @@ export default {
           return "bg-secondary text-white";
         case 9:
           return "bg-secondary text-white";
+        case 11:
+          return "bg-dark text-white";
       }
+    },
+    displayStateList: function(unit) {
+      if (unit) {
+        let stateList = this.states;
+        let unitState = parseInt(unit.state, 10);
+        stateList = stateList.filter(function(state) {
+          return state !== unitState;
+        });
+        return stateList;
+      }
+    },
+    stateSelect: function(state) {
+      console.log(state);
     },
     qualBgColour: function(qual) {
       switch (qual.type) {
