@@ -1,5 +1,8 @@
 <template>
-  <div class="container-fluid py-4 h-100">
+  <div v-if="this.isLoading">
+    <circle-spin :loading="isLoading"></circle-spin>
+  </div>
+  <div class="container-fluid py-4 h-100" v-else>
     <div class="card h-100">
       <div class="card-header">EmergencyRP CAD</div>
       <div class="row py-4 px-4 h-100">
@@ -92,7 +95,7 @@
             <div class="px-2">
               <span class="badge badge-pill badge-primary text-wrap" style="width: 8rem;">
                 {{dateNow}}
-                H.Cameron Oscar 1
+                {{this.displayName(this.position.user.name)}} {{this.position.callsign}}
               </span>
             </div>
           </div>
@@ -179,7 +182,7 @@
                                   v-bind:class="stateTextColour(unit.state)"
                                   v-for="(unit, index) in this.activeCad.units"
                                   :key="index"
-                                >{{unit.callsign}}</span>
+                                >{{unit.callsign}}&nbsp;</span>
                               </h6>
                             </div>
                           </div>
@@ -217,7 +220,12 @@
                                 <tr></tr>
                                 <tr></tr>
                               </thead>
-                              <tbody>
+                              <tbody v-for="(remark, i) in this.activeCad.remarks" :key="i">
+                                <tr class="border">
+                                  <td>{{formatDate(remark.created_at, 'HH:MM:ss')}}</td>
+                                  <td>{{remark.unit.callsign}}</td>
+                                  <td>{{remark.remark}}</td>
+                                </tr>
                                 <tr class="border">
                                   <td>19:40:42</td>
                                   <td>Oscar 1</td>
@@ -237,7 +245,7 @@
                                 name="remark"
                                 id="remark"
                                 placeholder="Type to add a remark"
-                                v-on:keyup.enter="addRemark"
+                                v-on:keyup.enter="addRemark($event, activeCad.id)"
                               />
                             </div>
                           </div>
@@ -306,6 +314,8 @@ export default {
       units: [],
       cads: [],
       activeCad: [],
+      position: [],
+      isLoading: true,
       dateNow: "",
       states: ["0", "2", "4", "5", "6", "9", "11"]
     };
@@ -315,17 +325,19 @@ export default {
     this.getActiveCad();
   },
   mounted: function() {
-    (this.timeBegan = null),
-      (this.timeStopped = null),
-      (this.stoppedDuration = 0),
-      (this.started = null),
-      (this.running = false);
+    this.timeBegan = null;
+    this.timeStopped = null;
+    this.stoppedDuration = 0;
+    this.started = null;
+    this.running = false;
     this.currentTime();
+    this.listen();
   },
   destroyed: function() {
     this.reset();
   },
   methods: {
+    listen: function() {},
     getQualsFromUsers: function(users) {
       if (users) {
         const qualList = [];
@@ -442,6 +454,20 @@ export default {
           this.activeCad = [];
         });
     },
+    remarkAdd: function(id, remark) {
+      this.$api
+        .post(`/api/remark`, {
+          id: id,
+          remark: remark,
+          unit: this.position.id
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     fetchData: function() {
       this.cads = this.units = null;
       this.$api
@@ -450,10 +476,13 @@ export default {
           this.cads = response.data.cads;
           this.cads.shift();
           this.units = response.data.units;
+          this.position = response.data.controller;
+          this.isLoading = false;
         })
         .catch(error => {
           this.cads = [];
           this.units = [];
+          this.fetched = false;
         });
     },
     displayName: function(name) {
@@ -525,7 +554,6 @@ export default {
       return (zero + num).slice(-digit);
     },
     clickList: function(cad, index) {
-      console.log(cad);
       this.cads.splice(index, 1);
       this.cads.push(this.activeCad);
       this.activeCad = cad;
@@ -533,8 +561,9 @@ export default {
     clickUnit: function() {
       console.log("Clicked a unit");
     },
-    addRemark: function(event) {
+    addRemark: function(event, id) {
       console.log(event.target.value);
+      console.log(id);
     },
     assignUnit: function(event) {
       console.log(event.target.value);

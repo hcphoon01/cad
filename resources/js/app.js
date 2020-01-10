@@ -9,6 +9,7 @@ require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import BootstrapVue from 'bootstrap-vue';
+import VueSpinners from 'vue-spinners';
 import axios from "axios";
 import moment from 'moment';
 
@@ -25,6 +26,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
+Vue.use(VueSpinners);
 Vue.use({
     install (Vue) {
         Vue.prototype.$api = axios.create();

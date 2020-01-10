@@ -29,4 +29,12 @@ class Unit extends Model
 	{
 		return $this->hasOne('App\Models\Helper\Vehicle', 'id', 'vehicle_id');
 	}
+
+	/**
+	 * Get the remarks the unit has created
+	 */
+	public function remarks()
+	{
+		return $this->hasMany('App\Models\FMS\CADRemark');
+	}
 }

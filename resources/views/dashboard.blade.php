@@ -1,6 +1,14 @@
 @extends('layouts.base')
 
 @section('content')
+@if(session()->has('message'))
+<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{session()->get('message')}}
+</div>
+@endif
 <div class="container">
     <div class="row">
         <div class="col-6 col-md-4">
@@ -103,7 +111,50 @@
                     <h5 class="card-title">{{$event->name}}</h5>
                     <h6 class="card-title">{{$event->description}}</h6>
                     <p class="card-text">{{$event->displayDateTime()}}</p>
-                    <a href="#" class="btn btn-success">Book On</a>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#bookOnModal">Book
+                        On</button>
+                    <div class="modal fade" id="bookOnModal" tabindex="-1" role="dialog"
+                        aria-labelledby="bookOnModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form class="form" action="{{route('book-on')}}" method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" value="{{$event->id}}" id="event" name="event">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="bookOnModalLabel">Book On</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @if ($event->isParticipant(Auth::user()))
+                                        <p>You are already booked on for this patrol.</p>
+                                        @else
+                                        <div class="form-group">
+                                            <label for="division">Division</label>
+                                            <select id="division" name="division" class="form-control">
+                                                <option selected>Choose a Division...</option>
+                                                @foreach ($divisions as $division)
+                                                <option value="{{$division->id}}">
+                                                    {{$division->name}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @endif
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        @if (!$event->isParticipant(Auth::user()))
+                                        <button type="submit" class="btn btn-success">Book On</button>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     @else
                     <h5 class="card-title">No event has been created yet</h5>
                     @endif

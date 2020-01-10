@@ -38,6 +38,7 @@ Route::group([
 
 Auth::routes(['verify' => true]);
 Route::get('/home', 'Home\HomeController@index')->name('home')->middleware('role:Member');
+Route::post('/book-on', 'FMS\CADController@bookOn')->name('book-on')->middleware('role:Member');
 
 // admin routes
 Route::group([

@@ -7,6 +7,7 @@ use App\Helper\Vehicle;
 use App\Models\FMS\CAD;
 use App\Models\Event\Event;
 use Illuminate\Http\Request;
+use App\Models\Helper\Division;
 use App\Http\Controllers\Controller;
 use App\Models\General\Announcement;
 
@@ -20,17 +21,21 @@ class HomeController extends Controller
     public function index()
     {
         $announcements = Announcement::paginate(5);
+
         $fleetCount = Vehicle::all()->count();
-        $event = Event::whereDate('start_time', Carbon::today())->first();
         $eventCount = Event::whereDate('end_time', '<', Carbon::now())->count();
         $cadCount = CAD::all()->count();
+
+        $event = Event::whereDate('start_time', Carbon::today())->first();
+        $divisions = Division::all();
 
         return view('dashboard', [
             'announcements' => $announcements,
             'fleetCount' => $fleetCount,
-            'event' => $event,
             'eventCount' => $eventCount,
-            'cadCount' => $cadCount
+            'cadCount' => $cadCount,
+            'event' => $event,
+            'divisions' => $divisions
         ]);
     }
 

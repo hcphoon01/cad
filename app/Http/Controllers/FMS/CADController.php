@@ -2,20 +2,55 @@
 
 namespace App\Http\Controllers\FMS;
 
+use App\Models\Event\Event;
+use App\Models\Event\EventParticipant;
 use Carbon\Carbon;
 use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\FMS\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CADController extends Controller
 {
+    /**
+     * Book on a user
+     * 
+     * @param Request $request
+     */
+    public function bookOn(Request $request)
+    {
+        $request->validate([
+            'division' => 'required|numeric|exists:divisions,id',
+            'event' => 'required|numeric|exists:events,id',
+        ]);
+
+        $eventParticipant = new EventParticipant();
+        $eventParticipant->user_id = Auth::user()->id;
+        $eventParticipant->division_id = $request->division;
+        $eventParticipant->event_id = $request->event;
+        $eventParticipant->save();
+
+        return redirect()->back();
+    }
+
     /**
      * Return CAD landing page
      */
     public function index()
     {
-        return view('fms.app');
+        $controller = Controller::where('user_id', Auth::user()->id)->first();
+        $event = Event::whereDate('start_time', Carbon::today())->first();
+
+        if ($controller) {
+            return view('fms.app');
+        } elseif (!$event) {
+            return view('fms.app');
+        } elseif ($event->isParticipant(Auth::user())) {
+            return redirect()->back()->with('message', 'You have not been assigned a position, please contact your chain of command');
+        } else {
+            return redirect()->back()->with('message', 'You are not booked on for this patrol. Please book on before proceeding.');
+        }
     }
 
     /**
@@ -27,7 +62,6 @@ class CADController extends Controller
      */
     public function create(Request $request)
     {
-
     }
 
     /**
@@ -37,28 +71,26 @@ class CADController extends Controller
     {
         $cads = CAD::whereDate('created_at', Carbon::today())->get();
         $units = Unit::all()->load('users.user.qualifications', 'vehicle');
+        $controller = Controller::where('user_id', Auth::user()->id)->first()->load('user');
 
         return [
             'cads' => $cads,
-            'units' => $units
+            'units' => $units,
+            'controller' => $controller
         ];
     }
 
     /**
      * Return a cad
      */
-    public function getCad($id=null)
+    public function getCad($id = null)
     {
-        if($id)
-        {
-            $cad = CAD::with('units')->find($id);
-        }
-        else
-        {
-            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units');
+        if ($id) {
+            $cad = CAD::with('units', 'remarks.unit')->find($id);
+        } else {
+            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units', 'remarks');
         }
 
         return $cad;
-
     }
 }

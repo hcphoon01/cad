@@ -17,8 +17,8 @@ class EventSeeder extends Seeder
             array(
                 'name' => 'Daily Patrol',
                 'description' => 'The normal patrol',
-                'start_time' => Carbon::parse('01/01/2020 19:00'),
-                'end_time' => Carbon::parse('01/01/2020 22:00'),
+                'start_time' => Carbon::parse('01/10/2020 19:00'),
+                'end_time' => Carbon::parse('01/10/2020 22:00'),
                 'max_participants' => '30',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -26,8 +26,8 @@ class EventSeeder extends Seeder
             array(
                 'name' => 'Special patrol',
                 'description' => 'A Special patrol',
-                'start_time' => Carbon::parse('02/01/2020 19:00'),
-                'end_time' => Carbon::parse('02/01/2020 22:00'),
+                'start_time' => Carbon::parse('01/11/2020 19:00'),
+                'end_time' => Carbon::parse('01/11/2020 22:00'),
                 'max_participants' => '30',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

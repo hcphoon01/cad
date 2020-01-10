@@ -28,4 +28,12 @@ class CAD extends Model
     {
         return $this->hasMany('App\Models\FMS\Unit', 'assigned_cad');
     }
+
+    /**
+     * Return the remarks created about the CAD
+     */
+    public function remarks()
+    {
+        return $this->hasMany('App\Models\FMS\CADRemark', 'id', 'cad_id');
+    }
 }
