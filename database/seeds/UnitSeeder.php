@@ -15,7 +15,7 @@ class UnitSeeder extends Seeder
         $data = array(
             array(
                 'vehicle_id' => '1',
-                'callsign' => 'G101',
+                'callsign_id' => '11',
                 'assigned_cad' => '1',
                 'state' => '2',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -23,7 +23,7 @@ class UnitSeeder extends Seeder
             ),
             array(
                 'vehicle_id' => '2',
-                'callsign' => 'G200',
+                'callsign_id' => '43',
                 'assigned_cad' => '2',
                 'state' => '5',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -31,7 +31,7 @@ class UnitSeeder extends Seeder
             ),
             array(
                 'vehicle_id' => '3',
-                'callsign' => 'GS202',
+                'callsign_id' => '19',
                 'assigned_cad' => '3',
                 'state' => '6',
                 'created_at' => date('Y-m-d H:i:s'),

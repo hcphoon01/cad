@@ -15,4 +15,12 @@ class Division extends Model
         'is_open' => 'boolean',
         'is_active' => 'boolean'
     ];
+
+    /**
+     * Return the callsigns that belong to the division
+     */
+    public function callsigns()
+    {
+        return $this->hasMany('App\Models\Helper\Callsign');
+    }
 }

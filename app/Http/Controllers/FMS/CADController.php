@@ -6,6 +6,7 @@ use App\Models\Event\Event;
 use App\Models\Event\EventParticipant;
 use Carbon\Carbon;
 use App\Models\FMS\CAD;
+use App\Models\FMS\CADRemark;
 use App\Models\FMS\Unit;
 use Illuminate\Http\Request;
 use App\Models\FMS\Controller;
@@ -70,7 +71,7 @@ class CADController extends Controller
     public function show()
     {
         $cads = CAD::whereDate('created_at', Carbon::today())->get();
-        $units = Unit::all()->load('users.user.qualifications', 'vehicle');
+        $units = Unit::all()->load('users.user.qualifications', 'vehicle', 'callsign');
         $controller = Controller::where('user_id', Auth::user()->id)->first()->load('user');
 
         return [
@@ -86,11 +87,31 @@ class CADController extends Controller
     public function getCad($id = null)
     {
         if ($id) {
-            $cad = CAD::with('units', 'remarks.unit')->find($id);
+            $cad = CAD::with('units.callsign', 'remarks.unit')->find($id);
         } else {
-            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units', 'remarks');
+            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units.callsign', 'remarks');
         }
 
         return $cad;
+    }
+
+    /**
+     * Handle adding a remark
+     * 
+     * @param Request $request
+     */
+    public function remark(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|numeric|exists:cads,id',
+            'unit' => 'required|numeric|exists:controllers,id',
+            'remark' => 'required|alpha_dash'
+        ]);
+
+        $remark = new CADRemark();
+        $remark->cad_id = $request->id;
+        $remark->unit_id = $request->unit;
+        $remark->remark = $request->remark;
+        $remark->save();
     }
 }

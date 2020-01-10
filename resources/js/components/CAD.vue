@@ -27,7 +27,7 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
-                        <h3>{{unit.callsign}}</h3>
+                        <h3>{{unit.callsign.callsign}}</h3>
                         <p>{{stateName(unit.state)}}</p>
                         <div v-for="(user, i) in unit.users" :key="i">
                           <font-awesome-icon icon="user" />
@@ -182,7 +182,7 @@
                                   v-bind:class="stateTextColour(unit.state)"
                                   v-for="(unit, index) in this.activeCad.units"
                                   :key="index"
-                                >{{unit.callsign}}&nbsp;</span>
+                                >{{unit.callsign.callsign}}&nbsp;</span>
                               </h6>
                             </div>
                           </div>
@@ -222,19 +222,9 @@
                               </thead>
                               <tbody v-for="(remark, i) in this.activeCad.remarks" :key="i">
                                 <tr class="border">
-                                  <td>{{formatDate(remark.created_at, 'HH:MM:ss')}}</td>
-                                  <td>{{remark.unit.callsign}}</td>
+                                  <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
+                                  <td>{{remark.unit.callsign.callsign}}</td>
                                   <td>{{remark.remark}}</td>
-                                </tr>
-                                <tr class="border">
-                                  <td>19:40:42</td>
-                                  <td>Oscar 1</td>
-                                  <td>CAD Created</td>
-                                </tr>
-                                <tr class="border">
-                                  <td>19:40:45</td>
-                                  <td>Oscar 1</td>
-                                  <td>G102 Attached</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -246,6 +236,7 @@
                                 id="remark"
                                 placeholder="Type to add a remark"
                                 v-on:keyup.enter="addRemark($event, activeCad.id)"
+                                v-model="remark"
                               />
                             </div>
                           </div>
@@ -317,7 +308,8 @@ export default {
       position: [],
       isLoading: true,
       dateNow: "",
-      states: ["0", "2", "4", "5", "6", "9", "11"]
+      states: ["0", "2", "4", "5", "6", "9", "11"],
+      remark: ""
     };
   },
   created: function() {
@@ -456,7 +448,7 @@ export default {
     },
     remarkAdd: function(id, remark) {
       this.$api
-        .post(`/api/remark`, {
+        .post(`/api/cad/remark`, {
           id: id,
           remark: remark,
           unit: this.position.id
@@ -562,8 +554,20 @@ export default {
       console.log("Clicked a unit");
     },
     addRemark: function(event, id) {
-      console.log(event.target.value);
-      console.log(id);
+      if (event.target.value.length > 0) {
+        const remark = {
+          created_at: this.$moment().format(),
+          unit: {
+            callsign: {
+              callsign: this.position.callsign
+            }
+          },
+          remark: event.target.value
+        };
+        this.remark = "";
+        this.activeCad.remarks.push(remark);
+        this.remarkAdd(id, event.target.value)
+      }
     },
     assignUnit: function(event) {
       console.log(event.target.value);

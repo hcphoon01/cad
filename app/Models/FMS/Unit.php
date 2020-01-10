@@ -37,4 +37,12 @@ class Unit extends Model
 	{
 		return $this->hasMany('App\Models\FMS\CADRemark');
 	}
+
+	/**
+	 * Get the callsign belonging to the unit
+	 */
+	public function callsign()
+	{
+		return $this->belongsTo('App\Models\Helper\Callsign');
+	}
 }
