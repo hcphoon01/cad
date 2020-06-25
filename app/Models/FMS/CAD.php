@@ -34,6 +34,6 @@ class CAD extends Model
      */
     public function remarks()
     {
-        return $this->hasMany('App\Models\FMS\CADRemark', 'id', 'cad_id');
+        return $this->hasMany('App\Models\FMS\CADRemark', 'cad_id', 'id');
     }
 }

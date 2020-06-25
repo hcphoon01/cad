@@ -23,9 +23,9 @@ class CreateUnitsTable extends Migration
         });
 
         Schema::table('units', function (Blueprint $table) {
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->foreign('callsign_id')->references('id')->on('callsigns')->onDelete('cascade');
-            $table->foreign('assigned_cad')->references('id')->on('cads')->onDelete('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles');
+            $table->foreign('callsign_id')->references('id')->on('callsigns');
+            $table->foreign('assigned_cad')->references('id')->on('cads');
         });
     }
 

@@ -72,7 +72,7 @@ class CADController extends Controller
     {
         $cads = CAD::whereDate('created_at', Carbon::today())->get();
         $units = Unit::all()->load('users.user.qualifications', 'vehicle', 'callsign');
-        $controller = Controller::where('user_id', Auth::user()->id)->first()->load('user');
+        $controller = Controller::where('user_id', Auth::user()->id)->first()->load('user', 'callsign');
 
         return [
             'cads' => $cads,
@@ -87,9 +87,9 @@ class CADController extends Controller
     public function getCad($id = null)
     {
         if ($id) {
-            $cad = CAD::with('units.callsign', 'remarks.unit')->find($id);
+            $cad = CAD::with('units.callsign', 'remarks.unit.callsign')->find($id);
         } else {
-            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units.callsign', 'remarks');
+            $cad = CAD::whereDate('created_at', Carbon::today())->firstOrFail()->load('units.callsign', 'remarks.unit.callsign');
         }
 
         return $cad;
@@ -105,12 +105,14 @@ class CADController extends Controller
         $request->validate([
             'id' => 'required|numeric|exists:cads,id',
             'unit' => 'required|numeric|exists:controllers,id',
+            'type' => 'required|alpha',
             'remark' => 'required|alpha_dash'
         ]);
 
         $remark = new CADRemark();
         $remark->cad_id = $request->id;
         $remark->unit_id = $request->unit;
+        $remark->type = $request->type;
         $remark->remark = $request->remark;
         $remark->save();
     }

@@ -450,6 +450,30 @@ class CallsignSeeder extends Seeder
             ),
         );
 
+        $comms = array(
+            array(
+                'callsign' => 'OSCAR 1',
+                'name' => 'Communications Supervisor',
+                'division_id' => '7',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ),
+            array(
+                'callsign' => 'Central 1',
+                'name' => 'Communications Operator',
+                'division_id' => '7',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ),
+            array(
+                'callsign' => 'Central 2',
+                'name' => 'Communications Operator',
+                'division_id' => '7',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            )
+        );
+
         $extra = array(
             array(
                 'callsign' => 'NPAS21',
@@ -473,6 +497,7 @@ class CallsignSeeder extends Seeder
         DB::table('callsigns')->insert($trojan);
         DB::table('callsigns')->insert($fire);
         DB::table('callsigns')->insert($ambo);
+        DB::table('callsigns')->insert($comms);
         DB::table('callsigns')->insert($extra);
     }
 }

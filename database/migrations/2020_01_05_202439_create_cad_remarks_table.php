@@ -17,6 +17,7 @@ class CreateCADRemarksTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('cad_id');
             $table->unsignedBigInteger('unit_id');
+            $table->string('type');
             $table->text('remark');
             $table->timestamps();
         });

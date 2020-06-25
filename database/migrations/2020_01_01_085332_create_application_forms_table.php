@@ -26,8 +26,8 @@ class CreateApplicationFormsTable extends Migration
         });
 
         Schema::table('application_forms', function (Blueprint $table) {
-            $table->foreign('applicant_id')->references('id')->on('applicants')->onDelete('cascade');
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
+            $table->foreign('applicant_id')->references('id')->on('applicants');
+            $table->foreign('division_id')->references('id')->on('divisions');
         });
     }
 

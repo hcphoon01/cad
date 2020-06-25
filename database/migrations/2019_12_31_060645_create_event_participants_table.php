@@ -22,9 +22,9 @@ class CreateEventParticipantsTable extends Migration
         });
 
         Schema::table('event_participants', function (Blueprint $table) {
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('events');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('division_id')->references('id')->on('divisions');
         });
     }
 

@@ -23,7 +23,7 @@ class CreateApplicantsTable extends Migration
         });
 
         Schema::table('applicants', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

@@ -22,7 +22,7 @@ class CreateAnnouncementsTable extends Migration
         });
 
         Schema::table('announcements', function (Blueprint $table) {
-            $table->foreign('posted_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('posted_by')->references('id')->on('users');
         });
     }
 

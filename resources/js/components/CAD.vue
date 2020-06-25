@@ -95,7 +95,7 @@
             <div class="px-2">
               <span class="badge badge-pill badge-primary text-wrap" style="width: 8rem;">
                 {{dateNow}}
-                {{this.displayName(this.position.user.name)}} {{this.position.callsign}}
+                {{this.displayName(this.position.user.name)}} {{this.position.callsign.callsign}}
               </span>
             </div>
           </div>
@@ -451,7 +451,8 @@ export default {
         .post(`/api/cad/remark`, {
           id: id,
           remark: remark,
-          unit: this.position.id
+          unit: this.position.id,
+          type: 'controller'
         })
         .then(response => {
           console.log(response);
@@ -549,6 +550,7 @@ export default {
       this.cads.splice(index, 1);
       this.cads.push(this.activeCad);
       this.activeCad = cad;
+      console.log(this.activeCad);
     },
     clickUnit: function() {
       console.log("Clicked a unit");
@@ -559,7 +561,7 @@ export default {
           created_at: this.$moment().format(),
           unit: {
             callsign: {
-              callsign: this.position.callsign
+              callsign: this.position.callsign.callsign
             }
           },
           remark: event.target.value

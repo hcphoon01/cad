@@ -9,21 +9,34 @@ class CADRemark extends Model
     /**
      * Specify the CAD remarks table
      */
-    protected $table = 'cads';
+    protected $table = 'cad_remarks';
 
     /**
      * Return the CAD the remark belongs to
      */
     public function cad()
     {
-        $this->belongsTo('App\Models\FMS\CAD', 'cad_id', 'id');
+        return $this->belongsTo('App\Models\FMS\CAD', 'cad_id', 'id');
     }
 
+    // /**
+    //  * Return the unit that created the remark
+    //  */
+    // public function unit()
+    // {
+    //     return $this->belongsTo('App\Models\FMS\Unit', 'unit_id', 'id');
+    // }
+
     /**
-     * Return the unit that created the remark
+     * Conditionally return the unit that created the remark
      */
     public function unit()
     {
-        $this->belongsTo('App\Models\FMS\Unit');
+        if($this->type = 'controller')
+        {
+            return $this->belongsTo('App\Models\FMS\Controller', 'unit_id', 'id');
+        } else {
+            return $this->belongsTo('App\Models\FMS\Unit', 'unit_id', 'id');
+        }
     }
 }

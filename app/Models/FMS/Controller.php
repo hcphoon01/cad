@@ -18,4 +18,12 @@ class Controller extends Model
     {
         return $this->belongsTo('App\Models\User\User');
     }
+
+    /**
+     * Return the callsign belonging to the controller
+     */
+    public function callsign()
+    {
+        return $this->belongsTo('App\Models\Helper\Callsign');
+    }
 }

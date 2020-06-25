@@ -16,12 +16,13 @@ class CreateControllersTable extends Migration
         Schema::create('controllers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('callsign');
+            $table->unsignedBigInteger('callsign_id');
             $table->timestamps();
         });
 
         Schema::table('controllers', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('callsign_id')->references('id')->on('callsigns');
         });
     }
 

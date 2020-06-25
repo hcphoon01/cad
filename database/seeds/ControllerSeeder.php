@@ -15,19 +15,19 @@ class ControllerSeeder extends Seeder
         $data = array(
             array(
                 'user_id' => null,
-                'callsign' => 'Oscar 1',
+                'callsign_id' => '61',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
                 'user_id' => null,
-                'callsign' => 'Central 1',
+                'callsign_id' => '62',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
                 'user_id' => null,
-                'callsign' => 'Central 2',
+                'callsign_id' => '63',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ),

@@ -26,8 +26,8 @@ class CreateUserDataTable extends Migration
 
         Schema::table('user_data', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->foreign('division_id')->references('id')->on('divisions');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

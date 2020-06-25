@@ -22,7 +22,7 @@ class CreateCallsignsTable extends Migration
         });
 
         Schema::table('callsigns', function (Blueprint $table) {
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
+            $table->foreign('division_id')->references('id')->on('divisions');
         });
     }
 
