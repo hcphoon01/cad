@@ -19,7 +19,7 @@ class Unit extends Model
 	 */
 	public function cad()
 	{
-		return $this->belongsTo('App\Models\FMS\CAD');
+		return $this->belongsTo('App\Models\FMS\CAD', 'assigned_cad', 'id');
 	}
 
 	/**

@@ -94,26 +94,4 @@ class CADController extends Controller
 
         return $cad;
     }
-
-    /**
-     * Handle adding a remark
-     * 
-     * @param Request $request
-     */
-    public function remark(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|numeric|exists:cads,id',
-            'unit' => 'required|numeric|exists:controllers,id',
-            'type' => 'required|alpha',
-            'remark' => 'required|alpha_dash'
-        ]);
-
-        $remark = new CADRemark();
-        $remark->cad_id = $request->id;
-        $remark->unit_id = $request->unit;
-        $remark->type = $request->type;
-        $remark->remark = $request->remark;
-        $remark->save();
-    }
 }

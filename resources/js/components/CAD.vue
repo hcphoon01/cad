@@ -166,14 +166,8 @@
                             </div>
                             <div class="col border">
                               <div>
-                                <!-- <input
-                                class="form-control input-lg"
-                                type="text"
-                                name="assignUnit"
-                                id="assignUnit"
-                                v-on:keyup.enter="assignUnit"
-                                /> -->
                                 <autocomplete 
+                                ref="searchUnit"
                                 :search="unitSearch" 
                                 :get-result-value="getUnitCallsign"
                                 auto-select
@@ -568,8 +562,30 @@ export default {
         this.remarkAdd(id, event.target.value)
       }
     },
-    assignUnit: function(unit) {
-      console.log(unit);
+    assignUnit: function(selectedUnit) {
+      if (!selectedUnit || selectedUnit.assigned_cad == this.activeCad.id) return
+      this.$refs.searchUnit.value = ''
+      this.activeCad.units.push(selectedUnit)
+      var assignedUnit = this.units.find(unit => {
+        if (unit.id == selectedUnit.id) {
+          unit.state = 5;
+          unit.assigned_cad = this.activeCad.id
+          return unit;
+        }
+      })
+      //this.sortByState()
+      this.$api
+        .post(`/api/cad/assign`, {
+          unit: assignedUnit,
+          cad: this.activeCad
+        })        
+        .then(response => {
+          //console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      //console.log(unit);
     },
     unitAssigned: function(unit, cad) {
       if(unit.assigned_cad == cad.id) {
