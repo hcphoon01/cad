@@ -3,6 +3,25 @@
     <circle-spin :loading="isLoading"></circle-spin>
   </div>
   <div class="container-fluid py-4 h-100" v-else>
+    <div class="modal" tabindex="-1" role="dialog" id="createModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" @click="close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="card h-100">
       <div class="card-header">City of London RP CAD</div>
       <div class="row py-4 px-4 h-100">
@@ -70,7 +89,7 @@
           <div class="row justify-content-between">
             <div class="d-flex">
               <div class="pr-2">
-                <a class="btn btn-primary" href="#" role="button">Create CAD</a>
+                <a class="btn btn-primary" href="#" data-target="#createModal" data-toggle="modal" role="button">Create CAD</a>
               </div>
               <div class="px-2">
                 <button
@@ -315,7 +334,7 @@ let blinkInterval;
 
 export default {
   components: {
-    Autocomplete
+    Autocomplete,
   },
   data: function() {
     return {
@@ -356,7 +375,7 @@ export default {
           name: "Off Duty"
         }
       ],
-      remark: ""
+      remark: "",
     };
   },
   created: function() {
