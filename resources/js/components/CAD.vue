@@ -166,12 +166,12 @@
                             </div>
                             <div class="col border">
                               <div>
-                                <autocomplete 
-                                ref="searchUnit"
-                                :search="unitSearch" 
-                                :get-result-value="getUnitCallsign"
-                                auto-select
-                                @submit="assignUnit"
+                                <autocomplete
+                                  ref="searchUnit"
+                                  :search="unitSearch"
+                                  :get-result-value="getUnitCallsign"
+                                  auto-select
+                                  @submit="assignUnit"
                                 />
                               </div>
                             </div>
@@ -278,7 +278,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-on:click="clickList(cad, i)" v-for="(cad,i) in this.cads" :key="i" style="cursor: pointer">
+                      <tr
+                        v-on:click="clickList(cad, i)"
+                        v-for="(cad,i) in this.cads"
+                        :key="i"
+                        style="cursor: pointer"
+                      >
                         <td>{{cad.display_name}}</td>
                         <td
                           v-bind:class="{'bg-danger text-white': cad.response_level == 'Immediate', 'bg-warning': cad.response_level == 'Standard'}"
@@ -300,8 +305,8 @@
 </template>
 
 <script>
-import Autocomplete from '@trevoreyre/autocomplete-vue'
-import '@trevoreyre/autocomplete-vue/dist/style.css'
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import "@trevoreyre/autocomplete-vue/dist/style.css";
 export default {
   components: {
     Autocomplete
@@ -443,7 +448,7 @@ export default {
           id: id,
           remark: remark,
           unit: this.position.id,
-          type: 'controller'
+          type: "controller"
         })
         .then(response => {
           //console.log(response);
@@ -559,51 +564,59 @@ export default {
         };
         this.remark = "";
         this.activeCad.remarks.push(remark);
-        this.remarkAdd(id, event.target.value)
+        this.remarkAdd(id, event.target.value);
       }
     },
     assignUnit: function(selectedUnit) {
-      if (!selectedUnit || selectedUnit.assigned_cad == this.activeCad.id) return
-      this.$refs.searchUnit.value = ''
-      this.activeCad.units.push(selectedUnit)
+      if (!selectedUnit || selectedUnit.assigned_cad == this.activeCad.id)
+        return;
+      this.$refs.searchUnit.value = "";
+      this.activeCad.units.push(selectedUnit);
+      this.cads.find(cad => {
+        if (cad.id == selectedUnit.assigned_cad) {
+          const unitArr = cad.units.filter(obj => {
+            return obj.id !== selectedUnit.id;
+          });
+          cad.units = unitArr;
+        }
+      });
       var assignedUnit = this.units.find(unit => {
         if (unit.id == selectedUnit.id) {
           unit.state = 5;
-          unit.assigned_cad = this.activeCad.id
+          unit.assigned_cad = this.activeCad.id;
           return unit;
         }
-      })
-      //this.sortByState()
+      });
       this.$api
         .post(`/api/cad/assign`, {
           unit: assignedUnit,
           cad: this.activeCad
-        })        
-        .then(response => {
-          //console.log(response);
         })
         .catch(err => {
           console.log(err);
         });
-      //console.log(unit);
     },
     unitAssigned: function(unit, cad) {
-      if(unit.assigned_cad == cad.id) {
+      if (unit.assigned_cad == cad.id) {
         return true;
       } else {
         return false;
       }
     },
     unitSearch: function(input) {
-      if (input.length < 1 ) { return [] };
+      if (input.length < 1) {
+        return [];
+      }
       return this.units.filter(unit => {
         if (!this.unitAssigned(unit, this.activeCad)) {
-          return unit.callsign.callsign.toLowerCase().startsWith(input.toLowerCase())
+          return unit.callsign.callsign
+            .toLowerCase()
+            .startsWith(input.toLowerCase());
         }
-      })
+      });
     },
     getUnitCallsign: function(unit) {
-      return unit.callsign.callsign
+      return unit.callsign.callsign;
     }
   }
 };
