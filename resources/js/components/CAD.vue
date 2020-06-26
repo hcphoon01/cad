@@ -165,13 +165,21 @@
                               <p class="pl-2">Assign Units</p>
                             </div>
                             <div class="col border">
-                              <input
+                              <div>
+                                <!-- <input
                                 class="form-control input-lg"
                                 type="text"
                                 name="assignUnit"
                                 id="assignUnit"
                                 v-on:keyup.enter="assignUnit"
-                              />
+                                /> -->
+                                <autocomplete 
+                                :search="unitSearch" 
+                                :get-result-value="getUnitCallsign"
+                                auto-select
+                                @submit="assignUnit"
+                                />
+                              </div>
                             </div>
                           </div>
                           <div class="row no-gutters">
@@ -298,7 +306,12 @@
 </template>
 
 <script>
+import Autocomplete from '@trevoreyre/autocomplete-vue'
+import '@trevoreyre/autocomplete-vue/dist/style.css'
 export default {
+  components: {
+    Autocomplete
+  },
   data: function() {
     return {
       time: "00:00:00:000",
@@ -430,22 +443,6 @@ export default {
         return this.$moment(String(date)).format(format);
       }
     },
-    // getActiveCad: function(id = null) {
-    //   let url;
-    //   if (id) {
-    //     url = `/api/cad/${id}`;
-    //   } else {
-    //     url = "/api/cad";
-    //   }
-    //   this.$api
-    //     .get(url)
-    //     .then(response => {
-    //       this.activeCad = response.data;
-    //     })
-    //     .catch(error => {
-    //       this.activeCad = [];
-    //     });
-    // },
     remarkAdd: function(id, remark) {
       this.$api
         .post(`/api/cad/remark`, {
@@ -571,8 +568,26 @@ export default {
         this.remarkAdd(id, event.target.value)
       }
     },
-    assignUnit: function(event) {
-      console.log(event.target.value);
+    assignUnit: function(unit) {
+      console.log(unit);
+    },
+    unitAssigned: function(unit, cad) {
+      if(unit.assigned_cad == cad.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    unitSearch: function(input) {
+      if (input.length < 1 ) { return [] };
+      return this.units.filter(unit => {
+        if (!this.unitAssigned(unit, this.activeCad)) {
+          return unit.callsign.callsign.toLowerCase().startsWith(input.toLowerCase())
+        }
+      })
+    },
+    getUnitCallsign: function(unit) {
+      return unit.callsign.callsign
     }
   }
 };

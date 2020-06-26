@@ -27,6 +27,7 @@
         "@fortawesome/fontawesome-svg-core": "^1.2.29",
         "@fortawesome/free-solid-svg-icons": "^5.13.1",
         "@fortawesome/vue-fontawesome": "^0.1.10",
+        "@trevoreyre/autocomplete-vue": "^2.2.0",
         "bootstrap-vue": "^2.15.0",
         "font-awesome": "^4.7.0",
         "laravel-echo": "^1.8.0",
