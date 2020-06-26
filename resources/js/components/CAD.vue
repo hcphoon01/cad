@@ -4,7 +4,7 @@
   </div>
   <div class="container-fluid py-4 h-100" v-else>
     <div class="card h-100">
-      <div class="card-header">EmergencyRP CAD</div>
+      <div class="card-header">City of London RP CAD</div>
       <div class="row py-4 px-4 h-100">
         <div class="col-md-3">
           <div class="card">
@@ -276,7 +276,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-on:click="clickList(cad, i)" v-for="(cad,i) in this.cads" :key="i">
+                      <tr v-on:click="clickList(cad, i)" v-for="(cad,i) in this.cads" :key="i" style="cursor: pointer">
                         <td>{{cad.display_name}}</td>
                         <td
                           v-bind:class="{'bg-danger text-white': cad.response_level == 'Immediate', 'bg-warning': cad.response_level == 'Standard'}"
@@ -314,7 +314,7 @@ export default {
   },
   created: function() {
     this.fetchData();
-    this.getActiveCad();
+    //this.getActiveCad();
   },
   mounted: function() {
     this.timeBegan = null;
@@ -430,22 +430,22 @@ export default {
         return this.$moment(String(date)).format(format);
       }
     },
-    getActiveCad: function(id = null) {
-      let url;
-      if (id) {
-        url = `/api/cad/${id}`;
-      } else {
-        url = "/api/cad";
-      }
-      this.$api
-        .get(url)
-        .then(response => {
-          this.activeCad = response.data;
-        })
-        .catch(error => {
-          this.activeCad = [];
-        });
-    },
+    // getActiveCad: function(id = null) {
+    //   let url;
+    //   if (id) {
+    //     url = `/api/cad/${id}`;
+    //   } else {
+    //     url = "/api/cad";
+    //   }
+    //   this.$api
+    //     .get(url)
+    //     .then(response => {
+    //       this.activeCad = response.data;
+    //     })
+    //     .catch(error => {
+    //       this.activeCad = [];
+    //     });
+    // },
     remarkAdd: function(id, remark) {
       this.$api
         .post(`/api/cad/remark`, {
@@ -455,7 +455,7 @@ export default {
           type: 'controller'
         })
         .then(response => {
-          console.log(response);
+          //console.log(response);
         })
         .catch(err => {
           console.log(err);
@@ -467,6 +467,7 @@ export default {
         .get("/api/cad/index")
         .then(response => {
           this.cads = response.data.cads;
+          this.activeCad = this.cads[0];
           this.cads.shift();
           this.units = response.data.units;
           this.position = response.data.controller;
@@ -550,7 +551,6 @@ export default {
       this.cads.splice(index, 1);
       this.cads.push(this.activeCad);
       this.activeCad = cad;
-      console.log(this.activeCad);
     },
     clickUnit: function() {
       console.log("Clicked a unit");

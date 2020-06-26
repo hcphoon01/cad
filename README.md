@@ -2,7 +2,6 @@
 A website for City of London Roleplay
 
 # To-Do
-- Refactor vue components, one component per cad element
 - Make individual cad elements scrollable
 - Implement popup modal for creating and editing cads
 - Implement assigning unit to cad
@@ -10,4 +9,4 @@ A website for City of London Roleplay
 
 # Possible implementations
 - Allow current cad/outstanding cad boxes to be popout
-- Change cursor from pointer to clicker when hovering over clickable element
+- ~~Change cursor from pointer to clicker when hovering over clickable element~~
