@@ -24,4 +24,5 @@ Route::group([
     Route::get('/{id?}', 'FMS\CADController@getCad');
     Route::post('/remark', 'API\FMS\CADController@remark');
     Route::post('/assign', 'API\FMS\CADController@assign');
+    Route::post('/state', 'API\FMS\CADController@state');
 });

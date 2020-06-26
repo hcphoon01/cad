@@ -44,4 +44,17 @@ class CADController extends Controller
       $unit->assigned_cad = $request->cad['id'];
       $unit->save();
     }
+
+    /**
+     * Handle a state change
+     * 
+     * @param Request $request
+     */
+    public function state(Request $request)
+    {
+      $unit = Unit::find($request->unit['id']);
+      $unit->state = $request->unit['state'];
+      $unit->assigned_cad = $request->unit['assigned_cad'];
+      $unit->save();
+    }
 }

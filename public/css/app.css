@@ -13995,3 +13995,8 @@ a.text-dark:focus {
   height: 100%;
 }
 
+.scrollable {
+  position: absolute;
+  overflow-y: scroll;
+}
+

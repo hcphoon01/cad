@@ -6,7 +6,7 @@
     <div class="card h-100">
       <div class="card-header">City of London RP CAD</div>
       <div class="row py-4 px-4 h-100">
-        <div class="col-md-3">
+        <div class="col-md-3 h-100">
           <div class="card">
             <div class="card-header bg-primary text-white">
               Available Units
@@ -23,7 +23,7 @@
             </div>
             <ul class="list-group list-group-flush collapse show" id="unitList">
               <li class="list-group-item" v-for="(unit, i) in sortByState(this.units)" :key="i">
-                <div class="card shadow" :class="stateBgColour(unit.state)">
+                <div class="card shadow" :class="stateBgColour(unit.state)" :id="unit.id">
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
@@ -51,12 +51,13 @@
                     <div class="row">
                       <div class="col">
                         <span
-                          class="badge badge-pill"
+                          class="badge badge-pill mx-1"
                           v-for="(state, i) in displayStateList(unit)"
                           :key="i"
-                          v-on:click="stateSelect(state)"
-                          :class="stateBgColour(state)"
-                        >State {{state}}</span>
+                          v-on:click="stateSelect(state.id, unit)"
+                          :class="stateBgColour(state.id)"
+                          style="cursor: pointer"
+                        >{{state.name}}</span>
                       </div>
                     </div>
                   </div>
@@ -93,7 +94,7 @@
               <a class="btn btn-danger" role="button" href="#">Book Off</a>
             </div>
             <div class="px-2">
-              <span class="badge badge-pill badge-primary text-wrap" style="width: 8rem;">
+              <span class="badge badge-pill badge-primary text-wrap" style="width: 9rem;">
                 {{dateNow}}
                 {{this.displayName(this.position.user.name)}} {{this.position.callsign.callsign}}
               </span>
@@ -184,6 +185,8 @@
                                   v-bind:class="stateTextColour(unit.state)"
                                   v-for="(unit, index) in this.activeCad.units"
                                   :key="index"
+                                  v-on:click="detachUnit(unit)"
+                                  style="cursor: pointer"
                                 >{{unit.callsign.callsign}}&nbsp;</span>
                               </h6>
                             </div>
@@ -307,6 +310,9 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
+let blinkInterval;
+
 export default {
   components: {
     Autocomplete
@@ -320,7 +326,36 @@ export default {
       position: [],
       isLoading: true,
       dateNow: "",
-      states: ["0", "2", "4", "5", "6", "9", "11"],
+      states: [
+        {
+          id: 0,
+          name: "Emergency Assisstance"
+        },
+        {
+          id: 2,
+          name: "On Patrol"
+        },
+        {
+          id: 4,
+          name: "Refreshments"
+        },
+        {
+          id: 5,
+          name: "En Route"
+        },
+        {
+          id: 6,
+          name: "At Scene"
+        },
+        {
+          id: 9,
+          name: "Prisoner Transport"
+        },
+        {
+          id: 11,
+          name: "Off Duty"
+        }
+      ],
       remark: ""
     };
   },
@@ -375,7 +410,7 @@ export default {
         case 6:
           return "At Scene";
         case 9:
-          return "Prisioner Escort";
+          return "Prisioner Transport";
       }
     },
     stateTextColour: function(state) {
@@ -417,13 +452,70 @@ export default {
         let stateList = this.states;
         let unitState = parseInt(unit.state, 10);
         stateList = stateList.filter(function(state) {
-          return state !== unitState;
+          return state.id != unitState;
         });
         return stateList;
       }
     },
-    stateSelect: function(state) {
-      console.log(state);
+    stateSelect: function(state, unit) {
+      switch (state) {
+        case 0:
+          unit.state = 0;
+          let blinkRed = true;
+          blinkInterval = setInterval(() => {
+            if (blinkRed) {
+              document.getElementById(unit.id).classList.add("bg-danger");
+              document.getElementById(unit.id).classList.add("text-white");
+              blinkRed = false;
+            } else {
+              document.getElementById(unit.id).classList.remove("bg-danger");
+              document.getElementById(unit.id).classList.remove("text-white");
+              blinkRed = true;
+            }
+          }, 500);
+          break;
+        case 2:
+          clearInterval(blinkInterval);
+          unit.state = 2;
+          if (unit.assigned_cad) {
+            this.dissociateUnit(unit, unit.assigned_cad);
+            unit.assigned_cad = "";
+          }
+          this.updateState(unit);
+          break;
+        case 4:
+          unit.state = 4;
+          if (unit.assigned_cad) {
+            this.dissociateUnit(unit, unit.assigned_cad);
+            unit.assigned_cad = "";
+          }
+          this.updateState(unit);
+          break;
+        case 5:
+          unit.state = 5;
+          this.updateState(unit);
+          break;
+        case 6:
+          unit.state = 6;
+          this.updateState(unit);
+          break;
+        case 9:
+          unit.state = 9;
+          this.updateState(unit);
+          break;
+      }
+    },
+    updateState: function(unit) {
+      this.$api
+        .post(`/api/cad/state`, {
+          unit: unit
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     qualBgColour: function(qual) {
       switch (qual.type) {
@@ -449,9 +541,6 @@ export default {
           remark: remark,
           unit: this.position.id,
           type: "controller"
-        })
-        .then(response => {
-          //console.log(response);
         })
         .catch(err => {
           console.log(err);
@@ -595,6 +684,31 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    dissociateUnit: function(unit, cadId) {
+      if (cadId == this.activeCad.id) {
+        const unitArr = this.activeCad.units.filter(obj => {
+          return obj.id !== unit.id;
+        });
+        this.activeCad.units = unitArr;
+      } else {
+        this.cads.find(cad => {
+          if (cad.id == cadId) {
+            const unitArr = cad.units.filter(obj => {
+              return obj.id !== unit.id;
+            });
+            cad.units = unitArr;
+          }
+        });
+      }
+    },
+    detachUnit: function(unit) {
+      this.units.find(obj => {
+        if (obj.id == unit.id) {
+          obj.state = 2;
+        }
+      });
+      this.stateSelect(2, unit);
     },
     unitAssigned: function(unit, cad) {
       if (unit.assigned_cad == cad.id) {
