@@ -17,9 +17,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faWindowMinimize, faTimes, faEdit, faUser, faCar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
 library.add(faWindowMinimize, faTimes, faEdit, faUser, faCar);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -40,6 +37,7 @@ Vue.prototype.log = console.log;
 
 import App from  './components/App';
 import CAD from './components/CAD';
+import MDT from './components/MDT';
 
 const router = new VueRouter({
     mode: 'history',
@@ -50,6 +48,11 @@ const router = new VueRouter({
             name: 'cad',
             component: CAD
         },
+        {
+          path: '/mdt',
+          name: 'mdt',
+          component: MDT
+        }
     ],
 });
 

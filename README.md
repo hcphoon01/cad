@@ -4,6 +4,7 @@ A website for City of London Roleplay
 # To-Do
 - Make individual cad elements scrollable
 - Implement popup modal for creating and editing cads
+- Create middleware to check if user is booked on before going to MDT or CAD
 - ~~Implement assigning unit to cad~~
 - ~~Change state codes to en route, at scene, on patrol (etc.) and make clickable~~
 

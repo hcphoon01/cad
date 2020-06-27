@@ -41,9 +41,12 @@ class CADController extends Controller
     public function index()
     {
         $controller = Controller::where('user_id', Auth::user()->id)->first();
+        $unit = Unit::whereHas('users', function($q) {
+          $q->where('user_id', Auth::id());
+        })->first();
         $event = Event::whereDate('start_time', Carbon::today())->first();
 
-        if ($controller) {
+        if ($controller || $unit) {
             return view('fms.app');
         } elseif (!$event) {
             return view('fms.app');
@@ -52,17 +55,6 @@ class CADController extends Controller
         } else {
             return redirect()->back()->with('message', 'You are not booked on for this patrol. Please book on before proceeding.');
         }
-    }
-
-    /**
-     * Create a CAD
-     * 
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
     }
 
     /**

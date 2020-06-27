@@ -19,7 +19,8 @@ Route::group([
     'middleware' => 'auth:api'
 ], function () {
     Route::get('/index', 'FMS\CADController@show');
-    Route::get('/create', 'FMS\CADController@create');
+    Route::post('/create', 'API\FMS\CADController@create');
+    Route::post('/update', 'API\FMS\CADController@update');
     Route::get('/{unit}/assign', 'FMS\CADController@assign');
     Route::get('/{id?}', 'FMS\CADController@getCad');
     Route::post('/remark', 'API\FMS\CADController@remark');

@@ -5,21 +5,94 @@
   <div class="container-fluid py-4 h-100" v-else>
     <div class="modal" tabindex="-1" role="dialog" id="createModal">
       <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+        <form @submit="createCad" id="createCadForm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Create CAD</h5>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="response">Response Category</label>
+                <select name="response" id="response" class="form-control" required>
+                  <option value="Immediate">Immediate</option>
+                  <option value="Standard">Standard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="caller_name">Caller Name</label>
+                <input type="text" name="caller_name" id="caller_name" class="form-control" required>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" name="location" id="location" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="vrm">VRM</label>
+                    <input type="text" name="vrm" id="vrm" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Call Description</label>
+                <textarea name="description" id="description" rows="3" class="form-control" required></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
           </div>
-          <div class="modal-body">
-            <p>Modal body text goes here.</p>
+        </form>
+      </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="editModal">
+      <div class="modal-dialog" role="document">
+        <form @submit="editCad" id="editCadForm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit CAD: {{this.activeCad.display_name}}</h5>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="response">Response Category</label>
+                <select name="response" id="response-2" class="form-control" required>
+                  <option value="Immediate" :selected="this.activeCad.response_level == 'Immediate'">Immediate</option>
+                  <option value="Standard" :selected="this.activeCad.response_level == 'Standard'">Standard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="caller_name">Caller Name</label>
+                <input type="text" name="caller_name" id="caller_name-2" class="form-control" required :value=this.activeCad.caller_name>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" name="location" id="location-2" class="form-control" required :value=this.activeCad.location>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="vrm">VRM</label>
+                    <input type="text" name="vrm" id="vrm2" class="form-control" :value=this.activeCad.vrm>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Call Description</label>
+                <textarea name="description" id="description-2" rows="3" class="form-control" required v-model="this.activeCad.description"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Edit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
     <div class="card h-100">
@@ -112,7 +185,7 @@
                             </div>
                             <div class="w-100"></div>
                             <div class="col border">
-                              <p class="pl-2">INC Channel: {{this.activeCad.inc_channel}}</p>
+                              <p class="pl-2">VRM: {{this.activeCad.vrm}}</p>
                             </div>
                             <div class="col border">
                               <p class="pl-2">Caller Name: {{this.activeCad.caller_name}}</p>
@@ -164,7 +237,7 @@
                                 Close CAD
                                 <font-awesome-icon icon="times" />
                               </a>
-                              <a role="button" href="#" class="btn btn-primary">
+                              <a role="button" href="#" class="btn btn-primary" data-target="#editModal" data-toggle="modal">
                                 Edit CAD
                                 <font-awesome-icon icon="edit" />
                               </a>
@@ -242,7 +315,6 @@
                       <tr>
                         <th>CAD Number</th>
                         <th>Grade</th>
-                        <th>INC Channel</th>
                         <th>Call Description</th>
                         <th>Location</th>
                       </tr>
@@ -258,7 +330,6 @@
                         <td
                           v-bind:class="{'bg-danger text-white': cad.response_level == 'Immediate', 'bg-warning': cad.response_level == 'Standard'}"
                         >{{cad.response_level}}</td>
-                        <td>{{cad.inc_channel}}</td>
                         <td>{{cad.description}}</td>
                         <td>{{cad.location}}</td>
                       </tr>
@@ -343,6 +414,58 @@ export default {
     this.reset();
   },
   methods: {
+    createCad: function(e) {
+      e.preventDefault();
+      var timestamp = this.$moment().format('YYYY/MM/DD HH:mm:ss')
+      var cadNumber = this.activeCad.cad_number;
+      for (let i = 0; i < this.cads.length; i++) {
+        const cad = this.cads[i];
+        if (cad.cad_number > cadNumber) {
+          cadNumber = cad.cad_number;
+        }
+      }
+      var displayName = (cadNumber + 1).toString().padStart(5, "0") + '/' + this.$moment().format('DDMMMYY').toUpperCase().replace('.', ''); 
+      
+      this.$api
+        .post('/api/cad/create', {
+          caller_name: e.target.elements.caller_name.value,
+          location: e.target.elements.location.value,
+          response_level: e.target.elements.response.value,
+          cad_number: cadNumber + 1,
+          display_name: displayName,
+          vrm: e.target.elements.vrm.value,
+          description: e.target.elements.description.value,
+          dateTime: timestamp
+        })
+        .then(response => {
+          this.cads.push(response.data)
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
+      $('#createModal').modal('hide');
+      $('#createCadForm').get(0).reset()
+    },
+    editCad: function(e) {
+      e.preventDefault();
+      this.$api
+        .post('/api/cad/update', {
+          id: this.activeCad.id,
+          caller_name: e.target.elements.caller_name.value,
+          location: e.target.elements.location.value,
+          response_level: e.target.elements.response.value,
+          vrm: e.target.elements.vrm2.value,
+          description: e.target.elements.description.value
+        })
+        .then(response => {
+          console.log(response);
+          this.activeCad = response.data;
+        })
+        .catch(err => {
+          console.log(err.response);
+        })
+        $('#editModal').modal('hide');
+    },
     listen: function() {},
     formatDate: function(date, format) {
       if (date) {

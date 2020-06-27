@@ -61,6 +61,8 @@
 
 <script>
 let blinkInterval;
+var audio = new Audio('/audio/panic.wav');
+audio.volume = 0.1;
 export default {
   props: ['units', 'states', 'activeCad', 'cads'],
   methods: {
@@ -135,6 +137,8 @@ export default {
           this.updateState(unit);
           let blinkRed = true;
           blinkInterval = setInterval(() => {
+            audio.loop = true;
+            audio.play();
             if (blinkRed) {
               document.getElementById(unit.id).classList.add("bg-danger");
               document.getElementById(unit.id).classList.add("text-white");
@@ -148,6 +152,7 @@ export default {
           break;
         case 2:
           clearInterval(blinkInterval);
+          audio.pause();
           unit.state = 2;
           if (unit.assigned_cad) {
             this.dissociateUnit(unit, unit.assigned_cad);

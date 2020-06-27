@@ -11,7 +11,7 @@
         <a class="nav-link" href="{{route('home')}}">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link " href="#">MDT</a>
+        <a class="nav-link " href="{{url('/fms/mdt')}}">MDT</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{url('/fms/cad')}}">CAD</a>

@@ -19,7 +19,9 @@ class CreateCADSTable extends Migration
             $table->string('location');
             $table->string('response_level');
             $table->string('display_name');
-            $table->string('inc_channel')->nullable();
+            $table->bigInteger('cad_number');
+            $table->string('vrm')->nullable();
+            $table->boolean('closed')->default(0);
             $table->longText('description');
             $table->timestamps();
         });

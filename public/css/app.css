@@ -13972,6 +13972,66 @@ a.text-dark:focus {
   clip: auto;
 }
 
+.btn-xlg {
+  width: 75%;
+  height: 100px;
+  font-size: 20px;
+  line-height: normal;
+  border-radius: 8px;
+}
+
+.btn-pnc-nav {
+  width: 50%;
+  height: 20px;
+  color: white;
+  background-color: #522487;
+  border-color: black;
+}
+
+.btn-pnc-disabled {
+  width: 50%;
+  height: 20px;
+  color: #5D5D5D;
+  background-color: #8B8B8D;
+  border-color: black;
+}
+
+.input-xs {
+  width: 2%;
+}
+
+.btn-spacer {
+  width: 75%;
+  height: 100px;
+  opacity: 0;
+}
+
+.btn-info,
+.btn-info:hover,
+.btn-info:visited,
+.btn-info:focus {
+  background-color: #003849;
+  border-color: #003849;
+}
+
+.btn-info {
+  color: white;
+}
+
+.btn-info:not(:disabled):not(.disabled):active:focus,
+.btn-info:not(:disabled):not(.disabled).active:focus,
+.show > .btn-info.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(97, 157, 206, 0.5);
+}
+
+.btn-info:not(:disabled):not(.disabled):active,
+.btn-info:not(:disabled):not(.disabled).active,
+.show > .btn-info.dropdown-toggle {
+  color: black;
+  background-color: #DBE1E6;
+  border-color: #DBE1E6;
+}
+
 .center {
   position: fixed;
   /* or absolute */
