@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API\FMS;
 
 use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
+use App\Events\RemarkAdded;
 use Illuminate\Http\Request;
 use App\Models\FMS\CADRemark;
 use Illuminate\Validation\Rule;
+use App\Models\FMS\ControllerModel;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CADController extends Controller
 {
@@ -22,16 +25,18 @@ class CADController extends Controller
         $request->validate([
             'id' => 'required|numeric|exists:cads,id',
             'unit' => 'required|numeric|exists:controllers,id',
-            'type' => 'required|alpha',
-            'remark' => 'required|alpha_dash'
+            'remark' => 'required'
         ]);
 
         $remark = new CADRemark();
         $remark->cad_id = $request->id;
-        $remark->unit_id = $request->unit;
-        $remark->type = $request->type;
+        $remark->controller_id = $request->unit;
         $remark->remark = $request->remark;
         $remark->save();
+
+        $remark->load('controller.callsign');
+
+        event(new RemarkAdded($remark));
     }
 
     /** Handle assign a unit

@@ -7,7 +7,8 @@ use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
 use App\Models\Event\Event;
 use Illuminate\Http\Request;
-use App\Models\FMS\Controller;
+use App\Models\FMS\ControllerModel;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event\EventParticipant;
 
@@ -39,7 +40,7 @@ class CADController extends Controller
      */
     public function index(Request $request)
     {
-        $controller = Controller::where('user_id', Auth::user()->id)->first();
+        $controller = ControllerModel::where('user_id', Auth::user()->id)->first();
         $unit = Unit::whereHas('users', function($q) {
           $q->where('user_id', Auth::id());
         })->first();
@@ -63,9 +64,9 @@ class CADController extends Controller
      */
     public function show()
     {
-        $cads = CAD::whereDate('created_at', Carbon::today())->with('units.callsign', 'remarks.unit.callsign')->get();
+        $cads = CAD::whereDate('created_at', Carbon::today())->with('units.callsign', 'remarks.unit.callsign',  'remarks.controller.callsign')->get();
         $units = Unit::all()->load('users.user.qualifications', 'vehicle', 'callsign');
-        $controller = Controller::where('user_id', Auth::user()->id)->first()->load('user', 'callsign');
+        $controller = ControllerModel::where('user_id', Auth::user()->id)->first()->load('user', 'callsign');
 
         return [
             'cads' => $cads,

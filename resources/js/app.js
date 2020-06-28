@@ -12,6 +12,7 @@ import BootstrapVue from 'bootstrap-vue';
 import VueSpinners from 'vue-spinners';
 import axios from "axios";
 import moment from 'moment';
+//import VuePusher from 'vue-pusher';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faWindowMinimize, faTimes, faEdit, faUser, faCar } from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +30,20 @@ Vue.use({
         Vue.prototype.$api = axios.create();
     }
 });
-
+// Vue.use(VuePusher, {
+//   app_key: process.env.PUSHER_APP_KEY,
+//   options: {
+//     cluster: process.env.PUSHER_APP_CLUSTER,
+//     encrypted: true,
+//     authEndpoint:`${process.env.APP_URL}/api/broadcasting/auth`,
+//       auth:{
+//         headers: {
+//           'X-CSRF-Token': document.head.querySelector(
+//             'meta[name="csrf-token"]')
+//         }
+//       }
+//   }
+// });
 
 moment.locale('nl');
 Vue.prototype.$moment = moment;

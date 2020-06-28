@@ -853,7 +853,7 @@ Named Drivers:
                           <tbody v-for="(remark, i) in this.cad.remarks" :key="i">
                             <tr class="border">
                               <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
-                              <td>{{remark.unit.callsign.callsign}}</td>
+                              <td>{{remark.unit ? remark.unit.callsign.callsign : remark.controller.callsign.callsign}}</td>
                               <td>{{remark.remark}}</td>
                             </tr>
                           </tbody>
@@ -891,7 +891,7 @@ Named Drivers:
                         class="form-control"
                         name="units"
                         id="units"
-                        value="CP12 CP25"
+                        :value="assigned"
                         disabled
                       />
                     </div>
@@ -964,14 +964,15 @@ export default {
   data() {
     return {
       state: 2,
-      tab: "cad",
+      tab: "pnc",
       prevTab: "",
-      pnc: "",
+      pnc: "vehicle",
       timeNow: "",
       cad: [],
       unit: [],
       isLoading: true,
       remark: "",
+      assigned: ""
     };
   }, 
   created: function() {
@@ -979,20 +980,26 @@ export default {
   },
   mounted: function() {
       this.currentTime();
+      Echo.private('remark-channel')
+      .listen('.newRemark', (data) => {
+        if(data.remark.unit_id == this.unit.id) return;
+        this.cad.remarks.push(data.remark);
+      })
   },
   methods: {
     fetchData: function() {
-      this.cads = this.units = null;
+      this.cad = this.unit = null;
       this.$api
         .get("/api/mdt/index")
         .then(response => {
-          this.cad = response.data.unit.cad;
+          this.cad = response.data.cad;
           this.unit = response.data.unit;
           this.isLoading = false;
+          this.assignedUnits();
         })
         .catch(error => {
-          this.cads = [];
-          this.units = [];
+          this.cad = [];
+          this.unit = [];
         });
     },
     addRemark: function(event, id) {
@@ -1016,11 +1023,7 @@ export default {
         .post(`/api/mdt/remark`, {
           id: id,
           remark: remark,
-          unit: this.unit.id,
-          type: "unit"
-        })
-        .then(response => {
-          console.log(response);
+          unit: this.unit.id
         })
         .catch(err => {
           console.log(err);
@@ -1033,6 +1036,14 @@ export default {
       this.timeNow = this.$moment().format("HH:mm");
 
       setTimeout(this.currentTime, 1000);
+    },
+    assignedUnits: function() {
+      this.assigned = "";
+      for (let i = 0; i < this.cad.units.length; i++) {
+        const unit = this.cad.units[i];
+        this.assigned = this.assigned + ' ' + unit.callsign.callsign
+      }
+      return this.assigned;
     },
     pncIndex: function() {
       if (!this.pnc) {

@@ -16,8 +16,8 @@ class CreateCADRemarksTable extends Migration
         Schema::create('cad_remarks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('cad_id');
-            $table->unsignedBigInteger('unit_id');
-            $table->string('type');
+            $table->unsignedBigInteger('unit_id')->nullable();
+            $table->unsignedBigInteger('controller_id')->nullable();
             $table->text('remark');
             $table->timestamps();
         });

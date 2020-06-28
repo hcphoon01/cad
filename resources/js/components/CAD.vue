@@ -259,20 +259,22 @@
                                 <font-awesome-icon icon="window-minimize" />
                               </a>
                             </div>
-                            <table class="table table-sm collapse show" id="remarks">
-                              <thead>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                              </thead>
-                              <tbody v-for="(remark, i) in this.activeCad.remarks" :key="i">
-                                <tr class="border">
-                                  <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
-                                  <td>{{remark.unit.callsign.callsign}}</td>
-                                  <td>{{remark.remark}}</td>
-                                </tr>
-                              </tbody>
-                            </table>
+                            <div class="scroll-remark">
+                              <table class="table table-sm collapse show" id="remarks">
+                                <thead>
+                                  <tr class="col-2"></tr>
+                                  <tr class="col-3"></tr>
+                                  <tr class="col-7"></tr>
+                                </thead>
+                                <tbody v-for="(remark, i) in this.activeCad.remarks" :key="i">
+                                  <tr class="border">
+                                    <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
+                                    <td>{{remark.unit ? remark.unit.callsign.callsign : remark.controller.callsign.callsign}}</td>
+                                    <td>{{remark.remark}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
                             <div class="form-group px-3">
                               <input
                                 class="form-control form-inline"
@@ -416,6 +418,18 @@ export default {
     this.running = false;
     this.currentTime();
     this.listen();
+    Echo.private('remark-channel')
+    .listen('.newRemark', (data) => {
+      if(data.remark.controller_id == this.position.id) return;
+      if(data.remark.cad_id == this.activeCad.id) {
+        this.activeCad.remarks.push(data.remark)
+      } 
+      this.cads.find(cad => {
+        if (cad.id == data.remark.cad_id) {
+          cad.remarks.push(data.remark);
+        }
+      });
+    })
   },
   destroyed: function() {
     this.reset();
@@ -465,7 +479,6 @@ export default {
           description: e.target.elements.description.value
         })
         .then(response => {
-          console.log(response);
           this.activeCad = response.data;
         })
         .catch(err => {
@@ -504,11 +517,10 @@ export default {
         .post(`/api/cad/remark`, {
           id: id,
           remark: remark,
-          unit: this.position.id,
-          type: "controller"
+          unit: this.position.id
         })
         .catch(err => {
-          console.log(err);
+          console.log(err.response.data);
         });
     },
     fetchData: function() {

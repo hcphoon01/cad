@@ -35,7 +35,7 @@ class Unit extends Model
 	 */
 	public function remarks()
 	{
-		return $this->hasMany('App\Models\FMS\CADRemark');
+		return $this->hasMany('App\Models\FMS\CADRemark', 'id', 'unit_id');
 	}
 
 	/**

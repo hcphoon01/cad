@@ -87,6 +87,12 @@
   overflow-x: hidden;
 }
 
+.scroll-remark {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .popover-content {
   display: none;
 }
