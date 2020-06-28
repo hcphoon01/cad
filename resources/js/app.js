@@ -30,6 +30,7 @@ Vue.use({
     }
 });
 
+
 moment.locale('nl');
 Vue.prototype.$moment = moment;
 
@@ -59,5 +60,8 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
-    render: (h) => h(App)
+    render: (h) => h(App),
+    mounted() {
+        $(document).trigger('vue-loaded');
+    }
 });

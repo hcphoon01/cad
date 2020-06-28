@@ -1,27 +1,121 @@
 <template>
-  <div class="container h-100" style="background-color:#8387A2;">
+  <div v-if="this.isLoading">
+    <circle-spin :loading="isLoading"></circle-spin>
+  </div>
+  <div class="container h-100" style="background-color:#8387A2;" v-else>
+    <div class="modal" tabindex="-1" role="dialog" id="pncDone">
+      <div class="modal-dialog" role="document">
+        <form id="addPncRemark">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add as remark</h5>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="remark">
+                  <strong>Review before adding</strong>
+                </label>
+                <textarea class="form-control" name="remark" id="remark" rows="12">VRM: SW13 AGD
+Make: Ford
+Model: Focus
+Insurer: Admiral
+Policy Number: D993314X
+From: 05/02/2019
+To: 05/02/2020
+Other vehicles: Y
+Policyholder Details: Mr Dude, Some Place, Some City, Some Postcode
+Permitted Drivers: Mr Else, JoJo
+Class of Use: Social, Domestic, Pleasure and Commuting
+Named Drivers: 
+  1. Joe Bloggs
+  2. Joe Smith
+  3. Joe Mama</textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Add Remark</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="row pt-2 px-2 h-100 justify-content-around">
       <div class="pb-1">
-        <div class="button btn btn-info" style="border-radius: 0 !important;">En Route</div>
+        <button class="button btn btn-info" style="border-radius: 0 !important;" @click="stateSelect(5)">En Route</button>
       </div>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link btn-info" id="menu-tab" data-toggle="tab" href="#menu" role="tab" aria-controls="menu" aria-selected="true">Menu</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab == 'menu'}"
+            id="menu-tab"
+            data-toggle="tab"
+            @click="prevTab = tab; tab = 'menu';"
+            role="tab"
+            aria-controls="menu"
+            aria-selected="true"
+          >Menu</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-info" id="status-tab" data-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="false">Status</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab == 'status'}"
+            id="status-tab"
+            data-toggle="tab"
+            @click="prevTab = tab; tab = 'status'"
+            role="tab"
+            aria-controls="status"
+            aria-selected="false"
+          >Status</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-info active" id="pnc-tab" data-toggle="tab" href="#pnc" role="tab" aria-controls="pnc" aria-selected="false">PNC</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab.includes('pnc')}"
+            id="pnc-tab"
+            data-toggle="tab"
+            @click="pncIndex"
+            role="tab"
+            aria-controls="pnc"
+            aria-selected="false"
+          >PNC</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-info" id="cad-tab" data-toggle="tab" href="#cad" role="tab" aria-controls="cad" aria-selected="false">CAD</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab == 'cad'}"
+            id="cad-tab"
+            data-toggle="tab"
+            @click="prevTab = tab; tab = 'cad'"
+            role="tab"
+            aria-controls="cad"
+            aria-selected="false"
+          >CAD</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-info" id="text-tab" data-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="false">Text</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab == 'text'}"
+            id="text-tab"
+            data-toggle="tab"
+            @click="prevTab = tab; tab = 'text'"
+            role="tab"
+            aria-controls="text"
+            aria-selected="false"
+          >Text</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-info" id="map-tab" data-toggle="tab" href="#map" role="tab" aria-controls="map" aria-selected="false">Map</a>
+          <button
+            class="nav-link btn-info"
+            :class="{'active': tab == 'map'}"
+            id="map-tab"
+            data-toggle="tab"
+            @click="prevTab = tab; tab = 'map'"
+            role="tab"
+            aria-controls="map"
+            aria-selected="false"
+          >Map</button>
         </li>
       </ul>
       <div class="pb-1">
@@ -29,185 +123,821 @@
       </div>
     </div>
     <div class="row px-2">
-      <div class="container mb-2" style="background-color:#DBE1E6;">
+      <div class="container mb-2" style="background-color:#DBE1E6; min-height:500px !important;">
         <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show" id="menu" role="tabpanel" aria-labelledby="menu-tab">
-            Test
-          </div>
-          <div class="tab-pane fade show" id="status" role="tabpanel" aria-labelledby="status-tab">
+          <div class="tab-pane fade show" id="menu" role="tabpanel" aria-labelledby="menu-tab">Test</div>
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'status'}"
+            id="status"
+            role="tabpanel"
+            aria-labelledby="status-tab"
+          >
             <div class="row ml-5 my-2">
               <div class="col-6 col-md-4 text-center">
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">En Route</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='5'}"
+                    @click="stateSelect(5)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >En Route</button>
                 </div>
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">Refreshments</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='4'}"
+                    @click="stateSelect(4)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >Refreshments</button>
                 </div>
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">Other Assignment</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='7'}"
+                    @click="stateSelect(7)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >Other Assignment</button>
                 </div>
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">Stop</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='8'}"
+                    @click="stateSelect(8)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >Stop</button>
                 </div>
               </div>
               <div class="col-6 col-md-4 align-self-center">
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">On Patrol</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='2'}"
+                    @click="stateSelect(2)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >On Patrol</button>
                 </div>
               </div>
               <div class="col-6 col-md-4">
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">At Scene</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='6'}"
+                    @click="stateSelect(6)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >At Scene</button>
                 </div>
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">Prisioner</button>
+                  <button
+                    type="button"
+                    :class="{'active': state=='9'}"
+                    @click="stateSelect(9)"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >Prisioner</button>
                 </div>
                 <div class="row py-2">
                   <div class="btn-spacer"></div>
                 </div>
                 <div class="row py-2">
-                  <button type="button" name="" id="" class="btn btn-info btn-xlg" style="border-radius: 0 !important;">Log Off</button>
+                  <button
+                    type="button"
+                    class="btn btn-muted btn-xlg"
+                    style="border-radius: 0 !important;"
+                  >Log Off</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="tab-pane fade show active" id="pnc" role="tabpanel" aria-labelledby="pnc-tab">
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'pnc'}"
+            id="pnc"
+            role="tabpanel"
+            aria-labelledby="pnv-tab"
+          >
             <div class="row mx-3 my-2">
               <form class="w-100">
                 <div class="col">
                   <div class="row w-100">
                     <div class="col form-group">
-                      <label for="vrm"><strong>VRM</strong></label>
-                      <input class="form-control" type="text" name="vrm" id="vrm" value="SW13 AGD" disabled>
+                      <label for="pncvehsearch">
+                        <strong>Search a VRM</strong>
+                      </label>
+                      <input type="text" name="pncvehsearch" id="pncvehsearch" class="form-control" placeholder="e.g. AB12 CDE"/>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <form class="w-100">
+                <div class="col">
+                  <div class="row w-100">
+                    <div class="col form-group">
+                      <label for="pncperssearch">
+                        <strong>Search a person</strong>
+                      </label>
+                      <input
+                        type="text"
+                        name="pncperssearch"
+                        id="pncperssearch"
+                        class="form-control"
+                        placeholder="LAST NAME\FIRST NAME\DDMMYYYY"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div 
+          class="tab-pane fade show"
+          :class="{'active': tab == 'pncpers'}"
+          id="pncpers"
+          role="tabpanel"
+          aria-labelledby="pncpers-tab"
+          >
+            <div class="row mx-3 my-2">
+              <form class="w-100">
+                <div class="col">
+                  <div class="row w-100">
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="first_name">
+                          <strong>First Name</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="row py-1">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="first_name"
+                          id="first_name"
+                          value="JoJo"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="last_name">
+                          <strong>Last Name</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="row py-1">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="last_name"
+                          id="last_name"
+                          value="Fice"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="dob">
+                          <strong>Date of Birth</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="row py-1">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="dob"
+                          id="dob"
+                          value="01/01/1990"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row w-100">
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="address">
+                          <strong>Address</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row py-1">
+                        <textarea
+                          class="form-control"
+                          name="address"
+                          id="address"
+                          rows="5"
+                          disabled
+                        >
+                        123 Yeetus Ave,
+                        Yeeted,
+                        Yeet,
+                        LN1 YET</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row w-100">
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="markers">
+                          <strong>Markers</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row py-1">
+                        <textarea
+                          class="form-control"
+                          name="markers"
+                          id="markers"
+                          rows="4"
+                          disabled
+                        >
+                        Weapons
+                        Drugs
+                        Firearms
+                        Suicide</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row w-100">
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="aliases">
+                          <strong>Aliases</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row py-1">
+                        <textarea
+                          class="form-control"
+                          name="aliases"
+                          id="aliases"
+                          rows="4"
+                          disabled
+                        >
+                        JoJo9905
+                        Jooshua
+                        </textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'pncveh'}"
+            id="pncveh"
+            role="tabpanel"
+            aria-labelledby="pncveh-tab"
+          >
+            <div class="row mx-3 my-2">
+              <form class="w-100">
+                <div class="col">
+                  <div class="row w-100">
+                    <div class="col form-group">
+                      <label for="vrmpnc">
+                        <strong>VRM</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="vrmpnc"
+                        id="vrmpnc"
+                        value="SW13 AGD"
+                        disabled
+                      />
                     </div>
                     <div class="col-3 form-group">
-                      <label for="make"><strong>Make</strong></label>
-                      <input class="form-control" type="text" name="make" id="make" value="Ford" disabled>
+                      <label for="make">
+                        <strong>Make</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="make"
+                        id="make"
+                        value="Ford"
+                        disabled
+                      />
                     </div>
                     <div class="col-3 form-group w-100">
-                      <label for="model"><strong>Model</strong></label>
-                      <input class="form-control" type="text" name="model" id="model" value="Focus" disabled>
+                      <label for="model">
+                        <strong>Model</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="model"
+                        id="model"
+                        value="Focus"
+                        disabled
+                      />
                     </div>
                   </div>
                   <div class="row mr-3">
                     <div class="col">
                       <div class="form-group">
-                        <label for="insurer"><strong>Insurers Details</strong></label>
-                        <input class="form-control" type="text" name="insurer" id="insurer" value="Admiral" disabled>
+                        <label for="insurer">
+                          <strong>Insurers Details</strong>
+                        </label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="insurer"
+                          id="insurer"
+                          value="Admiral"
+                          disabled
+                        />
                       </div>
                     </div>
                   </div>
                   <div class="row w-100">
                     <div class="col-4 form-group">
-                      <label for="number"><strong>Policy Number</strong></label>
-                      <input class="form-control" type="text" name="number" id="number" value="D993314X" disabled>
+                      <label for="number">
+                        <strong>Policy Number</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="number"
+                        id="number"
+                        value="D993314X"
+                        disabled
+                      />
                     </div>
                     <div class="col-4 form-group">
-                      <label for="from"><strong>Valid From</strong></label>
-                      <input class="form-control" type="text" name="from" id="from" value="05/02/2019" disabled>
+                      <label for="from">
+                        <strong>Valid From</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="from"
+                        id="from"
+                        value="05/02/2019"
+                        disabled
+                      />
                     </div>
                     <div class="col-4 form-group">
-                      <label for="to"><strong>Valid To</strong></label>
-                      <input class="form-control" type="text" name="to" id="to" value="05/02/2020" disabled>
+                      <label for="to">
+                        <strong>Valid To</strong>
+                      </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="to"
+                        id="to"
+                        value="05/02/2020"
+                        disabled
+                      />
                     </div>
                   </div>
                   <div class="row">
-                     <div class="col">
-                        <label class="mr-5" for="otherVehicle"><strong>Allowed to drive other vehicles</strong></label>
-                        <input class="input-xs" type="text" name="otherVehicle" id="otherVehicle" value="Y" disabled>
-                        <strong>M means Motorcycle</strong>
-                     </div>
+                    <div class="col">
+                      <label class="mr-5" for="otherVehicle">
+                        <strong>Allowed to drive other vehicles</strong>
+                      </label>
+                      <input
+                        class="input-xs"
+                        type="text"
+                        name="otherVehicle"
+                        id="otherVehicle"
+                        value="Y"
+                        disabled
+                      />
+                      <strong>M means Motorcycle</strong>
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col">
                       <div class="form-group">
-                        <label for="details"><strong>Policyholder Details</strong></label>
-                        <textarea class="form-control" name="details" id="details" rows="3" disabled>Mr Dude, Some Place, Some City, Some Postcode</textarea>
+                        <label for="details">
+                          <strong>Policyholder Details</strong>
+                        </label>
+                        <textarea
+                          class="form-control"
+                          name="details"
+                          id="details"
+                          rows="3"
+                          disabled
+                        >Mr Dude, Some Place, Some City, Some Postcode</textarea>
                       </div>
                     </div>
                   </div>
                   <div class="row w-100">
-                      <div class="col">
-                        <div class="button btn btn-pnc-disabled h-100 w-100" style="border-radius: 0 !important;">Previous</div>
-                      </div>
-                      <div class="col py-1 ml-5">
-                        <span class="align-text-top"><strong>Page 1 of 2</strong></span>
-                      </div>
-                      <div class="col pr-5">
-                         <div class="button btn btn-pnc-nav h-100 w-100" id="pnc2-tab" data-toggle="tab" href="#pnc2" role="tab" aria-controls="pnc2" aria-selected="false" style="border-radius: 0 !important;">Next</div>
-                      </div>
-                      <div class="col">
-                        <div class="button btn btn-pnc-nav h-100 w-100" style="border-radius: 0 !important;">Done</div>
-                      </div>
+                    <div class="col">
+                      <div
+                        class="button btn btn-pnc-disabled h-100 w-100"
+                        style="border-radius: 0 !important;"
+                      >Previous</div>
+                    </div>
+                    <div class="col py-1 ml-5">
+                      <span class="align-text-top">
+                        <strong>Page 1 of 2</strong>
+                      </span>
+                    </div>
+                    <div class="col pr-5">
+                      <button
+                        class="button btn btn-pnc-nav h-100 w-100"
+                        id="next-pnc"
+                        @click="prevTab = tab; tab='pncveh2'"
+                        data-toggle="tab"
+                        role="tab"
+                        aria-controls="pncveh2"
+                        aria-selected="false"
+                        style="border-radius: 0 !important;"
+                      >Next</button>
+                    </div>
+                    <div class="col">
+                      <a
+                        type="button"
+                        href="#"
+                        data-target="#pncDone"
+                        data-toggle="modal"
+                        class="button btn btn-pnc-nav h-100 w-100"
+                        style="border-radius: 0 !important;"
+                      >Done</a>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <div class="tab-pane fade show" id="pnc2" role="tabpanel" aria-labelledby="pnc2-tab">
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'pncveh2'}"
+            id="pncveh2"
+            role="tabpanel"
+            aria-labelledby="pncveh2-tab"
+          >
             <div class="row mx-3 my-2">
               <form class="w-100">
                 <div class="col">
                   <div class="row">
                     <div class="col form-group">
-                      <label for="drivers"><strong>Permitted Drivers</strong></label>
-                      <textarea class="form-control" name="drivers" id="drivers" rows="2">Mr Else, JoJo</textarea>
+                      <label for="drivers">
+                        <strong>Permitted Drivers</strong>
+                      </label>
+                      <textarea class="form-control" name="drivers" id="drivers" rows="2" disabled>Mr Else, JoJo</textarea>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col form-group">
-                      <label for="use"><strong>Class of Use</strong></label>
-                      <textarea class="form-control" name="use" id="use" rows="2">Social, Domestic, Pleasure and Commuting</textarea>
+                      <label for="use">
+                        <strong>Class of Use</strong>
+                      </label>
+                      <textarea class="form-control" name="use" id="use" rows="2" disabled>Social, Domestic, Pleasure and Commuting</textarea>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col form-group">
-                      <label for="named"><strong>Named Drivers</strong></label>
-                      <textarea class="form-control" name="named" id="named" rows="3">1. Joe Bloggs&#13;&#10;2. Joe Smith&#13;&#10;3. Joe Mama</textarea>
+                      <label for="named">
+                        <strong>Named Drivers</strong>
+                      </label>
+                      <textarea class="form-control" name="named" id="named" rows="6" disabled>1. Joe Bloggs
+2. Joe Smith
+3. Joe Mama</textarea>
                     </div>
                   </div>
                   <div class="row w-100">
-                      <div class="col">
-                        <div class="button btn btn-pnc-nav h-100 w-100" id="pnc-tab" data-toggle="tab" href="#pnc" role="tab" aria-controls="pnc" aria-selected="false" style="border-radius: 0 !important;">Previous</div>
-                      </div>
-                      <div class="col py-1 ml-5">
-                        <span class="align-text-top"><strong>Page 2 of 2</strong></span>
-                      </div>
-                      <div class="col pr-5">
-                         <div class="button btn btn-pnc-disabled h-100 w-100" style="border-radius: 0 !important;">Next</div>
-                      </div>
-                      <div class="col">
-                        <div class="button btn btn-pnc-nav h-100 w-100" style="border-radius: 0 !important;">Done</div>
-                      </div>
+                    <div class="col">
+                      <button
+                        class="button btn btn-pnc-nav h-100 w-100"
+                        id="prev-pnc"
+                        data-toggle="tab"
+                        @click="prevTab = tab; tab='pncveh'"
+                        role="tab"
+                        aria-controls="pncveh"
+                        aria-selected="false"
+                        style="border-radius: 0 !important;"
+                      >Previous</button>
+                    </div>
+                    <div class="col py-1 ml-5">
+                      <span class="align-text-top">
+                        <strong>Page 2 of 2</strong>
+                      </span>
+                    </div>
+                    <div class="col pr-5">
+                      <div
+                        class="button btn btn-pnc-disabled h-100 w-100"
+                        style="border-radius: 0 !important;"
+                      >Next</div>
+                    </div>
+                    <div class="col">
+                      <a
+                        type="button"
+                        href="#"
+                        data-target="#pncDone"
+                        data-toggle="modal"
+                        class="button btn btn-pnc-nav h-100 w-100"
+                        style="border-radius: 0 !important;"
+                      >Done</a>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <div class="tab-pane fade show" id="cad" role="tabpanel" aria-labelledby="cad-tab">
-            CAD
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'cad'}"
+            id="cad"
+            role="tabpanel"
+            aria-labelledby="cad-tab"
+          >
+            <div class="row mx-3 my-2">
+              <form class="w-100">
+                <div class="row">
+                  <div class="col-md-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="cad">
+                        <strong>CAD</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="cad"
+                        id="cad"
+                        :value="this.cad ? this.cad.cad_number.toString().padStart(5, '0') : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-2 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="dateTime">
+                        <strong>Time&Date</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="dateTime"
+                        id="dateTime"
+                        :value="this.cad ? formatDate(this.cad.created_at, 'HHmm DDMMYYYY') : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="grade">
+                        <strong>Grade</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="grade"
+                        id="grade"
+                        :value="this.cad ? this.cad.response_level.charAt(0) : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="location">
+                        <strong>Location</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-10 pr-2">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="location"
+                        id="location"
+                        :value="this.cad ? this.cad.location : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="name">
+                        <strong>Name</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        id="name"
+                        :value="this.cad ? this.cad.caller_name : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="vrm">
+                        <strong>VRM</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-2 mx-1">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="vrm"
+                        id="vrm"
+                        :value="this.cad.vrm ? this.cad.vrm : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="tel">
+                        <strong>Tel</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="tel"
+                        id="tel"
+                        :value="this.cad.telephone ? this.cad.telephone : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="toa">
+                        <strong>TOA</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-2 mx-1">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="toa"
+                        id="toa"
+                        :value="this.unit.toa ? this.unit.toa : ''"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="remarks">
+                        <strong>Remarks</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-10 pr-2 scroll">
+                    <div class="row py-1">
+                      <div class="card w-100">
+                        <table class="table table-sm collapse show" id="remarks">
+                          <thead>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                          </thead>
+                          <tbody>
+                            <tr class="border">
+                              <td>{{formatDate(this.cad.created_at, 'HH:mm:ss')}}</td>
+                              <td>Opening Remark</td>
+                              <td>{{this.cad.description}}</td>
+                            </tr>
+                          </tbody>
+                          <tbody v-for="(remark, i) in this.cad.remarks" :key="i">
+                            <tr class="border">
+                              <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
+                              <td>{{remark.unit.callsign.callsign}}</td>
+                              <td>{{remark.remark}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="remark-add">
+                        <strong>Add Remark</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-10">
+                    <div class="row py-1">
+                      <input type="text" class="form-control" name="remark-add" id="remark-add" v-on:keyup.enter="addRemark($event, cad.id)" v-model="remark"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-1 mr-1">
+                    <div class="row justify-content-end mt-2">
+                      <label for="units">
+                        <strong>Assigned</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-10">
+                    <div class="row py-1">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="units"
+                        id="units"
+                        value="CP12 CP25"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="tab-pane fade show" id="text" role="tabpanel" aria-labelledby="text-tab">
-            TEXT
-          </div>
-          <div class="tab-pane fade show" id="map" role="tabpanel" aria-labelledby="map-tab">
-            MAP
-          </div>
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'text'}"
+            id="text"
+            role="tabpanel"
+            aria-labelledby="text-tab"
+          >TEXT</div>
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'map'}"
+            id="map"
+            role="tabpanel"
+            aria-labelledby="map-tab"
+          >MAP</div>
         </div>
       </div>
     </div>
     <div class="row py-2">
       <div class="col">
-        <div class="button btn btn-info h-100 w-100 pt-3" style="border-radius: 0 !important; color: yellow;">IN COV</div>
+        <button
+          class="button btn btn-info h-100 w-100"
+          style="border-radius: 0 !important; color: yellow;"
+        >IN COV</button>
       </div>
       <div class="col col-2">
-        <div class="button btn btn-success h-100 w-100 pt-3" style="border-radius: 0 !important;">ON PATROL</div>
+        <button
+          class="button btn btn-success h-100 w-100"
+          style="border-radius: 0 !important;"
+        >ON PATROL</button>
       </div>
       <div class="col">
-        <div class="button btn btn-info h-100 w-100 pt-3" style="border-radius: 0 !important;">Back</div>
+        <button class="button btn btn-info h-100 w-100" style="border-radius: 0 !important;" @click="temp = tab; tab = prevTab; prevTab = temp;">Back</button>
       </div>
       <div class="col">
-        <div class="button btn btn-info h-100 w-100 pt-3" style="border-radius: 0 !important; color: yellow;">23:40</div>
+        <button
+          class="button btn btn-info h-100 w-100"
+          style="border-radius: 0 !important; color: yellow;"
+        >{{timeNow}}</button>
       </div>
       <div class="col">
         <div class="button btn btn-info h-100 w-100" style="border-radius: 0 !important;"></div>
@@ -219,7 +949,11 @@
         <div class="button btn btn-info h-100 w-100" style="border-radius: 0 !important;"></div>
       </div>
       <div class="col d-flex justify-content-center text-center">
-        <div class="button btn btn-danger h-100 w-100" style="border-radius: 0 !important;">Urgent Assistance</div>
+        <button
+          class="button btn btn-danger h-100 w-100"
+          style="border-radius: 0 !important;"
+          @click="stateSelect(0)"
+        >Urgent Assistance</button>
       </div>
     </div>
   </div>
@@ -227,10 +961,138 @@
 
 <script>
 export default {
+  data() {
+    return {
+      state: 2,
+      tab: "cad",
+      prevTab: "",
+      pnc: "",
+      timeNow: "",
+      cad: [],
+      unit: [],
+      isLoading: true,
+      remark: "",
+    };
+  }, 
+  created: function() {
+    this.fetchData();
+  },
+  mounted: function() {
+      this.currentTime();
+  },
+  methods: {
+    fetchData: function() {
+      this.cads = this.units = null;
+      this.$api
+        .get("/api/mdt/index")
+        .then(response => {
+          this.cad = response.data.unit.cad;
+          this.unit = response.data.unit;
+          this.isLoading = false;
+        })
+        .catch(error => {
+          this.cads = [];
+          this.units = [];
+        });
+    },
+    addRemark: function(event, id) {
+      if (event.target.value.length > 0) {
+        const remark = {
+          created_at: this.$moment().format(),
+          unit: {
+            callsign: {
+              callsign: this.unit.callsign.callsign
+            }
+          },
+          remark: event.target.value
+        };
+        this.remark = "";
+        this.cad.remarks.push(remark);
+        this.remarkAdd(id, event.target.value);
+      }
+    },
+    remarkAdd: function(id, remark) {
+      this.$api
+        .post(`/api/mdt/remark`, {
+          id: id,
+          remark: remark,
+          unit: this.unit.id,
+          type: "unit"
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    formatDate: function(date, format) {
+      return this.$moment(date).format(format);
+    },
+    currentTime: function() {
+      this.timeNow = this.$moment().format("HH:mm");
 
-}
+      setTimeout(this.currentTime, 1000);
+    },
+    pncIndex: function() {
+      if (!this.pnc) {
+        this.prevTab = this.tab;
+        this.tab = "pnc";
+      } else if (this.pnc == "vehicle") {
+        this.prevTab = this.tab;
+        this.tab = "pncveh";
+      } else if (this.pnc == "person") {
+        this.prevTab = this.tab;
+        this.tab = "pncpers";
+      }
+    },
+    stateSelect: function(state) {
+      switch (state) {
+        case 0:
+          this.state = 0;
+          this.updateState();
+          break;
+        case 2:
+          this.state = 2;
+          if (this.cad) {
+            this.dissociateUnit();
+            this.cad = "";
+          }
+          this.updateState();
+          break;
+        case 4:
+          this.state = 4;
+          if (this.cad) {
+            this.dissociateUnit();
+            this.cad = "";
+          }
+          this.updateState();
+          break;
+        case 5:
+          this.state = 5;
+          this.updateState();
+          break;
+        case 6:
+          this.state = 6;
+          this.updateState();
+          break;
+        case 7:
+          this.state = 7;
+          this.updateState();
+          break;
+        case 8:
+          this.state = 8;
+          this.updateState();
+          break;
+        case 9:
+          this.state = 9;
+          this.updateState();
+          break;
+      }
+    }, 
+  }
+};
 </script>
 
 <style>
-
 </style>

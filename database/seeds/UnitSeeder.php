@@ -18,6 +18,7 @@ class UnitSeeder extends Seeder
                 'callsign_id' => '11',
                 'assigned_cad' => '1',
                 'state' => '2',
+                'toa' => date('Hi'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
@@ -26,6 +27,7 @@ class UnitSeeder extends Seeder
                 'callsign_id' => '43',
                 'assigned_cad' => '2',
                 'state' => '5',
+                'toa' => date('Hi'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
@@ -34,6 +36,7 @@ class UnitSeeder extends Seeder
                 'callsign_id' => '19',
                 'assigned_cad' => '3',
                 'state' => '6',
+                'toa' => date('Hi'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             )

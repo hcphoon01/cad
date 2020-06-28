@@ -32,10 +32,9 @@ class CADRemark extends Model
      */
     public function unit()
     {
-        if($this->type = 'controller')
-        {
+        if($this->type == 'controller') {
             return $this->belongsTo('App\Models\FMS\Controller', 'unit_id', 'id');
-        } else {
+        } elseif ($this->type == 'unit') {
             return $this->belongsTo('App\Models\FMS\Unit', 'unit_id', 'id');
         }
     }

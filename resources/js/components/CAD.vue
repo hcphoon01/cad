@@ -49,7 +49,7 @@
         </form>
       </div>
     </div>
-    <div class="modal" tabindex="-1" role="dialog" id="editModal">
+    <div class="modal" tabindex="-1" role="dialog" id="editModal" v-if="this.activeCad">
       <div class="modal-dialog" role="document">
         <form @submit="editCad" id="editCadForm">
           <div class="modal-content">
@@ -156,7 +156,7 @@
                     <font-awesome-icon icon="window-minimize" />
                   </a>
                 </div>
-                <div class="card-group collapse show" id="activeCAD">
+                <div class="card-group collapse show" id="activeCAD" v-if="this.activeCad">
                   <div class="card">
                     <div class="card-header">
                       <div class="row justify-content-between">
@@ -386,6 +386,14 @@ export default {
           name: "At Scene"
         },
         {
+          id: 7,
+          name: "Other Assignment"
+        },
+        {
+          id: 8,
+          name: "Stop"
+        },
+        {
           id: 9,
           name: "Prisoner Transport"
         },
@@ -399,7 +407,6 @@ export default {
   },
   created: function() {
     this.fetchData();
-    //this.getActiveCad();
   },
   mounted: function() {
     this.timeBegan = null;
@@ -479,11 +486,15 @@ export default {
         case 2:
           return "text-success";
         case 4:
-          return "text-primary";
+          return "text-muted";
         case 5:
           return "text-warning";
         case 6:
           return "text-secondary";
+        case 7:
+          return "text-secondary";
+        case 8: 
+          return "text-muted";
         case 9:
           return "text-secondary";
       }

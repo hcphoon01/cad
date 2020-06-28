@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\FMS;
 
-use App\Models\Event\Event;
-use App\Models\Event\EventParticipant;
 use Carbon\Carbon;
 use App\Models\FMS\CAD;
-use App\Models\FMS\CADRemark;
 use App\Models\FMS\Unit;
+use App\Models\Event\Event;
 use Illuminate\Http\Request;
 use App\Models\FMS\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Event\EventParticipant;
 
 class CADController extends Controller
 {
@@ -38,7 +37,7 @@ class CADController extends Controller
     /**
      * Return CAD landing page
      */
-    public function index()
+    public function index(Request $request)
     {
         $controller = Controller::where('user_id', Auth::user()->id)->first();
         $unit = Unit::whereHas('users', function($q) {
@@ -46,8 +45,10 @@ class CADController extends Controller
         })->first();
         $event = Event::whereDate('start_time', Carbon::today())->first();
 
-        if ($controller || $unit) {
+        if ($controller && strpos($request->url(), '/cad')) {
             return view('fms.app');
+        } if ($unit && strpos($request->url(), '/mdt')) {
+          return view('fms.app');
         } elseif (!$event) {
             return view('fms.app');
         } elseif ($event->isParticipant(Auth::user())) {

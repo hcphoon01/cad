@@ -15,14 +15,15 @@ class CreateCADSTable extends Migration
     {
         Schema::create('cads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('caller_name');
-            $table->string('location');
+            $table->string('caller_name')->nullable();
+            $table->string('location')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('response_level');
             $table->string('display_name');
             $table->bigInteger('cad_number');
             $table->string('vrm')->nullable();
             $table->boolean('closed')->default(0);
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ class CreateUnitsTable extends Migration
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('callsign_id');
             $table->integer('state');
+            $table->bigInteger('toa')->nullable();
             $table->unsignedBigInteger('assigned_cad')->nullable();
             $table->timestamps();
         });

@@ -27,3 +27,12 @@ Route::group([
     Route::post('/assign', 'API\FMS\CADController@assign');
     Route::post('/state', 'API\FMS\CADController@state');
 });
+
+Route::group([
+  'as' => 'mdt.',
+  'prefix' => 'mdt',
+  'middleware' => 'auth:api'
+], function() {
+  Route::get('/index', 'API\FMS\MDTController@show');
+  Route::post('/remark', 'API\FMS\MDTController@remark');
+});

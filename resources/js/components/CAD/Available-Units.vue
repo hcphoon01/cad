@@ -98,6 +98,10 @@ export default {
           return "En Route";
         case 6:
           return "At Scene";
+        case 7: 
+          return "Other Assignment";
+        case 8:
+          return "Stop";
         case 9:
           return "Prisioner Transport";
       }
@@ -109,11 +113,15 @@ export default {
         case 2:
           return "bg-success text-white";
         case 4:
-          return "bg-primary text-white";
+          return "bg-muted text-white";
         case 5:
           return "bg-warning text-dark";
         case 6:
+          return "bg-primary text-white";
+        case 7:
           return "bg-secondary text-white";
+        case 8:
+          return "bg-muted text-white";
         case 9:
           return "bg-secondary text-white";
         case 11:
@@ -174,6 +182,14 @@ export default {
           break;
         case 6:
           unit.state = 6;
+          this.updateState(unit);
+          break;
+        case 7:
+          unit.state = 7;
+          this.updateState(unit);
+          break;
+        case 8:
+          unit.state = 8;
           this.updateState(unit);
           break;
         case 9:

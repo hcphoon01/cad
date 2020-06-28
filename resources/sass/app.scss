@@ -24,7 +24,7 @@
 .btn-pnc-nav {
   width: 50%;
   height: 20px;
-  color: white;
+  color: white !important;
   background-color: #522487;
   border-color: black;
 }
@@ -35,6 +35,64 @@
   color: #5D5D5D;
   background-color: #8B8B8D;
   border-color: black;
+}
+
+.btn-muted,
+.btn-muted:visited,
+.btn-muted:focus {
+  background-color: #1A326E;
+  border-color: #1A326E;
+}
+
+.btn-muted:hover {
+  color:white !important;
+  border-color: #D2C86F !important;
+  box-shadow: 0 0 0 0.2rem #D2C86F;
+}
+
+.btn-muted {
+  color: white;
+}
+
+.btn-muted:not(:disabled):not(.disabled):active:focus,
+.btn-muted:not(:disabled):not(.disabled).active:focus,
+.show > .btn-muted.dropdown-toggle:focus {
+  color: white;
+  box-shadow: 0 0 0 0.2rem #D2C86F;
+}
+
+.btn-muted:not(:disabled):not(.disabled):active,
+.btn-muted:not(:disabled):not(.disabled).active,
+.show > .btn-muted.dropdown-toggle {
+  color: white;
+  background-color: #EA5336;
+  border-color: #010c27;
+  -webkit-box-shadow: inset 0px 0px 5px #ffffff;
+     -moz-box-shadow: inset 0px 0px 5px #ffffff;
+          box-shadow: inset 0px 0px 5px #ffffff;
+   outline: none;
+}
+
+.bg-muted {
+  background-color: purple;
+}
+
+.text-muted {
+  color: purple;
+}
+
+.scroll {
+  height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.popover-content {
+  display: none;
+}
+
+.popover .arrow {
+  display: none;
 }
 
 .input-xs {
@@ -62,7 +120,7 @@
 .btn-info:not(:disabled):not(.disabled):active:focus,
 .btn-info:not(:disabled):not(.disabled).active:focus,
 .show > .btn-info.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(97, 157, 206, 0.5);
+  box-shadow: 0 0 0 0rem rgba(97, 157, 206, 0.5);
 }
 
 .btn-info:not(:disabled):not(.disabled):active,
