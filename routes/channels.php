@@ -14,6 +14,6 @@
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
-Broadcast::channel('remark-channel', function () {
+Broadcast::channel('fms-channel', function () {
   return Auth::check();
 });

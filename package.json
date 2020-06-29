@@ -34,7 +34,6 @@
         "moment": "^2.27.0",
         "npm-check-updates": "^7.0.1",
         "pusher-js": "^6.0.3",
-        "vue-pusher": "^1.0.0",
         "vue-router": "^3.3.4",
         "vue-spinners": "^1.0.2"
     }

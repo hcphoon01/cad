@@ -32,7 +32,7 @@ class RemarkAdded implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('remark-channel');
+        return new PrivateChannel('fms-channel');
     }
 
     public function broadcastAs()

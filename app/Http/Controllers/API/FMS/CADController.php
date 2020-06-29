@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\FMS;
 use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
 use App\Events\RemarkAdded;
+use App\Events\UnitAssigned;
+use App\Events\UnitDetached;
 use Illuminate\Http\Request;
 use App\Models\FMS\CADRemark;
 use Illuminate\Validation\Rule;
@@ -45,11 +47,20 @@ class CADController extends Controller
      */
     public function assign(Request $request)
     {
+      $controller = ControllerModel::where('user_id', Auth::id())->first();
+
       $unit = Unit::find($request->unit['id']);
+      if($unit->cad) {
+        event(new UnitDetached($unit, $controller));
+      }
       $unit->cad()->dissociate();
       $unit->state = $request->unit['state'];
       $unit->assigned_cad = $request->cad['id'];
       $unit->save();
+
+      $unit = $unit->load('cad.units.callsign', 'callsign');
+
+      event(new UnitAssigned($unit, $controller));
     }
 
     /**
@@ -60,9 +71,15 @@ class CADController extends Controller
     public function state(Request $request)
     {
       $unit = Unit::find($request->unit['id']);
+      $eventUnit = $unit->load('cad');
       $unit->state = $request->unit['state'];
       $unit->assigned_cad = $request->unit['assigned_cad'];
       $unit->save();
+
+      if ($unit->assigned_cad == null) {
+        $controller = ControllerModel::where('user_id', Auth::id())->first();
+        event(new UnitDetached($eventUnit, $controller));
+      }
     }
 
     /**

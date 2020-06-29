@@ -131,6 +131,9 @@
               </div>
             </div>
             <div class="px-2">
+              <button class="btn btn-primary" @click="pncPopup">PNC</button>
+            </div>
+            <div class="px-2">
               <a class="btn btn-danger" role="button" href="#">Book Off</a>
             </div>
             <div class="px-2">
@@ -351,11 +354,13 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import AvailableUnits from "./CAD/Available-Units";
+import PNC from "./CAD/PNC";
 
 export default {
   components: {
     Autocomplete,
-    AvailableUnits
+    AvailableUnits,
+    PNC
   },
   data: function() {
     return {
@@ -405,6 +410,7 @@ export default {
         }
       ],
       remark: "",
+      pncOpen: false,
     };
   },
   created: function() {
@@ -418,7 +424,7 @@ export default {
     this.running = false;
     this.currentTime();
     this.listen();
-    Echo.private('remark-channel')
+    Echo.private('fms-channel')
     .listen('.newRemark', (data) => {
       if(data.remark.controller_id == this.position.id) return;
       if(data.remark.cad_id == this.activeCad.id) {
@@ -430,11 +436,23 @@ export default {
         }
       });
     })
+    .listen('.unitAssigned', (data) => {
+      if(data.controller.id == this.position.id) return;
+      console.log(data);
+    })
+    .listen('.unitDetached', (data) => {
+      if(data.controller.id == this.position.id) return;
+      console.log(data);
+    })
   },
   destroyed: function() {
     this.reset();
   },
   methods: {
+    pncPopup: function() {
+      let route = this.$router.resolve({path: '/pnc'});
+      window.open(route.href,'newwindow', 'width=600,height=550,top=100,left=200');
+    },
     createCad: function(e) {
       e.preventDefault();
       var timestamp = this.$moment().format('YYYY/MM/DD HH:mm:ss')
@@ -663,9 +681,18 @@ export default {
         });
     },
     detachUnit: function(unit) {
+      var units = this.activeCad.units.find(obj => {
+        return obj.id != unit.id
+      })
+      if (units == undefined) {
+        this.activeCad.units = [];
+      } else {
+        this.activeCad.units = [units];
+      }
       this.units.find(obj => {
         if (obj.id == unit.id) {
           obj.state = 2;
+          obj.assigned_cad = null;
         }
       });
       this.$refs.availableUnits.stateSelect(2, unit);

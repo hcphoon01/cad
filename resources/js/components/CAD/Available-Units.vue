@@ -237,9 +237,6 @@ export default {
         .post(`/api/cad/state`, {
           unit: unit
         })
-        .then(response => {
-          console.log(response);
-        })
         .catch(err => {
           console.log(err);
         });

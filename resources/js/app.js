@@ -12,7 +12,6 @@ import BootstrapVue from 'bootstrap-vue';
 import VueSpinners from 'vue-spinners';
 import axios from "axios";
 import moment from 'moment';
-//import VuePusher from 'vue-pusher';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faWindowMinimize, faTimes, faEdit, faUser, faCar } from '@fortawesome/free-solid-svg-icons';
@@ -30,20 +29,6 @@ Vue.use({
         Vue.prototype.$api = axios.create();
     }
 });
-// Vue.use(VuePusher, {
-//   app_key: process.env.PUSHER_APP_KEY,
-//   options: {
-//     cluster: process.env.PUSHER_APP_CLUSTER,
-//     encrypted: true,
-//     authEndpoint:`${process.env.APP_URL}/api/broadcasting/auth`,
-//       auth:{
-//         headers: {
-//           'X-CSRF-Token': document.head.querySelector(
-//             'meta[name="csrf-token"]')
-//         }
-//       }
-//   }
-// });
 
 moment.locale('nl');
 Vue.prototype.$moment = moment;
@@ -53,20 +38,26 @@ Vue.prototype.log = console.log;
 import App from  './components/App';
 import CAD from './components/CAD';
 import MDT from './components/MDT';
+import PNC from './components/CAD/PNC';
 
 const router = new VueRouter({
     mode: 'history',
     base: '/fms',
     routes: [
         {
-            path: '/cad',
-            name: 'cad',
-            component: CAD
+          path: '/cad',
+          name: 'cad',
+          component: CAD
         },
         {
           path: '/mdt',
           name: 'mdt',
           component: MDT
+        },
+        {
+          path: '/pnc',
+          name: 'pnc',
+          component: PNC
         }
     ],
 });

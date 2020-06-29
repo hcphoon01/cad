@@ -48,7 +48,9 @@ class CADController extends Controller
 
         if ($controller && strpos($request->url(), '/cad')) {
             return view('fms.app');
-        } if ($unit && strpos($request->url(), '/mdt')) {
+        } elseif ($unit && strpos($request->url(), '/mdt')) {
+          return view('fms.app');
+        } elseif (strpos($request->url(), '/pnc')) {
           return view('fms.app');
         } elseif (!$event) {
             return view('fms.app');

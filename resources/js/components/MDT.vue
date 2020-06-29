@@ -678,7 +678,7 @@ Named Drivers:
                         class="form-control"
                         name="cad"
                         id="cad"
-                        :value="this.cad ? this.cad.cad_number.toString().padStart(5, '0') : ''"
+                        :value="this.cad != undefined && this.cad.cad_number ? this.cad.cad_number.toString().padStart(5, '0') : ''"
                         disabled
                       />
                     </div>
@@ -697,7 +697,7 @@ Named Drivers:
                         class="form-control"
                         name="dateTime"
                         id="dateTime"
-                        :value="this.cad ? formatDate(this.cad.created_at, 'HHmm DDMMYYYY') : ''"
+                        :value="this.cad != null && this.cad.created_at ? formatDate(this.cad.created_at, 'HHmm DDMMYYYY') : ''"
                         disabled
                       />
                     </div>
@@ -716,7 +716,7 @@ Named Drivers:
                         class="form-control"
                         name="grade"
                         id="grade"
-                        :value="this.cad ? this.cad.response_level.charAt(0) : ''"
+                        :value="this.cad != null && this.cad.response_level ? this.cad.response_level.charAt(0) : ''"
                         disabled
                       />
                     </div>
@@ -778,7 +778,7 @@ Named Drivers:
                         class="form-control"
                         name="vrm"
                         id="vrm"
-                        :value="this.cad.vrm ? this.cad.vrm : ''"
+                        :value="this.cad != null && this.cad.vrm ? this.cad.vrm : ''"
                         disabled
                       />
                     </div>
@@ -800,7 +800,7 @@ Named Drivers:
                         class="form-control"
                         name="tel"
                         id="tel"
-                        :value="this.cad.telephone ? this.cad.telephone : ''"
+                        :value="this.cad != null && this.cad.telephone ? this.cad.telephone : ''"
                         disabled
                       />
                     </div>
@@ -819,7 +819,7 @@ Named Drivers:
                         class="form-control"
                         name="toa"
                         id="toa"
-                        :value="this.unit.toa ? this.unit.toa : ''"
+                        :value="this.unit.toa ? this.unit.toa.toString().padStart('4',0) : ''"
                         disabled
                       />
                     </div>
@@ -835,28 +835,30 @@ Named Drivers:
                     </div>
                   </div>
                   <div class="col-sm-10 pr-2 scroll">
-                    <div class="row py-1">
+                    <div class="row py-1 h-100">
                       <div class="card w-100">
-                        <table class="table table-sm collapse show" id="remarks">
+                        <table class="table table-sm collapse show" id="remarks" >
                           <thead>
                             <tr></tr>
                             <tr></tr>
                             <tr></tr>
                           </thead>
-                          <tbody>
-                            <tr class="border">
-                              <td>{{formatDate(this.cad.created_at, 'HH:mm:ss')}}</td>
-                              <td>Opening Remark</td>
-                              <td>{{this.cad.description}}</td>
-                            </tr>
-                          </tbody>
-                          <tbody v-for="(remark, i) in this.cad.remarks" :key="i">
-                            <tr class="border">
-                              <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
-                              <td>{{remark.unit ? remark.unit.callsign.callsign : remark.controller.callsign.callsign}}</td>
-                              <td>{{remark.remark}}</td>
-                            </tr>
-                          </tbody>
+                          <template v-if="this.cad != null && (this.cad.remarks || this.cad.description)">
+                            <tbody>
+                              <tr class="border" v-if="this.cad != null && this.cad.description">
+                                <td>{{formatDate(this.cad.created_at, 'HH:mm:ss')}}</td>
+                                <td>Opening Remark</td>
+                                <td>{{this.cad.description}}</td>
+                              </tr>
+                            </tbody>
+                            <tbody v-for="(remark, i) in this.cad.remarks" :key="i" >
+                              <tr class="border">
+                                <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
+                                <td>{{remark.unit ? remark.unit.callsign.callsign : remark.controller.callsign.callsign}}</td>
+                                <td>{{remark.remark}}</td>
+                              </tr>
+                            </tbody>
+                          </template>
                         </table>
                       </div>
                     </div>
@@ -963,13 +965,13 @@ Named Drivers:
 export default {
   data() {
     return {
-      state: 2,
-      tab: "pnc",
+      state: '',
+      tab: "cad",
       prevTab: "",
       pnc: "vehicle",
       timeNow: "",
       cad: [],
-      unit: [],
+      unit: "",
       isLoading: true,
       remark: "",
       assigned: ""
@@ -980,25 +982,71 @@ export default {
   },
   mounted: function() {
       this.currentTime();
-      Echo.private('remark-channel')
+      Echo.private('fms-channel')
       .listen('.newRemark', (data) => {
         if(data.remark.unit_id == this.unit.id) return;
         this.cad.remarks.push(data.remark);
       })
+      .listen('.unitAssigned', (data) => {
+        if(this.emptyCad() && data.unit.id != this.unit.id) {
+          return;
+        } else if (this.emptyCad() && data.unit.id == this.unit.id) {
+          this.cad = data.unit.cad;
+          this.state = 5;
+          this.assignedUnits();
+        } else if (this.cad.id == data.unit.assigned_cad && data.unit.id != this.unit.id) {
+          for (let i = 0; i < data.unit.length; i++) {
+            const elem = data.unit[i];
+            if (elem == 'cad') {
+              data.unit.splice(i, 1);
+            }
+          }
+          this.cad.units.push(data.unit);
+          this.assignedUnits();
+        }
+      })
+      .listen('.unitDetached', (data) => {
+        if(this.emptyCad() && data.unit.id != this.unit.id) {
+          return;
+        } else if (!this.emptyCad() && data.unit.id == this.unit.id) {
+          this.cad = [];
+          this.assigned = "";
+          this.state = 2;
+        } else if (!this.emptyCad() && data.unit.id != this.unit.id) {
+          var filtered = this.cad.units.filter(unit => {
+            return unit.id != data.unit.id;
+          });
+          this.cad.units = filtered;
+          this.assignedUnits();
+        }
+      })
   },
   methods: {
+    emptyCad: function() {
+      for (var key in this.cad) {
+        if(this.cad.hasOwnProperty(key)){
+          return false;
+        }
+      }
+      return true;
+    },
     fetchData: function() {
-      this.cad = this.unit = null;
+      this.cad = this.unit = {};
       this.$api
         .get("/api/mdt/index")
         .then(response => {
-          this.cad = response.data.cad;
+          if (response.data.cad != null) {
+            this.cad = response.data.cad;
+          }
           this.unit = response.data.unit;
+          this.state = this.unit.state;
           this.isLoading = false;
-          this.assignedUnits();
+          if(this.cad != undefined) {
+            this.assignedUnits();
+          }
         })
         .catch(error => {
-          this.cad = [];
+          this.cad = {};
           this.unit = [];
         });
     },
