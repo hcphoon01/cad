@@ -37,7 +37,7 @@
             role="tabpanel"
             aria-labelledby="person-tab"
           >
-            <div class="row justify-content-center">
+            <div class="row mt-2 justify-content-center">
               <div class="col" v-if="!personPnc">
                 <div class="row mt-2 justify-content-center">
                   <form class="w-100" @submit="searchPerson">
@@ -55,6 +55,91 @@
                     </div>
                   </form>
                 </div>
+              </div>
+              <div class="col" v-else>
+                <form class="w-100">
+                  <div class="row">
+                    <div class="col-4 form-group text-center">
+                      <label for="first_name">First Name</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="first_name"
+                        id="first_name"
+                        disabled
+                        :value="personPnc.first_name"
+                      />
+                    </div>
+                    <div class="col-4 form-group text-center">
+                      <label for="last_name">Last Name</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="last_name"
+                        id="last_name"
+                        disabled
+                        :value="personPnc.last_name"
+                      />
+                    </div>
+                    <div class="col-4 form-group text-center">
+                      <label for="dob">Date of Birth</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="dob"
+                        id="dob"
+                        disabled
+                        :value="personPnc.dob"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col form-group text-center">
+                      <label for="address">Address</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="address"
+                        id="address"
+                        disabled
+                        :value="personPnc.address"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col form-group text-center">
+                      <label for="aliases">Aliases</label>
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="aliases"
+                        id="aliases"
+                        disabled
+                        :value="personPnc.aliases ? showAliases() : ''"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col form-group text-center">
+                      <label for="markers">Markers</label>
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="markers"
+                        id="markers"
+                        disabled
+                        :value="personPnc.markers ? showMarkers() : ''"
+                        rows="5"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col text-center">
+                      <button type="button" class="btn btn-primary" @click="personPnc = false">Back</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -81,11 +166,47 @@ export default {
   },
   methods: {
     searchPerson: function(e) {
-      document.getElementById('personValidation').innerHTML = '';
+      document.getElementById("personValidation").innerHTML = "";
       e.preventDefault();
-      if(!e.target.elements.personSearch.value.match(/\b[a-zA-Z ]*\\[a-zA-Z ]*\\[0-3][0-9][0-1][0-9][0-9]{4}\b/g)) {
-        document.getElementById('personValidation').innerHTML = 'Your search does not match the required format'
+      if (
+        !e.target.elements.personSearch.value.match(
+          /\b[a-zA-Z ]*\\[a-zA-Z ]*\\[0-3][0-9][0-1][0-9][0-9]{4}\b/g
+        )
+      ) {
+        document.getElementById("personValidation").innerHTML =
+          "Your search does not match the required format";
+        return;
       }
+      this.$api
+        .post("/api/pnc/person", {
+          search: e.target.elements.personSearch.value
+        })
+        .then(res => {
+          if (res.data.length != 0) {
+            this.personPnc = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
+    },
+    showAliases: function() {
+      let aliasString = "";
+      this.personPnc.aliases.forEach(
+        (item, i) => (aliasString += i + 1 + ". " + item + "\n")
+      );
+      aliasString = aliasString.substring(0, aliasString.length - 1);
+      return aliasString;
+    },
+    showMarkers: function() {
+      let markerString = "";
+      this.personPnc.markers.forEach(
+        (item, i) =>
+          (markerString +=
+            i + 1 + ". " + item.name + " - " + item.abbreviation + "\n")
+      );
+      markerString = markerString.substring(0, markerString.length - 1);
+      return markerString;
     }
   }
 };

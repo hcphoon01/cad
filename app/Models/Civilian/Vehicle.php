@@ -17,6 +17,6 @@ class Vehicle extends Model
    */
   public function civ()
   {
-    return $this->belongsTo('App\Models\Civillian\Person', 'civ_id', 'id');
+    return $this->belongsTo('App\Models\Civilian\Person', 'civ_id', 'id');
   }
 }

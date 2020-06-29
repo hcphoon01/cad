@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCivVehicleTable extends Migration
+class CreateCivVehiclesTable extends Migration
 {
   /**
    * Run the migrations.
@@ -20,13 +20,13 @@ class CreateCivVehicleTable extends Migration
       $table->string('model');
       $table->string('insurer');
       $table->string('policy_number');
-      $table->date('from');
-      $table->date('to');
+      $table->string('from');
+      $table->string('to');
       $table->string('other_vehicles');
       $table->integer('civ_id');
-      $table->string('permitted_drivers');
+      $table->string('permitted_drivers')->nullable();
       $table->string('use');
-      $table->json('named_drivers');
+      $table->json('named_drivers')->nullable();
       $table->timestamps();
     });
   }

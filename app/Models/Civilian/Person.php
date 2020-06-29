@@ -15,7 +15,7 @@ class Person extends Model
    */
   public function markers()
   {
-    return $this->belongsToMany('App\Models\Helper\Markers', 'civ_vehicles', 'person_id', 'marker_id');
+    return $this->belongsToMany('App\Models\Helper\Marker', 'marker_person', 'person_id', 'marker_id');
   }
 
   /**
@@ -23,6 +23,6 @@ class Person extends Model
    */
   public function vehicle()
   {
-    return $this->hasOne('App\Models\Civilian\Vehicle', 'id', 'civ_id');
+    return $this->hasOne('App\Models\Civilian\Vehicle', 'civ_id', 'id');
   }
 }

@@ -36,3 +36,11 @@ Route::group([
   Route::get('/index', 'API\FMS\MDTController@show');
   Route::post('/remark', 'API\FMS\MDTController@remark');
 });
+
+Route::group([
+  'as' => 'pnc.',
+  'prefix' => 'pnc',
+  'middleware' => 'auth:api'
+], function() {
+  Route::post('/person', 'API\FMS\PNCController@person');
+});
