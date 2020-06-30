@@ -56,7 +56,7 @@ class MarkersSeeder extends Seeder
         'updated_at' => date('Y-m-d H:i:s')
       ),
       array(
-        'name' => 'Female Impersonater',
+        'name' => 'Female Impersonator',
         'abbreviation' => 'IF',
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
@@ -68,7 +68,7 @@ class MarkersSeeder extends Seeder
         'updated_at' => date('Y-m-d H:i:s')
       ),
       array(
-        'name' => 'Male Impersonater',
+        'name' => 'Male Impersonator',
         'abbreviation' => 'IM',
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')

@@ -415,6 +415,10 @@ export default {
   },
   created: function() {
     this.fetchData();
+    $eventBus.$on('pnc-person',function(data) {
+      console.log('pnc remark');
+      console.log(data);
+    });
   },
   mounted: function() {
     this.timeBegan = null;
@@ -423,7 +427,6 @@ export default {
     this.started = null;
     this.running = false;
     this.currentTime();
-    this.listen();
     Echo.private('fms-channel')
     .listen('.newRemark', (data) => {
       if(data.remark.controller_id == this.position.id) return;
@@ -442,9 +445,6 @@ export default {
     })
     .listen('.unitDetached', (data) => {
       if(data.controller.id == this.position.id) return;
-      console.log(data);
-    });
-    this.$root.$on('pnc-person', (data) => {
       console.log(data);
     });
   },
@@ -507,7 +507,6 @@ export default {
         })
         $('#editModal').modal('hide');
     },
-    listen: function() {},
     formatDate: function(date, format) {
       if (date) {
         return this.$moment(String(date)).format(format);
@@ -524,7 +523,7 @@ export default {
         case 5:
           return "text-warning";
         case 6:
-          return "text-secondary";
+          return "text-primary";
         case 7:
           return "text-secondary";
         case 8: 

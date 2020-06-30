@@ -440,11 +440,15 @@ export default {
       let remarkString = "";
       for (let i = 0; i < e.target.elements.length; i++) {
         const element = e.target.elements[i];
-        if (element.type == "button") continue;
+        if (element.tagName == "BUTTON") continue;
+        if (element.value == "") {
+          remarkString += element.name + ": Nil\n";
+          continue;
+        }
         remarkString += element.name + ": " + element.value + "\n";
       }
       remarkString = remarkString.substring(0, remarkString.length - 1);
-      this.$root.$emit("pnc-person", remarkString);
+      $eventBus.$emit('pnc-person', remarkString);
     },
     vehicleRemark: function(e) {
       e.preventDefault();
