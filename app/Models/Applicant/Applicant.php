@@ -56,7 +56,7 @@ class Applicant extends Model
     public function applicationStageTextLong()
     {
         if ($this->interview) {
-            return 'Congratulations, you have been accepted into EmergencyRP';
+            return 'Congratulations, you have been accepted into City of London RP';
         } elseif ($this->hr_review) {
             return 'Congratulations, you have been invited for an interview.';
         } elseif ($this->gc_review) {

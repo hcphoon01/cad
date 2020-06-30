@@ -57,14 +57,14 @@
                 </div>
               </div>
               <div class="col" v-else>
-                <form class="w-100">
+                <form class="w-100" @submit="personRemark">
                   <div class="row">
                     <div class="col-4 form-group text-center">
                       <label for="first_name">First Name</label>
                       <input
                         class="form-control"
                         type="text"
-                        name="first_name"
+                        name="First Name"
                         id="first_name"
                         disabled
                         :value="personPnc.first_name"
@@ -75,7 +75,7 @@
                       <input
                         class="form-control"
                         type="text"
-                        name="last_name"
+                        name="Last Name"
                         id="last_name"
                         disabled
                         :value="personPnc.last_name"
@@ -86,7 +86,7 @@
                       <input
                         class="form-control"
                         type="text"
-                        name="dob"
+                        name="Date of Birth"
                         id="dob"
                         disabled
                         :value="personPnc.dob"
@@ -99,7 +99,7 @@
                       <input
                         class="form-control"
                         type="text"
-                        name="address"
+                        name="Address"
                         id="address"
                         disabled
                         :value="personPnc.address"
@@ -112,7 +112,7 @@
                       <textarea
                         class="form-control"
                         type="text"
-                        name="aliases"
+                        name="Aliases"
                         id="aliases"
                         disabled
                         :value="personPnc.aliases ? showAliases() : ''"
@@ -126,7 +126,7 @@
                       <textarea
                         class="form-control"
                         type="text"
-                        name="markers"
+                        name="Markers"
                         id="markers"
                         disabled
                         :value="personPnc.markers ? showMarkers() : ''"
@@ -136,7 +136,8 @@
                   </div>
                   <div class="row">
                     <div class="col text-center">
-                      <button type="button" class="btn btn-primary" @click="personPnc = false">Back</button>
+                      <button type="submit" class="btn btn-success">Send to CAD</button>
+                      <button type="button" class="btn btn-danger" @click="personPnc = false">Back</button>
                     </div>
                   </div>
                 </form>
@@ -148,7 +149,201 @@
             :class="{'active': tab == 'vehicle'}"
             role="tabpanel"
             aria-labelledby="vehicle-tab"
-          >Vehicle</div>
+          >
+            <div class="row mt-2 justify-content-center">
+              <div class="col" v-if="!vehiclePnc">
+                <div class="row mt-2 justify-content-center">
+                  <form class="w-100" @submit="searchVehicle">
+                    <div class="form-group text-center">
+                      <label for="vehicleSearch">Search PNC</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="search"
+                        id="vehicleSearch"
+                        placeholder="AB12 CDE"
+                        required
+                      />
+                      <p id="vehicleValidation"></p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col" v-else-if="vehiclePncPage == 1">
+                <form class="w-100" @submit="vehicleRemark">
+                  <div class="row">
+                    <div class="col md-4 text-center form-group">
+                      <label for="vrm">VRM</label>
+                      <input
+                        type="text"
+                        name="VRM"
+                        id="vrm"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.vrm"
+                      />
+                    </div>
+                    <div class="col md-4 text-center form-group">
+                      <label for="make">Make</label>
+                      <input
+                        type="text"
+                        name="Make"
+                        id="make"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.make"
+                      />
+                    </div>
+                    <div class="col md-4 text-center form-group">
+                      <label for="model">Model</label>
+                      <input
+                        type="text"
+                        name="Model"
+                        id="model"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.model"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col md-6 text-center form-group">
+                      <label for="insurer">Insurer</label>
+                      <input
+                        type="text"
+                        name="Insurer"
+                        id="insurer"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.insurer"
+                      />
+                    </div>
+                    <div class="col md-6 text-center form-group">
+                      <label for="policy_number">Policy Number</label>
+                      <input
+                        type="text"
+                        name="Policy Number"
+                        id="policy_number"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.policy_number"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col md-4 text-center form-group">
+                      <label for="from">Date from</label>
+                      <input
+                        type="text"
+                        name="Date from"
+                        id="from"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.from"
+                      />
+                    </div>
+                    <div class="col md-4 text-center form-group">
+                      <label for="to">Date to</label>
+                      <input
+                        type="text"
+                        name="Date to"
+                        id="to"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.to"
+                      />
+                    </div>
+                    <div class="col md-4 text-center form-group">
+                      <label for="other_vehicles">Other vehicles</label>
+                      <input
+                        type="text"
+                        name="Other vehicles"
+                        id="other_vehicles"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.other_vehicles"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col text-center form-group">
+                      <label for="details">Policyholder Details</label>
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="Policyholder Details"
+                        id="markers"
+                        disabled
+                        :value="showPolicyholder()"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row justify-content around">
+                    <div class="col text-center">
+                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 1">Previous</button>
+                      <button type="submit" class="btn btn-success">Send to CAD</button>
+                      <button type="button" class="btn btn-danger" @click="vehiclePnc = false">Back</button>
+                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 2">Next</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col" v-else-if="vehiclePncPage == 2">
+                <form class="w-100" @submit="vehicleRemark">
+                  <div class="row">
+                    <div class="col text-center form-group">
+                      <label for="permitted_drivers">Permitted Drivers</label>
+                      <textarea
+                        type="text"
+                        name="Permitted Drivers"
+                        id="permitted_drivers"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.permitted_drivers"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col text-center form-group">
+                      <label for="use">Class of Use</label>
+                      <input
+                        type="text"
+                        name="Class of Use"
+                        id="use"
+                        class="form-control"
+                        disabled
+                        :value="vehiclePnc.use"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col text-center form-group">
+                      <label for="named_drivers">Named Drivers</label>
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="Named Drivers"
+                        id="named_drivers"
+                        disabled
+                        :value="vehiclePnc.named_drivers ? showNamedDrivers() : ''"
+                        rows="5"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row justify-content around">
+                    <div class="col text-center">
+                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 1">Previous</button>
+                      <button type="submit" class="btn btn-success">Send to CAD</button>
+                      <button type="button" class="btn btn-danger" @click="vehiclePnc = false">Back</button>
+                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 2">Next</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -161,7 +356,8 @@ export default {
     return {
       tab: "person",
       personPnc: false,
-      vehiclePnc: false
+      vehiclePnc: false,
+      vehiclePncPage: 1,
     };
   },
   methods: {
@@ -184,6 +380,25 @@ export default {
         .then(res => {
           if (res.data.length != 0) {
             this.personPnc = res.data;
+          } else {
+            document.getElementById("personValidation").innerHTML = "No trace";
+          }
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
+    },
+    searchVehicle: function(e) {
+      e.preventDefault();
+      this.$api
+        .post("/api/pnc/vehicle", {
+          search: e.target.elements.vehicleSearch.value
+        })
+        .then(res => {
+          if (res.data.length != 0) {
+            this.vehiclePnc = res.data;
+          } else {
+            document.getElementById("vehicleValidation").innerHTML = "No trace";
           }
         })
         .catch(err => {
@@ -202,11 +417,37 @@ export default {
       let markerString = "";
       this.personPnc.markers.forEach(
         (item, i) =>
-          (markerString +=
-            i + 1 + ". " + item.name + " - " + item.abbreviation + "\n")
+          (markerString += item.name + " - " + item.abbreviation + "\n")
       );
       markerString = markerString.substring(0, markerString.length - 1);
       return markerString;
+    },
+    showPolicyholder: function() {
+      let detailString = "";
+      detailString += this.vehiclePnc.civ.first_name + ' ' + this.vehiclePnc.civ.last_name + ' ' + this.vehiclePnc.civ.address;
+      return detailString;
+    },
+    showNamedDrivers: function() {
+      let namedDriversString = "";
+      this.vehiclePnc.named_drivers.forEach(
+        (item, i) => (namedDriversString += i + 1 + ". " + item + "\n")
+      );
+      namedDriversString = namedDriversString.substring(0, namedDriversString.length - 1);
+      return namedDriversString;
+    },
+    personRemark: function(e) {
+      e.preventDefault();
+      let remarkString = "";
+      for (let i = 0; i < e.target.elements.length; i++) {
+        const element = e.target.elements[i];
+        if (element.type == "button") continue;
+        remarkString += element.name + ": " + element.value + "\n";
+      }
+      remarkString = remarkString.substring(0, remarkString.length - 1);
+      this.$root.$emit("pnc-person", remarkString);
+    },
+    vehicleRemark: function(e) {
+      e.preventDefault();
     }
   }
 };

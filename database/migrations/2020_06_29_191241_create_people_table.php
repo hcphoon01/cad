@@ -20,6 +20,7 @@ class CreatePeopleTable extends Migration
             $table->string('dob');
             $table->string('address')->nullable();
             $table->json('aliases')->nullable();
+            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

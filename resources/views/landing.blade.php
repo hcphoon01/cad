@@ -88,13 +88,13 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a>
-        <a class="navbar-brand" href="{{route('landing')}}">EmergencyRP</a>
+        <a class="navbar-brand" href="{{route('landing')}}">City of London RP</a>
     </nav>
     <div class="bg-image">
         <div class="flex-center position-ref full-height">
             <div class="content">
                 <div class="title m-b-md">
-                    Welcome to EmergencyRP
+                    Welcome to City of London RP
                 </div>
 
                 <div class="text-links">

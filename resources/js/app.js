@@ -33,6 +33,8 @@ Vue.use({
 moment.locale('nl');
 Vue.prototype.$moment = moment;
 
+Vue.prototype.$eventBus = new Vue();
+
 Vue.prototype.log = console.log;
 
 import App from  './components/App';

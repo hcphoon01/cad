@@ -43,4 +43,5 @@ Route::group([
   'middleware' => 'auth:api'
 ], function() {
   Route::post('/person', 'API\FMS\PNCController@person');
+  Route::post('/vehicle', 'API\FMS\PNCController@vehicle');
 });

@@ -84,7 +84,7 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="join_reason">Why would you like to join EmergencyRP?</label>
+                                <label for="join_reason">Why would you like to join City of London RP?</label>
                                 <textarea class="form-control {{ $errors->has('join_reason') ? 'border-danger' : '' }}"
                                     id="join_reason" rows="3" name="join_reason"></textarea>
                                 @if($errors->has('join_reason'))

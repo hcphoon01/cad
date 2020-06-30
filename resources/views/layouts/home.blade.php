@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'EmergencyRP') }}</title>
+    <title>{{ config('app.name', 'City of London RP') }}</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a href="#" class="pull-left"><img class="navbar-logo" src="{{asset('img/logo.png')}}"></a>
-        <a class="navbar-brand" href="{{route('landing')}}">EmergencyRP</a>
+        <a class="navbar-brand" href="{{route('landing')}}">City of London RP</a>
     </nav>
     <main class="py-4 container">
         @yield('content')

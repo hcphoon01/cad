@@ -443,7 +443,10 @@ export default {
     .listen('.unitDetached', (data) => {
       if(data.controller.id == this.position.id) return;
       console.log(data);
-    })
+    });
+    this.$root.$on('pnc-person', (data) => {
+      console.log(data);
+    });
   },
   destroyed: function() {
     this.reset();

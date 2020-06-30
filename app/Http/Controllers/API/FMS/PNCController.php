@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\FMS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Civilian\Person;
+use App\Models\Civilian\Vehicle;
 use Illuminate\Http\Request;
 
 class PNCController extends Controller
@@ -15,9 +16,9 @@ class PNCController extends Controller
    */
   public function person(Request $request)
   {
-    // $request->validate([
-    //   'search' => 'required|regex:/^[a-zA-Z ]*\\[a-zA-Z ]*\\[0-3][0-9][0-1][0-9][0-9]{4}+$/'
-    // ]);
+    $request->validate([
+      'search' => 'required'
+    ]);
 
     $exploded = explode('\\', $request->search);
     $day = substr($exploded[2], 0, 2);
@@ -26,7 +27,20 @@ class PNCController extends Controller
 
     $date = $day . '/' . $month . '/' . $year;
 
-    $result = Person::where('last_name', $exploded[0])->where('first_name', $exploded[1])->where('dob', $date)->with('markers')->first();
-    return $result;
+    return Person::where('last_name', $exploded[0])->where('first_name', $exploded[1])->where('dob', $date)->with('markers')->first();
+  }
+
+  /**
+   * Return PNC results for a vehicle
+   * 
+   * @param Request $request
+   */
+  public function vehicle(Request $request)
+  {
+    $request->validate([
+      'search' => 'required'
+    ]);
+
+    return Vehicle::where('vrm', $request->search)->with('civ')->first();
   }
 }

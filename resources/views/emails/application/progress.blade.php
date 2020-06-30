@@ -9,5 +9,5 @@
 <p>
     Kind Regards,
     <br>
-    EmergencyRP Team
+    City of London RP Team
 </p>
