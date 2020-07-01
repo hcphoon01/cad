@@ -4,7 +4,7 @@
       <ul class="nav nav-pills" id="pncTabs" role="tablist">
         <li class="nav-item">
           <a
-            class="nav-link active"
+            class="nav-link nav-pnc active"
             id="person-tab"
             data-toggle="tab"
             href="#person"
@@ -16,7 +16,7 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link nav-pnc"
             id="vehicle-tab"
             data-toggle="tab"
             href="#vehicle"
@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="col" v-else>
-                <form class="w-100" @submit="personRemark">
+                <form class="w-100" @submit="addRemark">
                   <div class="row">
                     <div class="col-4 form-group text-center">
                       <label for="first_name">First Name</label>
@@ -169,8 +169,8 @@
                   </form>
                 </div>
               </div>
-              <div class="col" v-else-if="vehiclePncPage == 1">
-                <form class="w-100" @submit="vehicleRemark">
+              <div class="col" v-else>
+                <form class="w-100 vehicle-pnc-result" @submit="addRemark" id="vehicle1">
                   <div class="row">
                     <div class="col md-4 text-center form-group">
                       <label for="vrm">VRM</label>
@@ -279,18 +279,6 @@
                       ></textarea>
                     </div>
                   </div>
-                  <div class="row justify-content around">
-                    <div class="col text-center">
-                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 1">Previous</button>
-                      <button type="submit" class="btn btn-success">Send to CAD</button>
-                      <button type="button" class="btn btn-danger" @click="vehiclePnc = false">Back</button>
-                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 2">Next</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="col" v-else-if="vehiclePncPage == 2">
-                <form class="w-100" @submit="vehicleRemark">
                   <div class="row">
                     <div class="col text-center form-group">
                       <label for="permitted_drivers">Permitted Drivers</label>
@@ -334,10 +322,8 @@
                   </div>
                   <div class="row justify-content around">
                     <div class="col text-center">
-                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 1">Previous</button>
-                      <button type="submit" class="btn btn-success">Send to CAD</button>
+                      <button type="button" class="btn btn-success" @click="submitVehicle">Send to CAD</button>
                       <button type="button" class="btn btn-danger" @click="vehiclePnc = false">Back</button>
-                      <button type="button" class="btn btn-primary" @click="vehiclePncPage = 2">Next</button>
                     </div>
                   </div>
                 </form>
@@ -435,7 +421,7 @@ export default {
       namedDriversString = namedDriversString.substring(0, namedDriversString.length - 1);
       return namedDriversString;
     },
-    personRemark: function(e) {
+    addRemark: function(e) {
       e.preventDefault();
       let remarkString = "";
       for (let i = 0; i < e.target.elements.length; i++) {
@@ -448,11 +434,8 @@ export default {
         remarkString += element.name + ": " + element.value + "\n";
       }
       remarkString = remarkString.substring(0, remarkString.length - 1);
-      $eventBus.$emit('pnc-person', remarkString);
+      pncChannel.postMessage(remarkString)
     },
-    vehicleRemark: function(e) {
-      e.preventDefault();
-    }
   }
 };
 </script>

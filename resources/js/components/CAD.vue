@@ -115,7 +115,7 @@
               <div class="px-2">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-success"
                   v-on:click="triggerTimer"
                 >Start/Stop Pursuit Timer</button>
               </div>
@@ -137,7 +137,7 @@
               <a class="btn btn-danger" role="button" href="#">Book Off</a>
             </div>
             <div class="px-2">
-              <span class="badge badge-pill badge-primary text-wrap" style="width: 9rem;">
+              <span class="badge badge-pill badge-danger text-wrap" style="width: 9rem;">
                 {{dateNow}}
                 {{this.displayName(this.position.user.name)}} {{this.position.callsign.callsign}}
               </span>
@@ -146,7 +146,7 @@
           <div class="row py-4">
             <div class="col">
               <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-danger text-white">
                   Active CAD
                   <a
                     role="button"
@@ -236,11 +236,11 @@
                           </div>
                           <div class="row no-gutters pb-4">
                             <div class="col border py-1 px-1">
-                              <a role="button" href="#" class="btn btn-primary">
+                              <a role="button" href="#" class="btn btn-danger" @click="closeCad">
                                 Close CAD
                                 <font-awesome-icon icon="times" />
                               </a>
-                              <a role="button" href="#" class="btn btn-primary" data-target="#editModal" data-toggle="modal">
+                              <a role="button" href="#" class="btn btn-warning" data-target="#editModal" data-toggle="modal">
                                 Edit CAD
                                 <font-awesome-icon icon="edit" />
                               </a>
@@ -263,7 +263,7 @@
                               </a>
                             </div>
                             <div class="scroll-remark">
-                              <table class="table table-sm collapse show" id="remarks">
+                              <table class="table table-sm collapse show" id="remarks" style="white-space: pre-line">
                                 <thead>
                                   <tr class="col-2"></tr>
                                   <tr class="col-3"></tr>
@@ -279,7 +279,7 @@
                               </table>
                             </div>
                             <div class="form-group px-3">
-                              <input
+                              <textarea
                                 class="form-control form-inline"
                                 type="text"
                                 name="remark"
@@ -287,7 +287,8 @@
                                 placeholder="Type to add a remark"
                                 v-on:keyup.enter="addRemark($event, activeCad.id)"
                                 v-model="remark"
-                              />
+                                rows="3"
+                              ></textarea>
                             </div>
                           </div>
                         </div>
@@ -301,7 +302,7 @@
           <div class="row py-2">
             <div class="col">
               <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-danger text-white">
                   Outstanding CADs
                   <a
                     role="button"
@@ -354,13 +355,10 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import AvailableUnits from "./CAD/Available-Units";
-import PNC from "./CAD/PNC";
-
 export default {
   components: {
     Autocomplete,
-    AvailableUnits,
-    PNC
+    AvailableUnits
   },
   data: function() {
     return {
@@ -410,15 +408,11 @@ export default {
         }
       ],
       remark: "",
-      pncOpen: false,
+      
     };
   },
   created: function() {
     this.fetchData();
-    $eventBus.$on('pnc-person',function(data) {
-      console.log('pnc remark');
-      console.log(data);
-    });
   },
   mounted: function() {
     this.timeBegan = null;
@@ -447,6 +441,9 @@ export default {
       if(data.controller.id == this.position.id) return;
       console.log(data);
     });
+    pncChannel.onmessage = msg => {
+      document.getElementById('remark').value = msg;
+    }
   },
   destroyed: function() {
     this.reset();
@@ -507,10 +504,28 @@ export default {
         })
         $('#editModal').modal('hide');
     },
+    closeCad: function() {
+      var oldCad = this.activeCad;
+      var newCad = this.cads.splice(0, 1);
+      this.activeCad = newCad[0];
+      this.$api
+      .post('/api/cad/close', {
+        id: oldCad.id
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
     formatDate: function(date, format) {
       if (date) {
         return this.$moment(String(date)).format(format);
       }
+    },
+    formatRemark: function(remark) {
+      return remark.replace(/(?:\r\n|\r|\n)/g, '<br>');
     },
     stateTextColour: function(state) {
       switch (state) {
@@ -633,9 +648,6 @@ export default {
       this.cads.splice(index, 1);
       this.cads.push(this.activeCad);
       this.activeCad = cad;
-    },
-    clickUnit: function() {
-      console.log("Clicked a unit");
     },
     addRemark: function(event, id) {
       if (event.target.value.length > 0) {

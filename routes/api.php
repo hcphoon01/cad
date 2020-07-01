@@ -21,6 +21,7 @@ Route::group([
     Route::get('/index', 'FMS\CADController@show');
     Route::post('/create', 'API\FMS\CADController@create');
     Route::post('/update', 'API\FMS\CADController@update');
+    Route::post('/close', 'API\FMS\CADController@close');
     Route::get('/{unit}/assign', 'FMS\CADController@assign');
     Route::get('/{id?}', 'FMS\CADController@getCad');
     Route::post('/remark', 'API\FMS\CADController@remark');

@@ -17,133 +17,161 @@ use Illuminate\Support\Facades\Auth;
 
 class CADController extends Controller
 {
-    /**
-     * Handle adding a remark
-     * 
-     * @param Request $request
-     */
-    public function remark(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|numeric|exists:cads,id',
-            'unit' => 'required|numeric|exists:controllers,id',
-            'remark' => 'required'
-        ]);
+  /**
+   * Handle adding a remark
+   * 
+   * @param Request $request
+   */
+  public function remark(Request $request)
+  {
+    $request->validate([
+      'id' => 'required|numeric|exists:cads,id',
+      'unit' => 'required|numeric|exists:controllers,id',
+      'remark' => 'required'
+    ]);
 
-        $remark = new CADRemark();
-        $remark->cad_id = $request->id;
-        $remark->controller_id = $request->unit;
-        $remark->remark = $request->remark;
-        $remark->save();
+    $remark = new CADRemark();
+    $remark->cad_id = $request->id;
+    $remark->controller_id = $request->unit;
+    $remark->remark = $request->remark;
+    $remark->save();
 
-        $remark->load('controller.callsign');
+    $remark->load('controller.callsign');
 
-        event(new RemarkAdded($remark));
+    event(new RemarkAdded($remark));
+  }
+
+  /** Handle assign a unit
+   * 
+   * @param Request $request
+   */
+  public function assign(Request $request)
+  {
+    $controller = ControllerModel::where('user_id', Auth::id())->first();
+
+    $unit = Unit::find($request->unit['id']);
+    if ($unit->cad) {
+      event(new UnitDetached($unit, $controller));
     }
+    $unit->cad()->dissociate();
+    $unit->state = $request->unit['state'];
+    $unit->assigned_cad = $request->cad['id'];
+    $unit->save();
 
-    /** Handle assign a unit
-     * 
-     * @param Request $request
-     */
-    public function assign(Request $request)
-    {
+    $unit = $unit->load('cad.units.callsign', 'callsign');
+
+    event(new UnitAssigned($unit, $controller));
+  }
+
+  /**
+   * Handle a state change
+   * 
+   * @param Request $request
+   */
+  public function state(Request $request)
+  {
+    $unit = Unit::find($request->unit['id']);
+    $eventUnit = $unit->load('cad');
+    $unit->state = $request->unit['state'];
+    $unit->assigned_cad = $request->unit['assigned_cad'];
+    $unit->save();
+
+    if ($unit->assigned_cad == null) {
       $controller = ControllerModel::where('user_id', Auth::id())->first();
+      event(new UnitDetached($eventUnit, $controller));
+    }
+  }
 
-      $unit = Unit::find($request->unit['id']);
-      if($unit->cad) {
+  /**
+   * Create a CAD
+   * 
+   * @param \Illuminate\Http\Request $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create(Request $request)
+  {
+    $request->validate([
+      'cad_number' => 'required|integer',
+      'caller_name' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'description' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'display_name' => 'required|regex:/([0-9]{5})(\/)([0-3][1-9])([A-Z]{3})([0-9]{2})/',
+      'location' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'response_level' => [
+        'required',
+        Rule::in(['Immediate', 'Standard'])
+      ],
+      'vrm' => 'required|regex:/[a-zA-Z0-9\s]+/',
+    ]);
+
+    $cad = new CAD();
+    $cad->cad_number = $request->cad_number;
+    $cad->caller_name = $request->caller_name;
+    $cad->description = $request->description;
+    $cad->display_name = $request->display_name;
+    $cad->location = $request->location;
+    $cad->response_level = $request->response_level;
+    $cad->vrm = $request->vrm;
+    $cad->save();
+    return $cad;
+  }
+
+  /**
+   * Update a CAD
+   * 
+   * @param \Illuminate\Http\Request $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request)
+  {
+    $request->validate([
+      'id' => 'required|numeric',
+      'caller_name' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'description' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'location' => 'required|regex:/^[a-zA-Z\s]*$/',
+      'response_level' => [
+        'required',
+        Rule::in(['Immediate', 'Standard'])
+      ],
+      'vrm' => 'required|regex:/[a-zA-Z0-9\s]+/',
+    ]);
+
+    $cad = CAD::find($request->id);
+    $cad->caller_name = $request->caller_name;
+    $cad->description = $request->description;
+    $cad->location = $request->location;
+    $cad->response_level = $request->response_level;
+    $cad->vrm = $request->vrm;
+    $cad->save();
+    return $cad;
+  }
+
+  /**
+   * Close a CAD
+   * 
+   * @param \Illuminate\Http\Request $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function close(Request $request)
+  {
+    $request->validate([
+      'id' => 'required|numeric|exists:cads,id'
+    ]);
+
+    $cad = CAD::find($request->id);
+    $units = $cad->units;
+    if ($units) {
+      $controller = ControllerModel::where('user_id', Auth::id())->first();
+      foreach ($units as $unit) {
+        $unit->assigned_cad = null;
+        return $unit;
+        $unit->save();
         event(new UnitDetached($unit, $controller));
       }
-      $unit->cad()->dissociate();
-      $unit->state = $request->unit['state'];
-      $unit->assigned_cad = $request->cad['id'];
-      $unit->save();
-
-      $unit = $unit->load('cad.units.callsign', 'callsign');
-
-      event(new UnitAssigned($unit, $controller));
     }
-
-    /**
-     * Handle a state change
-     * 
-     * @param Request $request
-     */
-    public function state(Request $request)
-    {
-      $unit = Unit::find($request->unit['id']);
-      $eventUnit = $unit->load('cad');
-      $unit->state = $request->unit['state'];
-      $unit->assigned_cad = $request->unit['assigned_cad'];
-      $unit->save();
-
-      if ($unit->assigned_cad == null) {
-        $controller = ControllerModel::where('user_id', Auth::id())->first();
-        event(new UnitDetached($eventUnit, $controller));
-      }
-    }
-
-    /**
-     * Create a CAD
-     * 
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-      $request->validate([
-        'cad_number' => 'required|integer',
-        'caller_name' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'description' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'display_name' => 'required|regex:/([0-9]{5})(\/)([0-3][1-9])([A-Z]{3})([0-9]{2})/',
-        'location' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'response_level' => [
-          'required',
-          Rule::in(['Immediate', 'Standard'])
-        ],
-        'vrm' => 'required|regex:/[a-zA-Z0-9\s]+/',
-      ]);
-      
-      $cad = new CAD();
-      $cad->cad_number = $request->cad_number;
-      $cad->caller_name = $request->caller_name;
-      $cad->description = $request->description;
-      $cad->display_name = $request->display_name;
-      $cad->location = $request->location;
-      $cad->response_level = $request->response_level;
-      $cad->vrm = $request->vrm;
-      $cad->save();
-      return $cad;
-    }
-
-    /**
-     * Update a CAD
-     * 
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-      $request->validate([
-        'id' => 'required|numeric',
-        'caller_name' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'description' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'location' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'response_level' => [
-          'required',
-          Rule::in(['Immediate', 'Standard'])
-        ],
-        'vrm' => 'required|regex:/[a-zA-Z0-9\s]+/',
-      ]);
-
-      $cad = CAD::find($request->id);
-      $cad->caller_name = $request->caller_name;
-      $cad->description = $request->description;
-      $cad->location = $request->location;
-      $cad->response_level = $request->response_level;
-      $cad->vrm = $request->vrm;
-      $cad->save();
-      return $cad;
-    }
+    $cad->closed = 1;
+    $cad->save();
+  }
 }

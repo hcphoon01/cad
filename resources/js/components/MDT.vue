@@ -5,7 +5,7 @@
   <div class="container h-100" style="background-color:#8387A2;" v-else>
     <div class="modal" tabindex="-1" role="dialog" id="pncDone">
       <div class="modal-dialog" role="document">
-        <form id="addPncRemark">
+        <form id="addPncRemark" @submit="addPncRemark">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Add as remark</h5>
@@ -15,21 +15,13 @@
                 <label for="remark">
                   <strong>Review before adding</strong>
                 </label>
-                <textarea class="form-control" name="remark" id="remark" rows="12">VRM: SW13 AGD
-Make: Ford
-Model: Focus
-Insurer: Admiral
-Policy Number: D993314X
-From: 05/02/2019
-To: 05/02/2020
-Other vehicles: Y
-Policyholder Details: Mr Dude, Some Place, Some City, Some Postcode
-Permitted Drivers: Mr Else, JoJo
-Class of Use: Social, Domestic, Pleasure and Commuting
-Named Drivers: 
-  1. Joe Bloggs
-  2. Joe Smith
-  3. Joe Mama</textarea>
+                <textarea
+                  class="form-control"
+                  name="remark"
+                  id="remark"
+                  rows="12"
+                  :value="showPncRemark()"
+                ></textarea>
               </div>
             </div>
             <div class="modal-footer">
@@ -42,7 +34,11 @@ Named Drivers:
     </div>
     <div class="row pt-2 px-2 h-100 justify-content-around">
       <div class="pb-1">
-        <button class="button btn btn-info" style="border-radius: 0 !important;" @click="stateSelect(5)">En Route</button>
+        <button
+          class="button btn btn-info"
+          style="border-radius: 0 !important;"
+          @click="stateSelect(5)"
+        >En Route</button>
       </div>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -123,7 +119,7 @@ Named Drivers:
       </div>
     </div>
     <div class="row px-2">
-      <div class="container mb-2" style="background-color:#DBE1E6; min-height:500px !important;">
+      <div class="container mb-2" style="background-color:#DBE1E6; min-height:560px !important;">
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show" id="menu" role="tabpanel" aria-labelledby="menu-tab">Test</div>
           <div
@@ -220,47 +216,55 @@ Named Drivers:
             :class="{'active': tab == 'pnc'}"
             id="pnc"
             role="tabpanel"
-            aria-labelledby="pnv-tab"
+            aria-labelledby="pnc-tab"
           >
             <div class="row mx-3 my-2">
-              <form class="w-100">
+              <form class="w-100" @submit="searchVehicle">
                 <div class="col">
                   <div class="row w-100">
                     <div class="col form-group">
-                      <label for="pncvehsearch">
+                      <label for="vehicleSearch">
                         <strong>Search a VRM</strong>
                       </label>
-                      <input type="text" name="pncvehsearch" id="pncvehsearch" class="form-control" placeholder="e.g. AB12 CDE"/>
+                      <input
+                        type="text"
+                        name="vehicleSearch"
+                        id="vehicleSearch"
+                        class="form-control"
+                        placeholder="AB12 CDE"
+                      />
+                      <p id="vehicleValidation"></p>
                     </div>
                   </div>
                 </div>
               </form>
-              <form class="w-100">
+              <form class="w-100" @submit="searchPerson">
                 <div class="col">
                   <div class="row w-100">
                     <div class="col form-group">
-                      <label for="pncperssearch">
+                      <label for="personSearch">
                         <strong>Search a person</strong>
                       </label>
                       <input
                         type="text"
-                        name="pncperssearch"
-                        id="pncperssearch"
+                        name="personSearch"
+                        id="personSearch"
                         class="form-control"
                         placeholder="LAST NAME\FIRST NAME\DDMMYYYY"
                       />
+                      <p id="personValidation"></p>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <div 
-          class="tab-pane fade show"
-          :class="{'active': tab == 'pncpers'}"
-          id="pncpers"
-          role="tabpanel"
-          aria-labelledby="pncpers-tab"
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'pncpers'}"
+            id="pncpers"
+            role="tabpanel"
+            aria-labelledby="pncpers-tab"
           >
             <div class="row mx-3 my-2">
               <form class="w-100">
@@ -280,7 +284,7 @@ Named Drivers:
                           class="form-control"
                           name="first_name"
                           id="first_name"
-                          value="JoJo"
+                          :value="pncPerson.first_name"
                           disabled
                         />
                       </div>
@@ -299,13 +303,13 @@ Named Drivers:
                           class="form-control"
                           name="last_name"
                           id="last_name"
-                          value="Fice"
+                          :value="pncPerson.last_name"
                           disabled
                         />
                       </div>
                     </div>
                     <div class="col-md-1 mr-1">
-                      <div class="row justify-content-end mt-2">
+                      <div class="row justify-content-end mt-2 text-right">
                         <label for="dob">
                           <strong>Date of Birth</strong>
                         </label>
@@ -318,7 +322,7 @@ Named Drivers:
                           class="form-control"
                           name="dob"
                           id="dob"
-                          value="01/01/1990"
+                          :value="pncPerson.dob"
                           disabled
                         />
                       </div>
@@ -338,13 +342,31 @@ Named Drivers:
                           class="form-control"
                           name="address"
                           id="address"
-                          rows="5"
+                          rows="2"
                           disabled
-                        >
-                        123 Yeetus Ave,
-                        Yeeted,
-                        Yeet,
-                        LN1 YET</textarea>
+                          :value="pncPerson.address"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row w-100">
+                    <div class="col-md-1 mr-1">
+                      <div class="row justify-content-end mt-2">
+                        <label for="notes">
+                          <strong>Notes</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row py-1">
+                        <textarea
+                          class="form-control"
+                          name="notes"
+                          id="notes"
+                          rows="3"
+                          disabled
+                          :value="pncPerson.notes ? pncPerson.notes : ''"
+                        ></textarea>
                       </div>
                     </div>
                   </div>
@@ -364,11 +386,8 @@ Named Drivers:
                           id="markers"
                           rows="4"
                           disabled
-                        >
-                        Weapons
-                        Drugs
-                        Firearms
-                        Suicide</textarea>
+                          :value="pncPerson.markers ? showMarkers() : ''"
+                        ></textarea>
                       </div>
                     </div>
                   </div>
@@ -388,12 +407,20 @@ Named Drivers:
                           id="aliases"
                           rows="4"
                           disabled
-                        >
-                        JoJo9905
-                        Jooshua
-                        </textarea>
+                          :value="pncPerson.aliases ? showAliases() : ''"
+                        ></textarea>
                       </div>
                     </div>
+                  </div>
+                  <div class="row w-100 justify-content-center">
+                    <a
+                      type="button"
+                      href="#"
+                      data-target="#pncDone"
+                      data-toggle="modal"
+                      class="button btn btn-pnc-nav h-100 w-25"
+                      style="border-radius: 0 !important;"
+                    >Done</a>
                   </div>
                 </div>
               </form>
@@ -419,7 +446,7 @@ Named Drivers:
                         type="text"
                         name="vrmpnc"
                         id="vrmpnc"
-                        value="SW13 AGD"
+                        :value="pncVehicle.vrm"
                         disabled
                       />
                     </div>
@@ -432,7 +459,7 @@ Named Drivers:
                         type="text"
                         name="make"
                         id="make"
-                        value="Ford"
+                        :value="pncVehicle.make"
                         disabled
                       />
                     </div>
@@ -445,7 +472,7 @@ Named Drivers:
                         type="text"
                         name="model"
                         id="model"
-                        value="Focus"
+                        :value="pncVehicle.model"
                         disabled
                       />
                     </div>
@@ -477,7 +504,7 @@ Named Drivers:
                         type="text"
                         name="number"
                         id="number"
-                        value="D993314X"
+                        :value="pncVehicle.policy_number"
                         disabled
                       />
                     </div>
@@ -490,7 +517,7 @@ Named Drivers:
                         type="text"
                         name="from"
                         id="from"
-                        value="05/02/2019"
+                        :value="pncVehicle.from"
                         disabled
                       />
                     </div>
@@ -503,7 +530,7 @@ Named Drivers:
                         type="text"
                         name="to"
                         id="to"
-                        value="05/02/2020"
+                        :value="pncVehicle.to"
                         disabled
                       />
                     </div>
@@ -518,7 +545,7 @@ Named Drivers:
                         type="text"
                         name="otherVehicle"
                         id="otherVehicle"
-                        value="Y"
+                        :value="pncVehicle.other_vehicles"
                         disabled
                       />
                       <strong>M means Motorcycle</strong>
@@ -536,7 +563,8 @@ Named Drivers:
                           id="details"
                           rows="3"
                           disabled
-                        >Mr Dude, Some Place, Some City, Some Postcode</textarea>
+                          :value="pncVehicle.civ ? showPolicyholder() : ''"
+                        ></textarea>
                       </div>
                     </div>
                   </div>
@@ -594,7 +622,14 @@ Named Drivers:
                       <label for="drivers">
                         <strong>Permitted Drivers</strong>
                       </label>
-                      <textarea class="form-control" name="drivers" id="drivers" rows="2" disabled>Mr Else, JoJo</textarea>
+                      <textarea
+                        class="form-control"
+                        name="drivers"
+                        id="drivers"
+                        rows="2"
+                        disabled
+                        :value="pncVehicle.permitted_drivers"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="row">
@@ -602,7 +637,14 @@ Named Drivers:
                       <label for="use">
                         <strong>Class of Use</strong>
                       </label>
-                      <textarea class="form-control" name="use" id="use" rows="2" disabled>Social, Domestic, Pleasure and Commuting</textarea>
+                      <textarea
+                        class="form-control"
+                        name="use"
+                        id="use"
+                        rows="2"
+                        disabled
+                        :value="pncVehicle.use"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="row">
@@ -610,9 +652,14 @@ Named Drivers:
                       <label for="named">
                         <strong>Named Drivers</strong>
                       </label>
-                      <textarea class="form-control" name="named" id="named" rows="6" disabled>1. Joe Bloggs
-2. Joe Smith
-3. Joe Mama</textarea>
+                      <textarea
+                        class="form-control"
+                        name="named"
+                        id="named"
+                        rows="6"
+                        disabled
+                        :value="pncVehicle.named_drivers ? showNamedDrivers() : ''"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="row w-100">
@@ -837,13 +884,19 @@ Named Drivers:
                   <div class="col-sm-10 pr-2 scroll">
                     <div class="row py-1 h-100">
                       <div class="card w-100">
-                        <table class="table table-sm collapse show" id="remarks" >
+                        <table
+                          class="table table-sm collapse show mdt-cad-table"
+                          id="remarks"
+                          style="white-space: pre-line"
+                        >
                           <thead>
                             <tr></tr>
                             <tr></tr>
                             <tr></tr>
                           </thead>
-                          <template v-if="this.cad != null && (this.cad.remarks || this.cad.description)">
+                          <template
+                            v-if="this.cad != null && (this.cad.remarks || this.cad.description)"
+                          >
                             <tbody>
                               <tr class="border" v-if="this.cad != null && this.cad.description">
                                 <td>{{formatDate(this.cad.created_at, 'HH:mm:ss')}}</td>
@@ -851,7 +904,7 @@ Named Drivers:
                                 <td>{{this.cad.description}}</td>
                               </tr>
                             </tbody>
-                            <tbody v-for="(remark, i) in this.cad.remarks" :key="i" >
+                            <tbody v-for="(remark, i) in this.cad.remarks" :key="i">
                               <tr class="border">
                                 <td>{{formatDate(remark.created_at, 'HH:mm:ss')}}</td>
                                 <td>{{remark.unit ? remark.unit.callsign.callsign : remark.controller.callsign.callsign}}</td>
@@ -874,7 +927,15 @@ Named Drivers:
                   </div>
                   <div class="col-sm-10">
                     <div class="row py-1">
-                      <input type="text" class="form-control" name="remark-add" id="remark-add" v-on:keyup.enter="addRemark($event, cad.id)" v-model="remark"/>
+                      <textarea
+                        type="text"
+                        class="form-control"
+                        name="remark-add"
+                        id="remark-add"
+                        v-on:keyup.enter="addRemark($event, cad.id)"
+                        :value="remark"
+                        rows="3"
+                      ></textarea>
                     </div>
                   </div>
                 </div>
@@ -933,7 +994,11 @@ Named Drivers:
         >ON PATROL</button>
       </div>
       <div class="col">
-        <button class="button btn btn-info h-100 w-100" style="border-radius: 0 !important;" @click="temp = tab; tab = prevTab; prevTab = temp;">Back</button>
+        <button
+          class="button btn btn-info h-100 w-100"
+          style="border-radius: 0 !important;"
+          @click="temp = tab; tab = prevTab; prevTab = temp;"
+        >Back</button>
       </div>
       <div class="col">
         <button
@@ -965,10 +1030,12 @@ Named Drivers:
 export default {
   data() {
     return {
-      state: '',
-      tab: "cad",
+      state: "",
+      tab: "pnc",
       prevTab: "",
-      pnc: "vehicle",
+      pnc: "",
+      pncPerson: [],
+      pncVehicle: [],
       timeNow: "",
       cad: [],
       unit: "",
@@ -976,28 +1043,31 @@ export default {
       remark: "",
       assigned: ""
     };
-  }, 
+  },
   created: function() {
     this.fetchData();
   },
   mounted: function() {
-      this.currentTime();
-      Echo.private('fms-channel')
-      .listen('.newRemark', (data) => {
-        if(data.remark.unit_id == this.unit.id) return;
+    this.currentTime();
+    Echo.private("fms-channel")
+      .listen(".newRemark", data => {
+        if (data.remark.unit_id == this.unit.id) return;
         this.cad.remarks.push(data.remark);
       })
-      .listen('.unitAssigned', (data) => {
-        if(this.emptyCad() && data.unit.id != this.unit.id) {
+      .listen(".unitAssigned", data => {
+        if (this.emptyCad() && data.unit.id != this.unit.id) {
           return;
         } else if (this.emptyCad() && data.unit.id == this.unit.id) {
           this.cad = data.unit.cad;
           this.state = 5;
           this.assignedUnits();
-        } else if (this.cad.id == data.unit.assigned_cad && data.unit.id != this.unit.id) {
+        } else if (
+          this.cad.id == data.unit.assigned_cad &&
+          data.unit.id != this.unit.id
+        ) {
           for (let i = 0; i < data.unit.length; i++) {
             const elem = data.unit[i];
-            if (elem == 'cad') {
+            if (elem == "cad") {
               data.unit.splice(i, 1);
             }
           }
@@ -1005,8 +1075,8 @@ export default {
           this.assignedUnits();
         }
       })
-      .listen('.unitDetached', (data) => {
-        if(this.emptyCad() && data.unit.id != this.unit.id) {
+      .listen(".unitDetached", data => {
+        if (this.emptyCad() && data.unit.id != this.unit.id) {
           return;
         } else if (!this.emptyCad() && data.unit.id == this.unit.id) {
           this.cad = [];
@@ -1019,12 +1089,12 @@ export default {
           this.cad.units = filtered;
           this.assignedUnits();
         }
-      })
+      });
   },
   methods: {
     emptyCad: function() {
       for (var key in this.cad) {
-        if(this.cad.hasOwnProperty(key)){
+        if (this.cad.hasOwnProperty(key)) {
           return false;
         }
       }
@@ -1041,7 +1111,7 @@ export default {
           this.unit = response.data.unit;
           this.state = this.unit.state;
           this.isLoading = false;
-          if(this.cad != undefined) {
+          if (this.cad != undefined) {
             this.assignedUnits();
           }
         })
@@ -1077,6 +1147,185 @@ export default {
           console.log(err);
         });
     },
+    showPncRemark: function() {
+      let remarkString = "";
+      if (this.pnc == "person") {
+        for (const [key, value] of Object.entries(this.pncPerson)) {
+          if (key == "id" || key == "created_at" || key == "updated_at")
+            continue;
+          if (key.includes("_")) {
+            let key = key.replace(/_/g, " ");
+            remarkString += this.capitalizeFirstLetter(key) + `: ${value}\n`;
+            continue;
+          }
+          if (key == "markers" && value) {
+            remarkString +=
+              this.capitalizeFirstLetter(key) + `: ${this.showMarkers()}\n`;
+            continue;
+          }
+          if (key == "aliases" && value) {
+            remarkString +=
+              this.capitalizeFirstLetter(key) + `: ${this.showAliases()}\n`;
+            continue;
+          }
+          if (key == "dob") {
+            remarkString += "Date of Birth: " + value + "\n";
+            continue;
+          }
+          if (value == null || value == "") {
+            remarkString += this.capitalizeFirstLetter(key) + ": Nil\n";
+            continue;
+          }
+          remarkString += this.capitalizeFirstLetter(key) + `: ${value}\n`;
+        }
+      } else if (this.pnc == "vehicle") {
+        for (const [key, value] of Object.entries(this.pncVehicle)) {
+          if (key == undefined) continue;
+          if (
+            key == "id" ||
+            key == "created_at" ||
+            key == "updated_at" ||
+            key == "civ_id"
+          )
+            continue;
+          if (key == "named_drivers") {
+            remarkString += `Named Drivers: ${this.showNamedDrivers()}\n`;
+            continue;
+          }
+          if (key == "vrm") {
+            remarkString += `VRM: ${value}\n`;
+            continue;
+          }
+          if (key.includes("_")) {
+            if (value == null || value == "") {
+              let newKey = key.replace(/_/g, " ");
+              remarkString += this.capitalizeFirstLetter(newKey) + ": Nil\n";
+              continue;
+            } else {
+              let newKey = key.replace(/_/g, " ");
+              remarkString +=
+                this.capitalizeFirstLetter(newKey) + `: ${value}\n`;
+              continue;
+            }
+          }
+          if (key == "civ") {
+            remarkString += `Policyholder Details: ${this.showPolicyholder()}\n`;
+            continue;
+          }
+          if (value == null || value == "") {
+            remarkString += this.capitalizeFirstLetter(key) + ": Nil\n";
+            continue;
+          }
+          remarkString += this.capitalizeFirstLetter(key) + `: ${value}\n`;
+        }
+      }
+      remarkString = remarkString.substring(0, remarkString.length - 1);
+      return remarkString;
+    },
+    addPncRemark: function(e) {
+      e.preventDefault();
+      this.pncVehicle = [];
+      this.pncPerson = [];
+      this.pnc = "";
+      $("#pncDone").modal("hide");
+      this.tab = "cad";
+      this.remark = e.target.elements.remark.value;
+    },
+    capitalizeFirstLetter: function(str) {
+      str = str.split(" ");
+
+      for (var i = 0, x = str.length; i < x; i++) {
+        str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+      }
+
+      return str.join(" ");
+    },
+    searchPerson: function(e) {
+      document.getElementById("personValidation").innerHTML = "";
+      e.preventDefault();
+      if (
+        !e.target.elements.personSearch.value.match(
+          /\b[a-zA-Z ]*\\[a-zA-Z ]*\\[0-3][0-9][0-1][0-9][0-9]{4}\b/g
+        )
+      ) {
+        document.getElementById("personValidation").innerHTML =
+          "Your search does not match the required format";
+        return;
+      }
+      this.$api
+        .post("/api/pnc/person", {
+          search: e.target.elements.personSearch.value
+        })
+        .then(res => {
+          if (res.data.length != 0) {
+            this.pncPerson = res.data;
+            this.pnc = "person";
+            this.tab = "pncpers";
+          } else {
+            document.getElementById("personValidation").innerHTML = "No trace";
+          }
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
+    },
+    searchVehicle: function(e) {
+      e.preventDefault();
+      this.$api
+        .post("/api/pnc/vehicle", {
+          search: e.target.elements.vehicleSearch.value
+        })
+        .then(res => {
+          if (res.data.length != 0) {
+            this.pncVehicle = res.data;
+            this.pnc = "vehicle";
+            this.tab = "pncveh";
+          } else {
+            document.getElementById("vehicleValidation").innerHTML = "No trace";
+          }
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
+    },
+    showAliases: function() {
+      let aliasString = "";
+      this.pncPerson.aliases.forEach(
+        (item, i) => (aliasString += i + 1 + ". " + item + "\n")
+      );
+      aliasString = aliasString.substring(0, aliasString.length - 1);
+      return aliasString;
+    },
+    showMarkers: function() {
+      let markerString = "";
+      this.pncPerson.markers.forEach(
+        (item, i) =>
+          (markerString += item.name + " - " + item.abbreviation + "\n")
+      );
+      markerString = markerString.substring(0, markerString.length - 1);
+      return markerString;
+    },
+    showPolicyholder: function() {
+      let detailString = "";
+      detailString +=
+        this.pncVehicle.civ.first_name +
+        " " +
+        this.pncVehicle.civ.last_name +
+        ", " +
+        this.pncVehicle.civ.address;
+      return detailString;
+    },
+    showNamedDrivers: function() {
+      let namedDriversString = "";
+      this.pncVehicle.named_drivers.forEach(
+        (item, i) => (namedDriversString += i + 1 + ". " + item + "\n")
+      );
+      namedDriversString = namedDriversString.substring(
+        0,
+        namedDriversString.length - 1
+      );
+      return namedDriversString;
+    },
     formatDate: function(date, format) {
       return this.$moment(date).format(format);
     },
@@ -1089,7 +1338,7 @@ export default {
       this.assigned = "";
       for (let i = 0; i < this.cad.units.length; i++) {
         const unit = this.cad.units[i];
-        this.assigned = this.assigned + ' ' + unit.callsign.callsign
+        this.assigned = this.assigned + " " + unit.callsign.callsign;
       }
       return this.assigned;
     },
@@ -1148,7 +1397,7 @@ export default {
           this.updateState();
           break;
       }
-    }, 
+    }
   }
 };
 </script>

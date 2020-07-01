@@ -29,6 +29,7 @@
         "@fortawesome/vue-fontawesome": "^0.1.10",
         "@trevoreyre/autocomplete-vue": "^2.2.0",
         "bootstrap-vue": "^2.15.0",
+        "broadcast-channel": "^3.1.0",
         "font-awesome": "^4.7.0",
         "laravel-echo": "^1.8.0",
         "moment": "^2.27.0",

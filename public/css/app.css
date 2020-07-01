@@ -14038,6 +14038,24 @@ a.text-dark:focus {
   color: purple;
 }
 
+.nav-link.nav-pnc.active {
+  background-color: #e3342f !important;
+}
+
+.nav-pills li a:not(.active) {
+  color: #e3342f !important;
+}
+
+.mdt-cad-table {
+  margin-bottom: 0px !important;
+}
+
+.vehicle-pnc-result {
+  max-height: 75vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 .scroll {
   height: 200px;
   overflow-y: auto;

@@ -12,6 +12,7 @@ import BootstrapVue from 'bootstrap-vue';
 import VueSpinners from 'vue-spinners';
 import axios from "axios";
 import moment from 'moment';
+import {BroadcastChannel} from 'broadcast-channel';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faWindowMinimize, faTimes, faEdit, faUser, faCar } from '@fortawesome/free-solid-svg-icons';
@@ -33,7 +34,7 @@ Vue.use({
 moment.locale('nl');
 Vue.prototype.$moment = moment;
 
-window.$eventBus = new Vue();
+window.pncChannel = new BroadcastChannel('PNC');
 
 Vue.prototype.log = console.log;
 

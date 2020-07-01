@@ -41,7 +41,7 @@ class MDTController extends Controller
       $request->validate([
           'id' => 'required|numeric|exists:cads,id',
           'unit' => 'required|numeric|exists:units,id',
-          'remark' => 'required|alpha_dash'
+          'remark' => 'required'
       ]);
 
       $remark = new CADRemark();

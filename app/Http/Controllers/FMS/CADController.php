@@ -66,7 +66,7 @@ class CADController extends Controller
      */
     public function show()
     {
-        $cads = CAD::whereDate('created_at', Carbon::today())->with('units.callsign', 'remarks.unit.callsign',  'remarks.controller.callsign')->get();
+        $cads = CAD::whereDate('created_at', Carbon::today())->where('closed', 0)->with('units.callsign', 'remarks.unit.callsign',  'remarks.controller.callsign')->get();
         $units = Unit::all()->load('users.user.qualifications', 'vehicle', 'callsign');
         $controller = ControllerModel::where('user_id', Auth::user()->id)->first()->load('user', 'callsign');
 
