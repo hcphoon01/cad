@@ -21,7 +21,7 @@ class UnitDetached implements ShouldBroadcast
      */
     public $unit;
     public $controller;
-    public function __construct($unit, $controller)
+    public function __construct($unit, $controller = null)
     {
         $this->unit = $unit;
         $this->controller = $controller;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\FMS;
 use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
 use App\Events\RemarkAdded;
+use App\Events\UnitDetached;
 use Illuminate\Http\Request;
 use App\Models\FMS\CADRemark;
 use App\Http\Controllers\Controller;
@@ -53,5 +54,27 @@ class MDTController extends Controller
       $remark->load('unit.callsign');
 
       event(new RemarkAdded($remark));
+    }
+
+    /**
+     * Dissociate unit
+     * 
+     * @param Request $request
+     */
+    public function dissociate(Request $request)
+    {
+      $request->validate([
+        'id' => 'required|numeric|exists:units,id',
+        'state' => 'required|numeric'
+      ]);
+
+      $unit = Unit::find($request->id);
+      $unit->state = $request->state;
+      $unit->assigned_cad = $request->assigned_cad;
+      if ($request->assigned_cad == null) {
+        event(new UnitDetached($unit));
+      }
+      $unit->save();
+
     }
 }

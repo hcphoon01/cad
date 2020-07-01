@@ -438,8 +438,8 @@ export default {
       console.log(data);
     })
     .listen('.unitDetached', (data) => {
-      if(data.controller.id == this.position.id) return;
-      console.log(data);
+      if(data.controller != null && data.controller.id == this.position.id) return;
+      this.detachUnit(data.unit);
     });
     pncChannel.onmessage = msg => {
       document.getElementById('remark').value = msg;

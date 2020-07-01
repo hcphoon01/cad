@@ -121,7 +121,65 @@
     <div class="row px-2">
       <div class="container mb-2" style="background-color:#DBE1E6; min-height:560px !important;">
         <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show" id="menu" role="tabpanel" aria-labelledby="menu-tab">Test</div>
+          <div
+            class="tab-pane fade show"
+            :class="{'active': tab == 'menu'}"
+            id="menu"
+            role="tabpanel"
+            aria-labelledby="menu-tab"
+          >
+            <div class="row mt-4">
+              <div class="col text-center">
+                <h2>{{this.unit.callsign.callsign}}</h2>
+              </div>
+            </div>
+            <div class="row my-2">
+              <div class="col-6">
+                <div class="row my-2">
+                  <div class="col text-center">Vehicle Details</div>
+                </div>
+                <div class="row justify-content-center">
+                  <form>
+                    <div class="col text-center form-group">
+                      <label for="model" class="my-2">Model</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="model"
+                        id="unitModel"
+                        disabled
+                        :value="unit.vehicle.model"
+                      />
+                      <label for="vrm" class="my-2">VRM</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="vrm"
+                        id="unitVrm"
+                        disabled
+                        :value="unit.vehicle.vrm"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row my-2">
+                  <div class="col text-center">Users</div>
+                </div>
+                <div class="row justify-content-center">
+                  <textarea
+                    name="users"
+                    id="users"
+                    rows="5"
+                    cols="30"
+                    disabled
+                    :value="showUsers()"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
           <div
             class="tab-pane fade show"
             :class="{'active': tab == 'status'}"
@@ -989,9 +1047,10 @@
       </div>
       <div class="col col-2">
         <button
-          class="button btn btn-success h-100 w-100"
+          class="button btn h-100 w-100"
+          :class="stateFormat()"
           style="border-radius: 0 !important;"
-        >ON PATROL</button>
+        >{{this.displayState()}}</button>
       </div>
       <div class="col">
         <button
@@ -1031,7 +1090,7 @@ export default {
   data() {
     return {
       state: "",
-      tab: "pnc",
+      tab: "status",
       prevTab: "",
       pnc: "",
       pncPerson: [],
@@ -1089,9 +1148,29 @@ export default {
           this.cad.units = filtered;
           this.assignedUnits();
         }
-      });
+      })
+      .listen(".updateState", data => {
+        if (data.unit.id != this.unit.id) return;
+        this.state = data.unit.state;
+        this.unit.state = data.unit.state
+      })
   },
   methods: {
+    displayName: function(name) {
+      const initial = name.substr(0, 1);
+      const lastName = name.split(" ")[1];
+      return `${initial}.${lastName}`;
+    },
+    showUsers: function() {
+      let userString = "";
+      for (let i = 0; i < this.unit.users.length; i++) {
+        const user = this.unit.users[i];
+        userString += `${this.displayName(user.user.name)} - ${
+          user.shoulder_number
+        }\n`;
+      }
+      return userString;
+    },
     emptyCad: function() {
       for (var key in this.cad) {
         if (this.cad.hasOwnProperty(key)) {
@@ -1101,7 +1180,7 @@ export default {
       return true;
     },
     fetchData: function() {
-      this.cad = this.unit = {};
+      this.cad = this.unit = [];
       this.$api
         .get("/api/mdt/index")
         .then(response => {
@@ -1111,11 +1190,12 @@ export default {
           this.unit = response.data.unit;
           this.state = this.unit.state;
           this.isLoading = false;
-          if (this.cad != undefined) {
+          if (this.cad != undefined && this.cad.length > 0) {
             this.assignedUnits();
           }
         })
         .catch(error => {
+          console.log(error);
           this.cad = {};
           this.unit = [];
         });
@@ -1354,6 +1434,21 @@ export default {
         this.tab = "pncpers";
       }
     },
+    dissociateUnit: function() {
+      this.unit.assigned_cad = null;
+      this.$api
+        .post('/api/mdt/dissociate', {
+          id: this.unit.id,
+          state: this.state,
+          assigned_cad: this.unit.assigned_cad
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     stateSelect: function(state) {
       switch (state) {
         case 0:
@@ -1397,6 +1492,51 @@ export default {
           this.updateState();
           break;
       }
+    },
+    displayState: function() {
+      switch (this.state) {
+        case 0:
+          return "URGENT ASSISTANCE";
+        case 2:
+          return "ON PATROL";
+        case 4:
+          return "REFRESHMENTS";
+        case 5:
+          return "EN ROUTE";
+        case 6:
+          return "AT SCENE";
+        case 7: 
+          return "OTHER ASSIGNMENT";
+        case 8:
+          return "STOP";
+        case 9:
+          return "PRISIONER TRANSPORT";
+      }
+    },
+    stateFormat: function() {
+      switch (this.state) {
+        case 0:
+          return "bg-danger text-white";
+        case 2:
+          return "bg-success text-white";
+        case 4:
+          return "bg-muted text-white";
+        case 5:
+          return "bg-warning text-dark";
+        case 6:
+          return "bg-primary text-white";
+        case 7:
+          return "bg-secondary text-white";
+        case 8:
+          return "bg-muted text-white";
+        case 9:
+          return "bg-secondary text-white";
+        case 11:
+          return "bg-dark text-white";
+      }
+    },
+    updateState: function() {
+
     }
   }
 };

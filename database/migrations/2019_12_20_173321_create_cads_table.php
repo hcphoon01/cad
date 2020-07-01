@@ -24,6 +24,7 @@ class CreateCADSTable extends Migration
             $table->string('vrm')->nullable();
             $table->boolean('closed')->default(0);
             $table->longText('description')->nullable();
+            $table->integer('toa')->nullable();
             $table->timestamps();
         });
     }
