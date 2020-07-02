@@ -17,7 +17,7 @@
         <a class="nav-link" href="{{url('/fms/cad')}}">CAD</a>
       </li>
       <li class="nav-item {{ Request::is('civilian') ? 'active' : '' }}">
-        <a class="nav-link" href="#">Civilian</a>
+        <a class="nav-link" href="{{route('civillian.index')}}">Civilian</a>
       </li>
       @can('Assign Duty Listings')
       <li class="nav-item {{ Request::is('listing') ? 'active' : '' }}">

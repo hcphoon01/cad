@@ -26,7 +26,7 @@ class MarkersSeeder extends Seeder
         'updated_at' => date('Y-m-d H:i:s')
       ),
       array(
-        'name' => 'Conceals items',
+        'name' => 'Conceals Items',
         'abbreviation' => 'CL',
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')

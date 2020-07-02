@@ -59,4 +59,15 @@ Route::group([
     Route::get('index', 'Profile\ProfileController@index')->name('index');
 });
 
+// civillian routes
+Route::group([
+  'as' => 'civillian.',
+  'prefix' => 'civillian',
+  'middleware' => ['role:Member']
+], function () {
+    Route::get('/', 'Civillian\CivillianController@index')->name('index');
+    Route::post('/person', 'Civillian\CivillianController@person')->name('person');
+    Route::post('/vehicle', 'Civillian\CivillianController@vehicle')->name('vehicle');
+});
+
 Route::get('/fms/{vue_capture?}', 'FMS\CADController@index')->where('vue_capture', '[\/\w\.-]*')->middleware('role:Member');
