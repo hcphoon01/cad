@@ -6,6 +6,7 @@ use App\Models\FMS\CAD;
 use App\Models\FMS\Unit;
 use App\Events\RemarkAdded;
 use App\Events\UnitDetached;
+use App\Events\UpdateState;
 use Illuminate\Http\Request;
 use App\Models\FMS\CADRemark;
 use App\Http\Controllers\Controller;
@@ -75,6 +76,23 @@ class MDTController extends Controller
         event(new UnitDetached($unit));
       }
       $unit->save();
+    }
 
+    /**
+     * Update a unit state
+     * 
+     * @param Request $request
+     */
+    public function state(Request $request)
+    {
+      $request->validate([
+        'id' => 'required|numeric|exists:units,id',
+        'state' => 'required|numeric'
+      ]);
+
+      $unit = Unit::find($request->id);
+      $unit->state = $request->state;
+      $unit->save();
+      event(new UpdateState($unit));
     }
 }

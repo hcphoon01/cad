@@ -94,11 +94,7 @@
             class="nav-link btn-info"
             :class="{'active': tab == 'text'}"
             id="text-tab"
-            data-toggle="tab"
-            @click="prevTab = tab; tab = 'text'"
             role="tab"
-            aria-controls="text"
-            aria-selected="false"
           >Text</button>
         </li>
         <li class="nav-item">
@@ -106,11 +102,7 @@
             class="nav-link btn-info"
             :class="{'active': tab == 'map'}"
             id="map-tab"
-            data-toggle="tab"
-            @click="prevTab = tab; tab = 'map'"
             role="tab"
-            aria-controls="map"
-            aria-selected="false"
           >Map</button>
         </li>
       </ul>
@@ -1536,7 +1528,14 @@ export default {
       }
     },
     updateState: function() {
-
+      this.$api
+        .post('/api/mdt/state', {
+          id: this.unit.id,
+          state: this.state
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        })
     }
   }
 };

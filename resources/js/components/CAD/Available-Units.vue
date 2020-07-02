@@ -13,8 +13,16 @@
         <font-awesome-icon icon="window-minimize" />
       </a>
     </div>
+    <div class="row justify-content-center">
+      <div class="col input-group text-center">
+        <input class="w-100" type="text" v-model="search" placeholder="Filter units" />
+        <!-- <button class="btn bg-transparent" style="margin-left: -40px; z-index: 100;">
+          <i class="fa fa-times"></i>
+        </button> -->
+      </div>
+    </div>
     <ul class="list-group list-group-flush collapse show" id="unitList">
-      <li class="list-group-item" v-for="(unit, i) in sortByState(units)" :key="i">
+      <li class="list-group-item" v-for="(unit, i) in filterUnits" :key="i">
         <div class="card shadow" :class="stateBgColour(unit.state)" :id="unit.id">
           <div class="card-body">
             <div class="row">
@@ -63,9 +71,53 @@
 let blinkInterval;
 var audio = new Audio('/audio/panic.wav');
 audio.volume = 0.1;
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import "@trevoreyre/autocomplete-vue/dist/style.css";
 export default {
   props: ['units', 'states', 'activeCad', 'cads'],
+  data: function() {
+    return {
+      search: '',
+    }
+  },
+  components: {
+    Autocomplete,
+  },
+  computed: {
+    filterUnits: function() {
+      let unitList = [];
+      if (this.search == '') {
+        unitList = this.units;
+      } else {
+        for (let i = 0; i < this.units.length; i++) {
+          const unit = this.units[i];
+          if (unit.callsign.callsign.toLowerCase().includes(this.search.toLowerCase())) {
+            unitList.push(unit);
+            continue;
+          }
+          unit.users.forEach(user => {
+            user.user.qualifications.forEach(qual => {
+              if (qual.name.toLowerCase().includes(this.search.toLowerCase())) {
+                if (unitList.filter(e => e.id === unit.id).length == 0) {
+                  return unitList.push(unit);
+                }
+              }
+            });
+          });
+        }
+      }
+      return this.sortByState(unitList)
+    }
+  },
   methods: {
+    unitFilter: function(input){
+      if (input.length < 1) {
+        return [];
+      }
+      return this.units.filter(unit => {
+
+      })
+    },
     getQualsFromUsers: function(users) {
       if (users) {
         const qualList = [];
@@ -177,10 +229,14 @@ export default {
           this.updateState(unit);
           break;
         case 5:
+          clearInterval(blinkInterval);
+          audio.pause();
           unit.state = 5;
           this.updateState(unit);
           break;
         case 6:
+          clearInterval(blinkInterval);
+          audio.pause();
           unit.state = 6;
           this.updateState(unit);
           break;
@@ -193,6 +249,8 @@ export default {
           this.updateState(unit);
           break;
         case 9:
+          clearInterval(blinkInterval);
+          audio.pause();
           unit.state = 9;
           this.updateState(unit);
           break;
@@ -247,5 +305,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -37,6 +37,7 @@ Route::group([
   Route::get('/index', 'API\FMS\MDTController@show');
   Route::post('/remark', 'API\FMS\MDTController@remark');
   Route::post('/dissociate', 'API\FMS\MDTController@dissociate');
+  Route::post('/state', 'API\FMS\MDTController@state');
 });
 
 Route::group([

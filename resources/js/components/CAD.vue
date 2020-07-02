@@ -20,25 +20,37 @@
               </div>
               <div class="form-group">
                 <label for="caller_name">Caller Name</label>
-                <input type="text" name="caller_name" id="caller_name" class="form-control" required>
+                <input
+                  type="text"
+                  name="caller_name"
+                  id="caller_name"
+                  class="form-control"
+                  required
+                />
               </div>
               <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <label for="location">Location</label>
-                    <input type="text" name="location" id="location" class="form-control" required>
+                    <input type="text" name="location" id="location" class="form-control" required />
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <label for="vrm">VRM</label>
-                    <input type="text" name="vrm" id="vrm" class="form-control">
+                    <input type="text" name="vrm" id="vrm" class="form-control" />
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="description">Call Description</label>
-                <textarea name="description" id="description" rows="3" class="form-control" required></textarea>
+                <textarea
+                  name="description"
+                  id="description"
+                  rows="3"
+                  class="form-control"
+                  required
+                ></textarea>
               </div>
             </div>
             <div class="modal-footer">
@@ -60,31 +72,64 @@
               <div class="form-group">
                 <label for="response">Response Category</label>
                 <select name="response" id="response-2" class="form-control" required>
-                  <option value="Immediate" :selected="this.activeCad.response_level == 'Immediate'">Immediate</option>
-                  <option value="Standard" :selected="this.activeCad.response_level == 'Standard'">Standard</option>
+                  <option
+                    value="Immediate"
+                    :selected="this.activeCad.response_level == 'Immediate'"
+                  >Immediate</option>
+                  <option
+                    value="Standard"
+                    :selected="this.activeCad.response_level == 'Standard'"
+                  >Standard</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="caller_name">Caller Name</label>
-                <input type="text" name="caller_name" id="caller_name-2" class="form-control" required :value=this.activeCad.caller_name>
+                <input
+                  type="text"
+                  name="caller_name"
+                  id="caller_name-2"
+                  class="form-control"
+                  required
+                  :value="this.activeCad.caller_name"
+                />
               </div>
               <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <label for="location">Location</label>
-                    <input type="text" name="location" id="location-2" class="form-control" required :value=this.activeCad.location>
+                    <input
+                      type="text"
+                      name="location"
+                      id="location-2"
+                      class="form-control"
+                      required
+                      :value="this.activeCad.location"
+                    />
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <label for="vrm">VRM</label>
-                    <input type="text" name="vrm" id="vrm2" class="form-control" :value=this.activeCad.vrm>
+                    <input
+                      type="text"
+                      name="vrm"
+                      id="vrm2"
+                      class="form-control"
+                      :value="this.activeCad.vrm"
+                    />
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="description">Call Description</label>
-                <textarea name="description" id="description-2" rows="3" class="form-control" required v-model="this.activeCad.description"></textarea>
+                <textarea
+                  name="description"
+                  id="description-2"
+                  rows="3"
+                  class="form-control"
+                  required
+                  v-model="this.activeCad.description"
+                ></textarea>
               </div>
             </div>
             <div class="modal-footer">
@@ -99,18 +144,25 @@
       <div class="card-header">City of London RP CAD</div>
       <div class="row py-4 px-4 h-100">
         <div class="col-md-3 h-100">
-          <AvailableUnits 
-          :units="this.units" 
-          :states="this.states" 
-          :activeCad="this.activeCad"
-          :cads="this.cads"
-          ref="availableUnits"/>
+          <AvailableUnits
+            :units="this.units"
+            :states="this.states"
+            :activeCad="this.activeCad"
+            :cads="this.cads"
+            ref="availableUnits"
+          />
         </div>
         <div class="col">
           <div class="row justify-content-between">
             <div class="d-flex">
               <div class="pr-2">
-                <a class="btn btn-primary" href="#" data-target="#createModal" data-toggle="modal" role="button">Create CAD</a>
+                <a
+                  class="btn btn-primary"
+                  href="#"
+                  data-target="#createModal"
+                  data-toggle="modal"
+                  role="button"
+                >Create CAD</a>
               </div>
               <div class="px-2">
                 <button
@@ -240,7 +292,13 @@
                                 Close CAD
                                 <font-awesome-icon icon="times" />
                               </a>
-                              <a role="button" href="#" class="btn btn-warning" data-target="#editModal" data-toggle="modal">
+                              <a
+                                role="button"
+                                href="#"
+                                class="btn btn-warning"
+                                data-target="#editModal"
+                                data-toggle="modal"
+                              >
                                 Edit CAD
                                 <font-awesome-icon icon="edit" />
                               </a>
@@ -263,7 +321,11 @@
                               </a>
                             </div>
                             <div class="scroll-remark">
-                              <table class="table table-sm collapse show" id="remarks" style="white-space: pre-line">
+                              <table
+                                class="table table-sm collapse show"
+                                id="remarks"
+                                style="white-space: pre-line"
+                              >
                                 <thead>
                                   <tr class="col-2"></tr>
                                   <tr class="col-3"></tr>
@@ -407,8 +469,7 @@ export default {
           name: "Off Duty"
         }
       ],
-      remark: "",
-      
+      remark: ""
     };
   },
   created: function() {
@@ -421,41 +482,70 @@ export default {
     this.started = null;
     this.running = false;
     this.currentTime();
-    Echo.private('fms-channel')
-    .listen('.newRemark', (data) => {
-      if(data.remark.controller_id == this.position.id) return;
-      if(data.remark.cad_id == this.activeCad.id) {
-        this.activeCad.remarks.push(data.remark)
-      } 
-      this.cads.find(cad => {
-        if (cad.id == data.remark.cad_id) {
-          cad.remarks.push(data.remark);
+    Echo.private("fms-channel")
+      .listen(".newRemark", data => {
+        if (data.remark.controller_id == this.position.id) return;
+        if (data.remark.cad_id == this.activeCad.id) {
+          this.activeCad.remarks.push(data.remark);
+        }
+        this.cads.find(cad => {
+          if (cad.id == data.remark.cad_id) {
+            cad.remarks.push(data.remark);
+          }
+        });
+      })
+      .listen(".unitAssigned", data => {
+        if (data.controller.id == this.position.id) return;
+        console.log(data);
+      })
+      .listen(".unitDetached", data => {
+        if (data.controller != null && data.controller.id == this.position.id)
+          return;
+        this.detachUnit(data.unit);
+      })
+      .listen(".updateState", data => {
+        this.units.find(unit => {
+          if (unit.id == data.unit.id) {
+            unit.state = data.unit.state;
+          }
+        });
+        if (data.unit.assigned_cad == this.activeCad.id) {
+          this.activeCad.units.find(unit => {
+            if (unit.id == data.unit.id) {
+              unit.state = data.unit.state;
+            }
+          });
+        } else {
+          this.cads.find(cad => {
+            if (cad.id == data.unit.assigned_cad) {
+              cad.units.find(unit => {
+                if (unit.id == data.unit.id) {
+                  unit.state = data.unit.state;
+                }
+              });
+            }
+          });
         }
       });
-    })
-    .listen('.unitAssigned', (data) => {
-      if(data.controller.id == this.position.id) return;
-      console.log(data);
-    })
-    .listen('.unitDetached', (data) => {
-      if(data.controller != null && data.controller.id == this.position.id) return;
-      this.detachUnit(data.unit);
-    });
     pncChannel.onmessage = msg => {
-      document.getElementById('remark').value = msg;
-    }
+      document.getElementById("remark").value = msg;
+    };
   },
   destroyed: function() {
     this.reset();
   },
   methods: {
     pncPopup: function() {
-      let route = this.$router.resolve({path: '/pnc'});
-      window.open(route.href,'newwindow', 'width=600,height=550,top=100,left=200');
+      let route = this.$router.resolve({ path: "/pnc" });
+      window.open(
+        route.href,
+        "newwindow",
+        "width=600,height=550,top=100,left=200"
+      );
     },
     createCad: function(e) {
       e.preventDefault();
-      var timestamp = this.$moment().format('YYYY/MM/DD HH:mm:ss')
+      var timestamp = this.$moment().format("YYYY/MM/DD HH:mm:ss");
       var cadNumber = this.activeCad.cad_number;
       for (let i = 0; i < this.cads.length; i++) {
         const cad = this.cads[i];
@@ -463,10 +553,16 @@ export default {
           cadNumber = cad.cad_number;
         }
       }
-      var displayName = (cadNumber + 1).toString().padStart(5, "0") + '/' + this.$moment().format('DDMMMYY').toUpperCase().replace('.', ''); 
-      
+      var displayName =
+        (cadNumber + 1).toString().padStart(5, "0") +
+        "/" +
+        this.$moment()
+          .format("DDMMMYY")
+          .toUpperCase()
+          .replace(".", "");
+
       this.$api
-        .post('/api/cad/create', {
+        .post("/api/cad/create", {
           caller_name: e.target.elements.caller_name.value,
           location: e.target.elements.location.value,
           response_level: e.target.elements.response.value,
@@ -477,18 +573,20 @@ export default {
           dateTime: timestamp
         })
         .then(response => {
-          this.cads.push(response.data)
+          this.cads.push(response.data);
         })
         .catch(err => {
           console.log(err.response.data);
         });
-      $('#createModal').modal('hide');
-      $('#createCadForm').get(0).reset()
+      $("#createModal").modal("hide");
+      $("#createCadForm")
+        .get(0)
+        .reset();
     },
     editCad: function(e) {
       e.preventDefault();
       this.$api
-        .post('/api/cad/update', {
+        .post("/api/cad/update", {
           id: this.activeCad.id,
           caller_name: e.target.elements.caller_name.value,
           location: e.target.elements.location.value,
@@ -501,23 +599,23 @@ export default {
         })
         .catch(err => {
           console.log(err.response);
-        })
-        $('#editModal').modal('hide');
+        });
+      $("#editModal").modal("hide");
     },
     closeCad: function() {
       var oldCad = this.activeCad;
       var newCad = this.cads.splice(0, 1);
       this.activeCad = newCad[0];
       this.$api
-      .post('/api/cad/close', {
-        id: oldCad.id
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        .post("/api/cad/close", {
+          id: oldCad.id
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     formatDate: function(date, format) {
       if (date) {
@@ -525,7 +623,7 @@ export default {
       }
     },
     formatRemark: function(remark) {
-      return remark.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      return remark.replace(/(?:\r\n|\r|\n)/g, "<br>");
     },
     stateTextColour: function(state) {
       switch (state) {
@@ -541,7 +639,7 @@ export default {
           return "text-primary";
         case 7:
           return "text-secondary";
-        case 8: 
+        case 8:
           return "text-muted";
         case 9:
           return "text-secondary";
@@ -696,8 +794,8 @@ export default {
     },
     detachUnit: function(unit) {
       var units = this.activeCad.units.find(obj => {
-        return obj.id != unit.id
-      })
+        return obj.id != unit.id;
+      });
       if (units == undefined) {
         this.activeCad.units = [];
       } else {
