@@ -1,5 +1,5 @@
 <p>
-    Hello, {{$applicant->user->name}},
+    Hello {{$applicant->user->name}},
 </p>
 
 <p>

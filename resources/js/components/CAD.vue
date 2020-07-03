@@ -526,6 +526,9 @@ export default {
             }
           });
         }
+      })
+      .listen(".newCad", data => {
+        this.cads.push(data.cad);
       });
     pncChannel.onmessage = msg => {
       document.getElementById("remark").value = msg;

@@ -13,66 +13,66 @@ use App\Models\Applicant\ApplicationForm;
 
 class ApplicationController extends Controller
 {
-    /**
-     * Return the application status page
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function status()
-    {
-        $applicant = Applicant::where('id', Auth::user()->id)->first();
+  /**
+   * Return the application status page
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function status()
+  {
+    $applicant = Applicant::where('user_id', Auth::id())->first();
 
-        return view('application.status', [
-            'applicant' => $applicant
-        ]);
-    }
+    return view('application.status', [
+      'applicant' => $applicant
+    ]);
+  }
 
-    /**
-     * Return the form page
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function form()
-    {
-        $applicant = Applicant::where('id', Auth::user()->id)->first();
-        $divisions = Division::get();
+  /**
+   * Return the form page
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function form()
+  {
+    $applicant = Applicant::where('id', Auth::user()->id)->first();
+    $divisions = Division::get();
 
-        return view('application.form', [
-            'applicant' => $applicant,
-            'divisions' => $divisions
-        ]);
-    }
+    return view('application.form', [
+      'applicant' => $applicant,
+      'divisions' => $divisions
+    ]);
+  }
 
-    /**
-     * Store a form
-     * 
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createForm(Request $request)
-    {
-        $request->validate([
-            'age' => 'required|numeric|min:15',
-            'dob' => 'required|date',
-            'discord' => 'required|regex:/([a-z]*)(#)([0-9]{4})/g',
-            'join_reason' => 'required',
-            'previous_community' => 'required',
-            'division' => 'required|numeric|exists:divisions,id'
-        ]);
+  /**
+   * Store a form
+   * 
+   * @param \Illuminate\Http\Request $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function createForm(Request $request)
+  {
+    $request->validate([
+      'age' => 'required|numeric|min:15',
+      'dob' => 'required|date',
+      'discord' => 'required|regex:/([a-z]*)(#)([0-9]{4})/',
+      'join_reason' => 'required',
+      'previous_community' => 'required',
+      'division' => 'required|numeric|exists:divisions,id'
+    ]);
 
-        $applicationForm = new ApplicationForm();
-        $applicationForm->applicant_id = Auth::user()->id;
-        $applicationForm->age = $request->age;
-        $applicationForm->dob = $request->dob;
-        $applicationForm->discord = $request->discord;
-        $applicationForm->join_reason = $request->join_reason;
-        $applicationForm->division_id = $request->division;
-        $applicationForm->previous_community = $request->previous_community;
-        $applicationForm->save();
+    $applicationForm = new ApplicationForm();
+    $applicationForm->applicant_id = Auth::user()->applicant->id;
+    $applicationForm->age = $request->age;
+    $applicationForm->dob = $request->dob;
+    $applicationForm->discord = $request->discord;
+    $applicationForm->join_reason = $request->join_reason;
+    $applicationForm->division_id = $request->division;
+    $applicationForm->previous_community = $request->previous_community;
+    $applicationForm->save();
 
-        Mail::to(Auth::user()->email)->queue(new ApplicationSubmitted($applicationForm->applicant));
+    Mail::to(Auth::user()->email)->queue(new ApplicationSubmitted($applicationForm->applicant));
 
-        return redirect()->route('application.status')->with('success', 'formComplete');
-    }
+    return redirect()->route('application.status')->with('success', 'formComplete');
+  }
 }

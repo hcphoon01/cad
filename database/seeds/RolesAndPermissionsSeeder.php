@@ -6,74 +6,88 @@ use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
-    public function run()
-    {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+  public function run()
+  {
+    // Reset cached roles and permissions
+    app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // hr
-        Role::create(['name' => 'Applicant']);
-        Role::create(['name' => 'Member']);
-        Role::create(['name' => 'Human Resources']);
+    // hr
+    Role::create(['name' => 'Applicant']);
+    Role::create(['name' => 'Member']);
+    Role::create(['name' => 'Human Resources']);
 
-        // police
-        Role::create(['name' => 'Chief Constable']);
-        Role::create(['name' => 'Deputy Chief Constable']);
-        Role::create(['name' => 'Assisstant Chief Constable']);
-        Role::create(['name' => 'Superintendant']);
-        Role::create(['name' => 'Chief Inspector']);
-        Role::create(['name' => 'Inspector']);
-        Role::create(['name' => 'Sergeant']);
-        Role::create(['name' => 'Police Constable']);
-        Role::create(['name' => 'Special Police Constable']);
-        Role::create(['name' => 'Probationary Police Constable']);
-        Role::create(['name' => 'Student Constable']);
+    // police
+    Role::create(['name' => 'Commissioner']);
+    Role::create(['name' => 'Assisstant Commissioner']);
+    Role::create(['name' => 'Commander']);
+    Role::create(['name' => 'Chief Superintendant']);
+    Role::create(['name' => 'Deputy Chief Superintendant']);
+    Role::create(['name' => 'Superintendant']);
+    Role::create(['name' => 'Chief Inspector']);
+    Role::create(['name' => 'Inspector']);
+    Role::create(['name' => 'Sergeant']);
+    Role::create(['name' => 'Police Constable']);
+    Role::create(['name' => 'Probationary Police Constable']);
+    Role::create(['name' => 'Student Constable']);
 
-        // fire & rescue
-        Role::create(['name' => 'Watch Manager']);
-        Role::create(['name' => 'Crew Manager A']);
-        Role::create(['name' => 'Crew Manager B']);
-        Role::create(['name' => 'Retained Crew Manager']);
-        Role::create(['name' => 'Firefighter']);
-        Role::create(['name' => 'Trainee Firefighter']);
-        Role::create(['name' => 'Retained Firefighter']);
+    // fire & rescue
+    Role::create(['name' => 'Group Commander']);
+    Role::create(['name' => 'Station Commander']);
+    Role::create(['name' => 'Station Officer']);
+    Role::create(['name' => 'Sub Officer']);
+    Role::create(['name' => 'Leading Firefighter']);
+    Role::create(['name' => 'Firefighter']);
+    Role::create(['name' => 'Trainee Firefighter']);
+    Role::create(['name' => 'Retained Firefighter']);
 
-        // ambulance
-        Role::create(['name' => 'Operations Manager']);
-        Role::create(['name' => 'Operations Teamleader']);
-        Role::create(['name' => 'Critical Care Paramedic']);
-        Role::create(['name' => 'HART Paramedic']);
-        Role::create(['name' => 'Paramedic']);
-        Role::create(['name' => 'Student Paramedic']);
-        Role::create(['name' => 'Associate  Practitioner']);
-        Role::create(['name' => 'Emergency Care Support Worker']);
-        Role::create(['name' => 'Community First Responder']);
+    // ambulance
+    Role::create(['name' => 'Sector Manager']);
+    Role::create(['name' => 'Station Manager']);
+    Role::create(['name' => 'Team Leader']);
+    Role::create(['name' => 'Critical Care Paramedic']);
+    Role::create(['name' => 'HART Paramedic']);
+    Role::create(['name' => 'Paramedic']);
+    Role::create(['name' => 'Student Paramedic']);
 
-        // comms
-        Role::create(['name' => 'FCH Superintendant']);
-        Role::create(['name' => 'FCH Inspector']);
-        Role::create(['name' => 'FCH Duty Officer']);
-        Role::create(['name' => 'FCH Dispatcher']);
-        Role::create(['name' => 'FCH Operator']);
+    // comms
+    Role::create(['name' => 'Communications Supervisor']);
+    Role::create(['name' => 'Duty Officer']);
+    Role::create(['name' => 'Communications Officer']);
 
-        // civilian
-        Role::create(['name' => 'Civilian Duty Officer']);
-        Role::create(['name' => 'Civilian Supervisor']);
-        Role::create(['name' => 'Civilian']);
+    // civilian
+    Role::create(['name' => 'Civilian Duty Officer']);
+    Role::create(['name' => 'Civilian Supervisor']);
+    Role::create(['name' => 'Authorised Civilian']);
 
-        // create permissions
-        Permission::create(['name' => 'assign duty listings']);
+    // create permissions
+    Permission::create(['name' => 'manage duty listings']);
+    Permission::create(['name' => 'create announcements']);
+    Permission::create(['name' => 'manage applications']);
+    Permission::create(['name' => 'update ranks']);
+    Permission::create(['name' => 'update vehicles']);
+    Permission::create(['name' => 'add bronze']);
+    Permission::create(['name' => 'add silver']);
+    Permission::create(['name' => 'add gold']);
 
-        // create roles and assign created permissions
+    // create roles and assign created permissions
 
-        // this can be done as separate statements
-        $role = Role::create(['name' => 'Bronze']);
-        $role->givePermissionTo('assign duty listings');
+    // this can be done as separate statements
+    Role::create(['name' => 'Bronze'])->givePermissionTo([
+      'update vehicles',
+      'manage duty listings', 
+      'update ranks',
+      'add bronze'
+      ]);
 
-        $role = Role::create(['name' => 'Silver']);
-        $role->givePermissionTo('assign duty listings');
+    Role::create(['name' => 'Silver'])->givePermissionTo([
+      'update vehicles',
+      'manage duty listings', 
+      'create announcements', 
+      'update ranks', 
+      'add silver', 
+      'add bronze'
+      ]);
 
-        $role = Role::create(['name' => 'Gold']);
-        $role->givePermissionTo('assign duty listings');
-    }
+    Role::create(['name' => 'Gold'])->givePermissionTo(Permission::all());
+  }
 }

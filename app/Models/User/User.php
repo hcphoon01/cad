@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function applicant()
     {
-        return $this->hasOne('App\Models\User\Applicant');
+        return $this->hasOne('App\Models\Applicant\Applicant');
     }
 
     /**

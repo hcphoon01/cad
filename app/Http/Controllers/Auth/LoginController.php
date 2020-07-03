@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -21,34 +21,33 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+  use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    public function redirectTo()
-    {
-        $user = User::where('id', Auth::user()->id)->first();
+  /**
+   * Where to redirect users after login.
+   *
+   * @var string
+   */
+  public function redirectTo()
+  {
+    $user = User::find(Auth::id());
 
-        if($user->hasRole('Applicant'))
-        {
-            return '/application/status';
-        }
-        else
-        {
-            return '/home';
-        }
+    if ($user->hasRole('Applicant') && $user->applicant->form) {
+      return '/application/status';
+    } elseif ($user->hasRole('Applicant') && !$user->applicant->form) {
+      return '/application/form';
+    } else {
+      return '/home';
     }
+  }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('guest')->except('logout');
+  }
 }

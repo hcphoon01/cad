@@ -141,7 +141,7 @@
             <div class="form-group">
               <label for="permitted_drivers">Permitted Drivers (optional)</label>
               <textarea type="text" name="permitted_drivers" id="permitted_drivers" class="form-control" rows="3"
-                placeholder="Enter a list of permitted drivers, commas will be treated as new drivers"></textarea>
+                placeholder="Enter a list of permitted drivers"></textarea>
             </div>
             <div class="form-group">
               <label for="named_drivers">Named Drivers (optional)</label>
@@ -156,9 +156,59 @@
                 @endforeach
               </select>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Create</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="createCad">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <form action="{{route('civillian.cad')}}" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createCivLabel">Create CAD</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
             <div class="form-group">
-              <label for="notes">Notes (optional)</label>
-              <textarea type="text" name="notes" id="notes" class="form-control" rows="2"></textarea>
+              <label for="caller_name">Caller Name</label>
+              <input type="text" name="caller_name" id="caller_name" class="form-control" required />
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" name="location" id="location" class="form-control" required />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="telephone">Telephone</label>
+                  <input type="text" name="telephone" id="telephone" class="form-control" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="response_level">Response Level</label>
+              <select class="form-control" id="response_level" name="response_level">
+                <option value="Immediate" selected>Immediate</option>
+                <option value="Standard">Standard</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cad_vrm">VRM</label>
+              <input type="text" name="cad_vrm" id="cad_vrm" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea type="text" name="description" id="description" class="form-control" rows="4" required></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -272,7 +322,44 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="cad" role="tabpanel" aria-labelledby="cad-tab">...</div>
+      <div class="tab-pane fade" id="cad" role="tabpanel" aria-labelledby="cad-tab">
+        <div class="row">
+          <a type="button" class="btn btn-success mb-2" data-toggle="modal" href="#" data-target="#createCad">Create
+            CAD
+            <i class="fa fa-plus" aria-hidden="true"></i></a>
+          <div class="table-responsive">
+            <table class="table table-bordered w-100">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Caller Name</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Telephone Number</th>
+                  <th scope="col">Response Level</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">VRM</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($cads as $cad)
+                <tr>
+                  <th scope="row">{{$cad->id}}</th>
+                  <td>{{$cad->caller_name}}</td>
+                  <td>{{$cad->location}}</td>
+                  <td>{{$cad->telephone}}</td>
+                  <td>{{$cad->response_level}}</td>
+                  <td>{{$cad->description}}</td>
+                  <td>{{$cad->vrm}}</td>
+                </tr>
+                @endforeach
+              </tbody>
+              <tfoot>
+                {{ $cads->links() }}
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

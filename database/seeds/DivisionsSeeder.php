@@ -14,49 +14,55 @@ class DivisionsSeeder extends Seeder
     {
         $data = array(
             array(
-                'name' => 'Neighbourhood Policing Team',
+                'name' => 'Uniform Response',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Crime Squad',
+                'name' => 'City Support Group',
                 'is_open' => false,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Roads Crime Team',
+                'name' => 'Transport & Highways Operations Group',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Tactical Firearms Team',
+                'name' => 'Tactical Firearms Group',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Southgate Fire & Rescue',
+              'name' => 'British Transport Police',
+              'is_open' => true,
+              'created_at' => date('Y-m-d H:i:s'),
+              'updated_at' => date('Y-m-d H:i:s')
+          ),
+            array(
+                'name' => 'London Fire Brigade',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Southgate Ambulance Service',
+                'name' => 'London Ambulance Service',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Force Communications Hub',
+                'name' => 'Command & Control',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Civilian Team',
+                'name' => 'Civilian',
                 'is_open' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

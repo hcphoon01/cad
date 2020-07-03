@@ -20,7 +20,6 @@ class CreateUserDataTable extends Migration
             $table->unsignedBigInteger('division_id')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->timestamp('last_patrol')->nullable();
-            $table->boolean('cc_commendation')->nullable()->default(false);
             $table->timestamps();
         });
 

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo"
-      src="{{asset('img/logo.png')}}">City of London RP</a>
+  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo" src="{{asset('img/logo.png')}}">City of
+    London RP</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -19,16 +19,16 @@
       <li class="nav-item {{ Request::is('civilian') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('civillian.index')}}">Civilian</a>
       </li>
-      @can('Assign Duty Listings')
-      <li class="nav-item {{ Request::is('listing') ? 'active' : '' }}">
-        <a class="nav-link" href="#">Duty Listings</a>
-      </li>
-      @endcan
       @role('Human Resources|Gold')
       <li class="nav-item {{ Request::is('hr/*') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('hr.index')}}">HR</a>
       </li>
       @endrole
+      @can('manage duty listings')
+      <li class="nav-item {{ Request::is('duty*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('duty.index')}}">Duty Listings</a>
+      </li>
+      @endcan
       <li class="nav-item dropdown ml-auto">
         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">{{ Auth::user()->name }}</a>

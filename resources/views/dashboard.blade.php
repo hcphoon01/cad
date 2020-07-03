@@ -160,13 +160,6 @@
                     @endif
                 </div>
             </div>
-            <div class="card mt-3 flex-grow-1">
-                <h2 class="card-header">CC's Commendation</h2>
-                <div class="card-body">
-                    <h5 class="card-title">Name: H.Cameron</h5>
-                    <p class="card-text">Description: Made ERP such an amazing website</p>
-                </div>
-            </div>
         </div>
     </div>
 </div>

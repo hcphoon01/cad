@@ -26,7 +26,13 @@ class QualificationsSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'First Aid',
+                'name' => 'Retained Paramedic',
+                'type' => 'Other',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => 'Retained Firefighter',
                 'type' => 'Other',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
@@ -44,56 +50,20 @@ class QualificationsSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Solo',
+                'name' => 'Motorcycle',
                 'type' => 'Driver',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => 'Aviation',
+                'name' => 'NPAS',
                 'type' => 'Other',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'Custody Sergeant',
-                'type' => 'Other',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'Collision Investigator',
-                'type' => 'Other',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'SRT',
-                'type' => 'Firearms',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'HAZMAT',
-                'type' => 'Other',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'FRU',
-                'type' => 'Public Order',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
                 'name' => 'Dog Handler',
                 'type' => 'Other',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ),
-            array(
-                'name' => 'Scorpion',
-                'type' => 'Driver',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
