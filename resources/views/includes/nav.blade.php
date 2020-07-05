@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo" src="{{asset('img/logo.png')}}">City of
-    London RP</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+  <a href="{{route('home')}}" class="navbar-brand"><img class="navbar-logo" src="{{asset('img/logo.png')}}"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -16,11 +15,11 @@
       <li class="nav-item">
         <a class="nav-link" href="{{url('/fms/cad')}}">CAD</a>
       </li>
-      <li class="nav-item {{ Request::is('civilian') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('civillian.index')}}">Civilian</a>
+      <li class="nav-item {{ Request::is('civilian*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('civilian.index')}}">Civilian</a>
       </li>
       @role('Human Resources|Gold')
-      <li class="nav-item {{ Request::is('hr/*') ? 'active' : '' }}">
+      <li class="nav-item {{ Request::is('hr*') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('hr.index')}}">HR</a>
       </li>
       @endrole
@@ -29,12 +28,17 @@
         <a class="nav-link" href="{{route('duty.index')}}">Duty Listings</a>
       </li>
       @endcan
-      <li class="nav-item dropdown ml-auto">
-        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">{{ Auth::user()->name }}</a>
+      @can('manage vehicles')
+      <li class="nav-item {{ Request::is('vehicle*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('vehicle.index')}}">Vehicle Management</a>
+      </li>
+      @endcan
+      <li class="nav-item dropdown ml-auto"">
+        <a class=" nav-link dropdown-toggle {{ Request::is('profile*') ? 'active' : '' }}" href="#"
+        id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ Auth::user()->displayName() }}</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
           <a class="dropdown-item" href="{{route('profile.index')}}">Profile</a>
-          <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="{{ route('logout') }}"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             {{ __('Logout') }}

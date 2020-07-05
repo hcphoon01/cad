@@ -15,9 +15,13 @@ class CreateVehiclesTable extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('class');
+            $table->string('make');
             $table->string('model');
-            $table->string('model_abbreviation');
             $table->string('vrm');
+            $table->integer('division_id');
+            $table->boolean('status')->default(1);
+            $table->date('return')->nullable();
             $table->timestamps();
         });
     }

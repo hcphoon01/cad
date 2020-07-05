@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
         <a href="#" class="pull-left"><img class="navbar-logo" src="{{asset('img/logo.png')}}"></a>
         <a class="navbar-brand" href="{{route('landing')}}">City of London RP</a>
     </nav>

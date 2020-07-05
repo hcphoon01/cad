@@ -71,18 +71,37 @@ Route::group([
 ], function () {
   Route::get('/', 'Duty\DutyController@index')->name('index');
   Route::post('/assign', 'Duty\DutyController@assign')->name('assign');
+  Route::post('/assign-control', 'Duty\DutyController@assignControl')->name('assign-control');
+  Route::post('/unit', 'Duty\DutyController@unit')->name('unit');
+  Route::get('/delete/{id}', 'Duty\DutyController@delete')->name('delete');
+  Route::get('/book-off/{id}', 'Duty\DutyController@bookOff')->name('book-off');
 });
 
-// civillian routes
+// vehicle maintenance routes
 Route::group([
-  'as' => 'civillian.',
-  'prefix' => 'civillian',
+  'as' => 'vehicle.',
+  'prefix' => 'vehicle',
+  'middleware' => ['permission:manage vehicles']
+], function() {
+  Route::get('/', 'Vehicle\VehicleController@index')->name('index');
+  Route::get('/show/{id}', 'Vehicle\VehicleController@show')->name('show');
+  Route::post('/show/{id}', 'Vehicle\VehicleController@update')->name('update');
+  Route::get('/delete/{id}', 'Vehicle\VehicleController@delete')->name('delete');
+  Route::post('/create', 'Vehicle\VehicleController@create')->name('create');
+  Route::get('/bulk', 'Vehicle\VehicleController@bulkIndex')->name('bulk.index');
+  Route::post('/bulk/import', 'Vehicle\VehicleController@bulkImport')->name('bulk.import');
+});
+
+// civilian routes
+Route::group([
+  'as' => 'civilian.',
+  'prefix' => 'civilian',
   'middleware' => ['role:Member']
 ], function () {
-  Route::get('/', 'Civillian\CivillianController@index')->name('index');
-  Route::post('/person', 'Civillian\CivillianController@person')->name('person');
-  Route::post('/vehicle', 'Civillian\CivillianController@vehicle')->name('vehicle');
-  Route::post('/cad', 'Civillian\CivillianController@cad')->name('cad');
+  Route::get('/', 'Civilian\CivilianController@index')->name('index');
+  Route::post('/person', 'Civilian\CivilianController@person')->name('person');
+  Route::post('/vehicle', 'Civilian\CivilianController@vehicle')->name('vehicle');
+  Route::post('/cad', 'Civilian\CivilianController@cad')->name('cad');
 });
 
 Route::get('/fms/{vue_capture?}', 'FMS\CADController@index')->where('vue_capture', '[\/\w\.-]*')->middleware('role:Member');

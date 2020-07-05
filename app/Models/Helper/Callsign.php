@@ -13,4 +13,12 @@ class Callsign extends Model
     {
         return $this->belongsTo('App\Models\Helper\Division');
     }
+
+    /**
+     * Return the unit assigned to the callsign
+     */
+    public function unit()
+    {
+      return $this->belongsTo('App\Models\FMS\Unit', 'id', 'callsign_id');
+    }
 }

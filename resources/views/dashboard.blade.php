@@ -15,7 +15,7 @@
             <div class="card flex-grow-1">
                 <h2 class="card-header">
                     Announcements
-                    @role('Gold')
+                    @can('create announcements')
                     <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
                         data-target="#newAnnouncement">
                         New
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                    @endrole
+                    @endcan
                 </h2>
                 @foreach ($announcements as $announcement)
                 <div class="card-body">
@@ -64,7 +64,7 @@
                             <h5 class="card-title">{{$announcement->title}}</h5>
                         </div>
                         <div>
-                            @role('Gold')
+                            @can('create announcements')
                             <form action="{{ route('admin.delete-announcement', ['id' => $announcement->id]) }}"
                                 method="post" class="is-hidden">
                                 @csrf
@@ -73,7 +73,7 @@
                                     <i class="fa fa-times"></i>
                                 </button>
                             </form>
-                            @endrole
+                            @endcan
                         </div>
 
                     </div>

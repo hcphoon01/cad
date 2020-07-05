@@ -64,7 +64,7 @@ class ApplicationController extends Controller
     $applicationForm = new ApplicationForm();
     $applicationForm->applicant_id = Auth::user()->applicant->id;
     $applicationForm->age = $request->age;
-    $applicationForm->dob = $request->dob;
+    $applicationForm->dob = date('d/m/Y', strtotime($request->dob));
     $applicationForm->discord = $request->discord;
     $applicationForm->join_reason = $request->join_reason;
     $applicationForm->division_id = $request->division;

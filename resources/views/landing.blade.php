@@ -24,11 +24,12 @@
         }
 
         .bg-image {
-            background: url('img/landing_bg.png') no-repeat;
+            background: url('img/landing.png') no-repeat;
             overflow: hidden;
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
             position: relative;
+            background-size:cover
         }
 
         .full-height {
@@ -86,7 +87,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
         <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a>
         <a class="navbar-brand" href="{{route('landing')}}">City of London RP</a>
     </nav>

@@ -35,7 +35,7 @@
                 </div>
                 <div>
                   <font-awesome-icon icon="car" />
-                  &nbsp;{{unit.vehicle.vrm}} ({{unit.vehicle.model_abbreviation}})
+                  &nbsp;{{unit.vehicle.vrm}} ({{unit.vehicle.model}})
                 </div>
               </div>
               <div class="col">

@@ -64,7 +64,7 @@ class RolesAndPermissionsSeeder extends Seeder
     Permission::create(['name' => 'create announcements']);
     Permission::create(['name' => 'manage applications']);
     Permission::create(['name' => 'update ranks']);
-    Permission::create(['name' => 'update vehicles']);
+    Permission::create(['name' => 'manage vehicles']);
     Permission::create(['name' => 'add bronze']);
     Permission::create(['name' => 'add silver']);
     Permission::create(['name' => 'add gold']);
@@ -73,14 +73,14 @@ class RolesAndPermissionsSeeder extends Seeder
 
     // this can be done as separate statements
     Role::create(['name' => 'Bronze'])->givePermissionTo([
-      'update vehicles',
+      'manage vehicles',
       'manage duty listings', 
       'update ranks',
       'add bronze'
       ]);
 
     Role::create(['name' => 'Silver'])->givePermissionTo([
-      'update vehicles',
+      'manage vehicles',
       'manage duty listings', 
       'create announcements', 
       'update ranks', 
