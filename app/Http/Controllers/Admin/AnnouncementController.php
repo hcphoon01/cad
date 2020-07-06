@@ -9,42 +9,52 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends Controller
 {
-    /**
-     * Create an announcement.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required'
-        ]);
+  /**
+   * Instantiate a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware(['permission:create announcements']);
+  }
 
-        $announcement = new Announcement();
-        $announcement->title = $request->title;
-        $announcement->body = $request->body;
-        $announcement->posted_by = Auth::user()->id;
-        $announcement->save();
+  /**
+   * Create an announcement.
+   *
+   * @param \Illuminate\Http\Request $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create(Request $request)
+  {
+    $request->validate([
+      'title' => 'required|max:255',
+      'body' => 'required'
+    ]);
 
-        return redirect()->back();
-    }
-    
-    /**
-     * Remove the specified announcement.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        // delete
-        $nerd = Announcement::find($id);
-        $nerd->delete();
+    $announcement = new Announcement();
+    $announcement->title = $request->title;
+    $announcement->body = $request->body;
+    $announcement->posted_by = Auth::user()->id;
+    $announcement->save();
 
-        // redirect
-        return redirect()->back();
-    }
+    return redirect()->back();
+  }
+
+  /**
+   * Remove the specified announcement.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function destroy($id)
+  {
+    // delete
+    $nerd = Announcement::find($id);
+    $nerd->delete();
+
+    // redirect
+    return redirect()->back();
+  }
 }

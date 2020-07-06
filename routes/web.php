@@ -48,10 +48,10 @@ Route::post('/book-on', 'FMS\CADController@bookOn')->name('book-on')->middleware
 Route::group([
   'as' => 'admin.',
   'prefix' => 'admin',
-  'middleware' => ['role:Gold']
 ], function () {
   Route::post('announcement/create', 'Admin\AnnouncementController@create')->name('create-announcement');
   Route::delete('announcement/{id}', 'Admin\AnnouncementController@destroy')->name('delete-announcement');
+  Route::post('event/{id}', 'Admin\AdminController@event')->name('event');
 });
 
 // profile routes

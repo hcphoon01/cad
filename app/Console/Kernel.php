@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\CreateEvent;
+use App\Models\Event\EventParticipant;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +28,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->job(new CreateEvent)->dailyAt('12:00');
+        $schedule->call(function() {
+          EventParticipant::truncate();
+        })->dailyAt('00:00');
     }
 
     /**
