@@ -77,6 +77,16 @@ Route::group([
   Route::get('/book-off/{id}', 'Duty\DutyController@bookOff')->name('book-off');
 });
 
+Route::group([
+  'as' => 'users.',
+  'prefix' => 'users',
+  'middleware' => ['permission:update ranks']
+], function() {
+  Route::get('/', 'User\UserController@index')->name('index');
+  Route::get('/show/{id}', 'User\UserController@show')->name('show');
+  Route::post('/show/{id}', 'User\UserController@update')->name('update');
+});
+
 // vehicle maintenance routes
 Route::group([
   'as' => 'vehicle.',

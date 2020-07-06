@@ -16,10 +16,10 @@ class CreateUserDataTable extends Migration
         Schema::create('user_data', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('shoulder_number', 4)->nullable();
+            $table->string('shoulder_number', 6)->nullable();
             $table->unsignedBigInteger('division_id')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
-            $table->timestamp('last_patrol')->nullable();
+            $table->integer('last_patrol')->nullable();
             $table->timestamps();
         });
 

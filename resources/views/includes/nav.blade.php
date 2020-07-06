@@ -33,6 +33,11 @@
         <a class="nav-link" href="{{route('vehicle.index')}}">Vehicle Management</a>
       </li>
       @endcan
+      @can('update ranks')
+      <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('users.index')}}">User Management</a>
+      </li>
+      @endcan
       <li class="nav-item dropdown ml-auto"">
         <a class=" nav-link dropdown-toggle {{ Request::is('profile*') ? 'active' : '' }}" href="#"
         id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -6,29 +6,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserData extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'user_id', 'shoulder_number', 'last_patrol', 'gc_commendation',
-    ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = [
+    'user_id', 'shoulder_number', 'last_patrol',
+  ];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'gc_commendation' => 'boolean',
-    ];
+  /**
+   * Get the user that the data belongs to.
+   */
+  public function user()
+  {
+    return $this->belongsTo('App\Models\User\User');
+  }
 
-    /**
-     * Get the user that the data belongs to.
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User\User');
-    }
+  /**
+   * Get the division the user is a part of
+   */
+  public function division()
+  {
+    return $this->belongsTo('App\Models\Helper\Division', 'division_id', 'id');
+  }
+
+  /**
+   * Get the last patrol of the user
+   */
+  public function lastPatrol()
+  {
+    return $this->belongsTo('App\Models\Event\Event', 'last_patrol', 'id');
+  }
 }

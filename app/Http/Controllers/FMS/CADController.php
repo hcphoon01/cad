@@ -32,6 +32,10 @@ class CADController extends Controller
         $eventParticipant->event_id = $request->event;
         $eventParticipant->save();
 
+        $user = Auth::user();
+        $user->data->last_patrol = $request->event;
+        $user->data->save();
+
         return redirect()->back();
     }
 
