@@ -88,8 +88,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
-        <a href="#" class="pull-left"><img class="navbar-logo" src="img/logo.png"></a>
-        <a class="navbar-brand" href="{{route('landing')}}">City of London RP</a>
+        <a href="{{route('landing')}}" class="pull-left"><img class="navbar-logo" src="img/1logo.png"></a>
     </nav>
     <div class="bg-image">
         <div class="flex-center position-ref full-height">
