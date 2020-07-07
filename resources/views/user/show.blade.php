@@ -34,7 +34,7 @@
               <label for="shoulder_number">Shoulder Number</label>
               <input type="text" name="shoulder_number" id="shoulder_number"
                 class="form-control {{ $errors->has('shoulder_number') ? 'border-danger' : '' }}" required
-                value="{{$user->data->shoulder_number}}" />
+                value="{{$user->data ? $user->data->shoulder_number : ''}}" />
               @if($errors->has('shoulder_number'))
               <p class="help text-danger">
                 {{ $errors->first('shoulder_number') }}
@@ -48,7 +48,7 @@
               <select class="form-control {{ $errors->has('division') ? 'border-danger' : '' }}" id="division"
                 name="division">
                 @foreach ($divisions as $division)
-                @if ($user->data->division_id == $division->id)
+                @if ($user->data && $user->data->division_id == $division->id)
                 <option value="{{$division->id}}" selected>{{$division->name}}</option>
                 @else
                 <option value="{{$division->id}}">{{$division->name}}</option>
@@ -64,7 +64,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="ranks">Ranks</label>
+          <label for="ranks">Ranks</label><br>
+          <small class="text-muted">Hold 'control' to select multiple ranks</small>
           <select class="form-control {{ $errors->has('ranks') ? 'border-danger' : '' }}" id="ranks"
             name="ranks[]" multiple size="10">
             @foreach ($roles as $role)
