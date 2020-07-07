@@ -25,7 +25,7 @@
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
-                <form id="role-form" method="post" action={{route('admin.create-announcement')}}>
+                <form id="announcementEdit" method="post" action={{route('admin.create-announcement')}}>
                   @csrf
                   @method('POST')
                   <div class="modal-header">
@@ -112,7 +112,7 @@
           <div class="modal fade" id="editEvent" role="dialog" aria-labelledby="Edit Event" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
-                <form id="role-form" method="post" action={{route('admin.event', ['id' => $event->id])}}>
+                <form id="eventEdit" method="post" action={{route('admin.event', ['id' => $event->id])}}>
                   @csrf
                   @method('POST')
                   <div class="modal-header">

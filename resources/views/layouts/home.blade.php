@@ -13,7 +13,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
-        <a href="{{route('landing')}}" class="pull-left"><img class="navbar-logo" src="{{asset('img/1logo.png')}}"></a>
+        <a href="{{route('landing')}}" class="pull-left"><img class="navbar-logo" src="{{asset('img/1logo.png')}}" height="75"></a>
     </nav>
     <main class="py-4 container">
         @yield('content')

@@ -88,7 +88,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
-        <a href="{{route('landing')}}" class="pull-left"><img class="navbar-logo" src="img/1logo.png"></a>
+        <a href="{{route('landing')}}" class="pull-left"><img class="navbar-logo" src="img/1logo.png" height="75"></a>
     </nav>
     <div class="bg-image">
         <div class="flex-center position-ref full-height">

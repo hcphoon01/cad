@@ -163,9 +163,10 @@
     transform: translate(-50%, -50%);
 }
 
-.navbar-logo {
-    height: 50px;
-    padding-right: 5px;
+.navbar { 
+  padding: 0rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 .landing-bg {
