@@ -9,7 +9,7 @@
       @csrf
       <div class="form-group">
         <div class="form-group">
-          <label for="name">Name</label>
+          <label for="name">Full Name</label>
           <input type="text" name="name" id="name"
             class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" required value="{{$user->name}}" />
           @if($errors->has('name'))

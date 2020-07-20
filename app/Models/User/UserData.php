@@ -12,7 +12,7 @@ class UserData extends Model
    * @var array
    */
   protected $fillable = [
-    'user_id', 'shoulder_number', 'last_patrol',
+    'user_id', 'shoulder_number', 'last_patrol', 'division_id',
   ];
 
   /**

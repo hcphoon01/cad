@@ -57,7 +57,7 @@
         }
 
         .title {
-            font-size: 84px;
+            font-size: 63px;
         }
 
         .text-links>a {
@@ -94,16 +94,12 @@
         <div class="flex-center position-ref full-height">
             <div class="content">
                 <div class="title m-b-md">
-                    Welcome to City of London RP
+                    Welcome to City of London RP Members Website
                 </div>
 
                 <div class="text-links">
                     <div class="row justify-content-md-center">
-                        <a class="btn btn-primary btn-lg" href="{{route('register')}}" role="button">Apply Now</a>
-                    </div>
-                    <br>
-                    <div class="row justify-content-md-center">
-                        <a class="btn btn-primary" href="{{route('login')}}" role="button">Log In</a>
+                        <a class="btn btn-danger text-white" href="{{route('login')}}" role="button">Log In</a>
                     </div>
                 </div>
             </div>

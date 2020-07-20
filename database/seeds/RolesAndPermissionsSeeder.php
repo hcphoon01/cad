@@ -12,7 +12,6 @@ class RolesAndPermissionsSeeder extends Seeder
     app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
     // hr
-    Role::create(['name' => 'Applicant']);
     Role::create(['name' => 'Member']);
     Role::create(['name' => 'Human Resources']);
 

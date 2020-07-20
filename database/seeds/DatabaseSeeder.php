@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
     $this->call(RolesAndPermissionsSeeder::class);
     $this->call(DivisionsSeeder::class);
     $this->call(QualificationsSeeder::class);
+    $this->call(CallsignSeeder::class);
     $this->call(ControllerSeeder::class);
     $this->call(MarkersSeeder::class);
-    $this->call(CallsignSeeder::class);
 
     if (App::environment('local')) {
       $this->call(VehicleSeeder::class);
