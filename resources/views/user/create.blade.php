@@ -67,7 +67,7 @@
                     <select class="form-control {{ $errors->has('ranks') ? 'border-danger' : '' }}" id="ranks"
                         name="ranks[]" multiple size="10">
                         @foreach ($roles as $role)
-                        @if ($role->name == 'Bronze' || $role->name == 'Silver' || $role->name == 'Gold' || $role->name == 'Member')
+                        @if ($role->name == 'Bronze' || $role->name == 'Silver' || $role->name == 'Gold' || $role->name == 'Admin' || $role->name == 'Member')
                         @continue
                         @endif
                         <option value="{{$role->id}}">{{$role->name}}</option>

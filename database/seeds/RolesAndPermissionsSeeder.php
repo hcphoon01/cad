@@ -90,5 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
       ]);
 
     Role::create(['name' => 'Gold'])->givePermissionTo(Permission::all());
+
+    Role::create(['name' => 'Admin'])->givePermissionTo(Permission::all());
   }
 }

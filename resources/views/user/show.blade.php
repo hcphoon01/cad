@@ -75,7 +75,7 @@
             @if (!$user->can('add silver') && $role->name == 'Silver')
             @continue
             @endif
-            @if (!$user->can('add gold') && $role->name == 'Gold')
+            @if (!$user->can('add gold') && $role->name == 'Gold' || $role->name == 'Admin' )
             @continue
             @endif
             @if ($user->roles->contains('id', $role->id))
