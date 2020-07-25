@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Helper\Vehicle;
 use App\Models\Helper\Division;
 use App\Http\Controllers\Controller;
+use App\Models\Event\EventParticipant;
 use App\Models\General\Announcement;
 
 class HomeController extends Controller
@@ -27,6 +28,21 @@ class HomeController extends Controller
         $cadCount = CAD::all()->count();
 
         $event = Event::whereDate('start_time', Carbon::today())->first();
+        $eventParticipants = EventParticipant::where('event_id', $event->id)->get();
+
+        $participantCount = [];
+
+        foreach ($eventParticipants as $participant) {
+            if (isset($participantCount[$participant->division_id])) {
+                $participantCount[$participant->division_id] += 1;
+            } else {
+                $participantCount[$participant->division_id] = 1;
+            }
+            
+        }
+        
+        ksort($participantCount);
+
         $divisions = Division::all();
 
         return view('dashboard', [
@@ -35,6 +51,8 @@ class HomeController extends Controller
             'eventCount' => $eventCount,
             'cadCount' => $cadCount,
             'event' => $event,
+            'eventParticipants' => $eventParticipants,
+            'participantCount' => $participantCount,
             'divisions' => $divisions
         ]);
     }

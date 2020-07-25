@@ -183,7 +183,7 @@
                         On</button>
                     <div class="modal fade" id="bookOnModal" tabindex="-1" role="dialog"
                         aria-labelledby="bookOnModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <form class="form" action="{{route('book-on')}}" method="POST">
                                     @csrf
@@ -196,6 +196,25 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        {{-- @foreach ($divisions->chunk(5) as $chunk)
+                                        <div class="row">
+                                            @foreach ($chunk as $division)
+                                            <div class="col text-center">
+                                                @foreach ($participantCount as $key => $value)
+                                                @if ($key == $division->id)
+                                                <span style="font-size: smaller">{{$division->name}}: {{$value}}</span>
+                                                @continue
+                                                @else
+                                                <span style="font-size: medium">{{$division->name}}: 0</span>
+                                                @continue
+                                                @endif
+                                                @endforeach
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @endforeach --}}
+                                        <strong>Booked on: {{count($eventParticipants)}}</strong>
+                                        <hr>
                                         @if ($event->isParticipant(Auth::user()))
                                         <p>You are already booked on for this patrol.</p>
                                         @else
