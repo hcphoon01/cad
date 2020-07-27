@@ -70,7 +70,6 @@ class UserController extends Controller
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
             'ranks.*' => 'required|exists:roles,id',
-            'qualifications' => 'required',
             'qualifications.*' => 'required|exists:qualifications,id'
         ]);
 

@@ -71,13 +71,13 @@
                     <select class="form-control {{ $errors->has('ranks') ? 'border-danger' : '' }}" id="ranks"
                         name="ranks[]" multiple size="7">
                         @foreach ($roles as $role)
-                        @if (!$user->can('add bronze') && $role->name == 'Bronze')
+                        @if (!Auth::user()->can('add bronze') && $role->name == 'Bronze')
                         @continue
                         @endif
-                        @if (!$user->can('add silver') && $role->name == 'Silver')
+                        @if (!Auth::user()->can('add silver') && $role->name == 'Silver')
                         @continue
                         @endif
-                        @if (!$user->can('add gold') && $role->name == 'Gold' || $role->name == 'Admin' )
+                        @if (!Auth::user()->can('add gold') && $role->name == 'Gold' || $role->name == 'Admin' )
                         @continue
                         @endif
                         @if ($user->roles->contains('id', $role->id))
@@ -94,10 +94,10 @@
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="qualifications">Qualifications</label>
+                    <label for="qualifications">Qualifications</label><br>
                     <small class="text-muted">Hold 'control' to select multiple qualifications</small>
                     <select name="qualifications[]" id="qualifications"
-                        class="form-control {{ $errors->has('ranks') ? 'border-danger' : '' }}" multiple size="10">
+                        class="form-control {{ $errors->has('qualifications') ? 'border-danger' : '' }}" multiple size="10">
                     @foreach ($groupedQuals as $key => $qualifications)
                         <option disabled>----{{$key}}----</option>
                         @foreach ($qualifications as $qual)
@@ -109,6 +109,11 @@
                         @endforeach
                     @endforeach
                     </select>
+                    @if($errors->has('qualifications'))
+                    <p class="help text-danger">
+                        {{ $errors->first('qualifications') }}
+                    </p>
+                    @endif
                 </div>
                 <button type="submit" class="btn btn-success">Update <i class=" fa fa-pencil"></i></button>
             </div>

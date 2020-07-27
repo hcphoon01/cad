@@ -33,7 +33,7 @@
         <a class="nav-link" href="{{route('vehicle.index')}}">Vehicle Management</a>
       </li>
       @endcan
-      @if (Auth::user()->can('update ranks') || Auth::user()->role('Human Resources'))
+      @if (Auth::user()->can('update ranks') || Auth::user()->hasRole('Human Resources'))
       <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('users.index')}}">User Management</a>
       </li>
