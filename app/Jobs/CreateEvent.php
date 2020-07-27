@@ -35,7 +35,7 @@ class CreateEvent implements ShouldQueue
 
     $event = new Event();
     $event->name = 'Daily Patrol';
-    $event->description = 'The normal daily patrol';
+    $event->description = '';
     $event->start_time = date('Y-m-d H:i:s', $startTime);
     $event->end_time = date('Y-m-d H:i:s', $endTime);
     $event->max_participants = '32';
