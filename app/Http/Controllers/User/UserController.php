@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         $this->middleware(['role:Human Resources'])->only('index', 'create', 'store');
 
-        $this->middleware(['permission:update ranks'])->except('index', 'create', 'store');
+        $this->middleware(['permission:update ranks'])->except('index', 'create', 'store', 'showPassword', 'storePassword');
     }
     /**
      * Return the index page
