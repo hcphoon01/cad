@@ -85,8 +85,7 @@ Route::group([
 
 Route::group([
     'as' => 'users.',
-    'prefix' => 'users',
-    'middleware' => ['permission:update ranks']
+    'prefix' => 'users'
 ], function () {
     Route::get('/', 'User\UserController@index')->name('index');
     Route::get('/create', 'User\UserController@create')->name('create');

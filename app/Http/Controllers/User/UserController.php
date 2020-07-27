@@ -15,6 +15,18 @@ use App\Notifications\CreateNewPassword;
 
 class UserController extends Controller
 {
+
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['role:Human Resources'])->only('index', 'create', 'store');
+
+        $this->middleware(['permission:update ranks'])->except('index', 'create', 'store');
+    }
     /**
      * Return the index page
      */
