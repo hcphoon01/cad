@@ -79,7 +79,7 @@
             </thead>
             <tbody>
               @foreach ($eventParticipants as $participant)
-              @if (!$participant->division_id == 8)
+              @if ($participant->division_id != 8)
               <tr>
                 <th scope="row">{{$participant->user->displayName()}}</th>
                 <td>{{$participant->user->data->shoulder_number}}</td>
@@ -87,6 +87,7 @@
                 <td>
                   <form action="{{route('duty.assign')}}" method="POST">
                     @csrf
+                    <input name="user_id" type="hidden" value="{{$participant->user->id}}">
                     <div class="form-group">
                       <select class="form-control" name="assign" id="assign" onchange="this.form.submit()">
                         <option value="" selected>Nothing</option>
@@ -97,7 +98,7 @@
                         @break
                         @endif
                         @foreach ($unit->users as $user)
-                        @if ($user->user_id == Auth::id())
+                        @if ($user->user_id == $participant->user->id)
                         <option value="{{$unit->id}}" selected>{{$unit->callsign->callsign}} - {{$unit->vehicle->model}}
                         </option>
                         @break
@@ -142,10 +143,16 @@
                 <td>
                   <form action="{{route('duty.assign-control')}}" method="POST">
                     @csrf
+                    <input name="user_id" type="hidden" value="{{$participant->user->id}}">
                     <div class="form-group">
                       <select class="form-control" name="assign" id="assign" onchange="this.form.submit()">
-                        <option value="" selected>Nothing</option>
+                        <option value="" {!!$participant->user->controller ? '' : 'selected'!!}>Nothing</option>
                         @foreach ($controllers as $controller)
+                        @if ($controller->user_id == $participant->user->id)
+                        <option value="{{$controller->id}}" selected>{{$controller->callsign->callsign}} -
+                            {{$controller->callsign->name}}
+                          </option>
+                        @endif
                         @if(!$controller->user_id)
                         <option value="{{$controller->id}}">{{$controller->callsign->callsign}} -
                           {{$controller->callsign->name}}
@@ -178,7 +185,7 @@
         <thead>
           <th scope="col">#</th>
           <th scope="col">Vehicle</th>
-          <th scope="col">Callsigm</th>
+          <th scope="col">Callsign</th>
           <th scope="col">Users</th>
           <th scope="col">Delete</th>
         </thead>
