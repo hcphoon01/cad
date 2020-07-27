@@ -20,7 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
     Role::create(['name' => 'Assisstant Commissioner']);
     Role::create(['name' => 'Commander']);
     Role::create(['name' => 'Chief Superintendant']);
-    Role::create(['name' => 'Deputy Chief Superintendant']);
+    Role::create(['name' => 'Detective Chief Superintendant']);
     Role::create(['name' => 'Superintendant']);
     Role::create(['name' => 'Chief Inspector']);
     Role::create(['name' => 'Inspector']);
