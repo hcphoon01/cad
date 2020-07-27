@@ -9,6 +9,7 @@ use App\Models\User\UserData;
 use App\Models\Helper\Division;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Models\Helper\Qualification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\CreateNewPassword;
@@ -46,11 +47,13 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $divisions = Division::all();
+        $groupedQuals = Qualification::all()->groupBy('type');
         $roles = Role::all();
 
         return view('user.show', [
             'user' => $user,
             'divisions' => $divisions,
+            'groupedQuals' => $groupedQuals,
             'roles' => $roles,
         ]);
     }
@@ -66,7 +69,9 @@ class UserController extends Controller
             'shoulder_number' => 'required',
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
-            'ranks.*' => 'required|exists:roles,id'
+            'ranks.*' => 'required|exists:roles,id',
+            'qualifications' => 'required',
+            'qualifications.*' => 'required|exists:qualifications,id'
         ]);
 
         $user = User::find($id);
@@ -75,6 +80,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->data->shoulder_number = $request->shoulder_number;
         $user->data->division_id = $request->division;
+
+        $user->qualifications()->sync($request->qualifications);
 
         $user->save();
         $user->data->save();
