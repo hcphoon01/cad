@@ -28,11 +28,13 @@ class HomeController extends Controller
         $cadCount = CAD::all()->count();
 
         $event = Event::whereDate('start_time', Carbon::today())->first();
+
+        $eventParticipants = [];
+
         if ($event) {
             $eventParticipants = EventParticipant::where('event_id', $event->id)->get();
         };
 
-        $eventParticipants = [];
         $participantCount = [];
 
         foreach ($eventParticipants as $participant) {
