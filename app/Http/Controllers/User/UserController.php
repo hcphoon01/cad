@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role:Human Resources'])->only('index', 'create', 'store');
+        $this->middleware(['role_or_permission:Human Resources|update ranks'])->only('index', 'create', 'store');
 
         $this->middleware(['permission:update ranks'])->except('index', 'create', 'store', 'showPassword', 'storePassword');
     }
