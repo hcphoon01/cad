@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Jobs\CreateEvent;
 use App\Models\Event\EventParticipant;
+use App\Models\FMS\Unit;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,8 +30,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->job(new CreateEvent)->dailyAt('12:00');
-        $schedule->call(function() {
-          EventParticipant::truncate();
+        $schedule->call(function () {
+            Unit::truncate();
         })->dailyAt('00:00');
     }
 
@@ -41,7 +42,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

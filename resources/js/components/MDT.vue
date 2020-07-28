@@ -246,7 +246,7 @@
                     @click="stateSelect(9)"
                     class="btn btn-muted btn-xlg"
                     style="border-radius: 0 !important;"
-                  >Prisioner</button>
+                  >Prisoner</button>
                 </div>
                 <div class="row py-2">
                   <div class="btn-spacer"></div>
@@ -1502,7 +1502,7 @@ export default {
         case 8:
           return "STOP";
         case 9:
-          return "PRISIONER TRANSPORT";
+          return "PRISONER TRANSPORT";
       }
     },
     stateFormat: function() {

@@ -155,7 +155,7 @@ export default {
         case 8:
           return "Stop";
         case 9:
-          return "Prisioner Transport";
+          return "Prisoner Transport";
       }
     },
     stateBgColour: function(state) {
