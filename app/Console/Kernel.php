@@ -2,9 +2,10 @@
 
 namespace App\Console;
 
-use App\Jobs\CreateEvent;
-use App\Models\Event\EventParticipant;
 use App\Models\FMS\Unit;
+use App\Jobs\CreateEvent;
+use Illuminate\Support\Facades\DB;
+use App\Models\Event\EventParticipant;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -31,7 +32,9 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $schedule->job(new CreateEvent)->dailyAt('12:00');
         $schedule->call(function () {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             Unit::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         })->dailyAt('00:00');
     }
 
