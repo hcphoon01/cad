@@ -139,7 +139,7 @@ class CivilianController extends Controller
     ]);
 
     $latestCad = CAD::orderBy('id', 'desc')->first();
-    if ($latestCad->created_at->isToday()) {
+    if ($latestCad && $latestCad->created_at->isToday()) {
       $cadNumber = $latestCad->cad_number + 1;
     }
     $displayName = str_pad($cadNumber, 5, "0", STR_PAD_LEFT) . '/' . strtoupper(Carbon::now()->format('dMy'));
