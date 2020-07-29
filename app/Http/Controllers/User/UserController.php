@@ -66,7 +66,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'shoulder_number' => 'required',
+            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number',
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
             'ranks.*' => 'required|exists:roles,id',
@@ -110,7 +110,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'shoulder_number' => 'required|unique:user_data,shoulder_number',
+            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number',
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
             'ranks.*' => 'required|exists:roles,id'
