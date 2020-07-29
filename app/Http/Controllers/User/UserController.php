@@ -65,8 +65,8 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number',
+            'email' => 'required|email|unique:users,email,'. $id,
+            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number,'. $id,
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
             'ranks.*' => 'required|exists:roles,id',
