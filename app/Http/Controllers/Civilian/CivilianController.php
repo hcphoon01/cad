@@ -44,12 +44,14 @@ class CivilianController extends Controller
       'last_name' => 'required|alpha_dash',
       'dob' => 'required|date',
       'address' => 'required',
-      'aliases' => 'required',
-      'markers.*' => 'required|exists:markers,id',
-      'notes' => 'required'
+      'markers.*' => 'required|exists:markers,id'
     ]);
 
-    $aliasesArray = explode(' ', $request->aliases);
+    $aliasesArray = [];
+
+    if ($request->aliases) {
+        $aliasesArray = explode(' ', $request->aliases);
+    }
 
     $person = new Person();
     $person->first_name = $request->first_name;
