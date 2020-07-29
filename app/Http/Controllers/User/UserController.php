@@ -63,17 +63,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::findOrFail($id);
+
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'. $id,
-            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number,'. $id,
+            'email' => 'required|email|unique:users,email,'. $user->id,
+            'shoulder_number' => 'required|string|max:6|unique:user_data,shoulder_number,'. $user->data->id,
             'division' => 'required|exists:divisions,id',
             'ranks' => 'required',
             'ranks.*' => 'required|exists:roles,id',
             'qualifications.*' => 'required|exists:qualifications,id'
         ]);
 
-        $user = User::find($id);
         $user->syncRoles($request->ranks);
         $user->name = $request->name;
         $user->email = $request->email;
