@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\ClearControllers;
 use App\Models\FMS\Unit;
 use App\Jobs\CreateEvent;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +37,7 @@ class Kernel extends ConsoleKernel
             Unit::truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         })->dailyAt('00:00');
+        $schedule->job(new ClearControllers)->dailyAt('00:00');
     }
 
     /**
