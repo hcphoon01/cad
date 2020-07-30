@@ -193,7 +193,7 @@
           @foreach ($units as $unit)
           <tr>
             <th scope="row">{{$unit->id}}</th>
-            <td>{{$unit->vehicle->model}}</td>
+            <td>{{$unit->vehicle->model}} - {{$unit->vehicle->vrm}}</td>
             <td>{{$unit->callsign->callsign}}</td>
             <td>
               @foreach ($unit->users as $user)
