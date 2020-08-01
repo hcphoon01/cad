@@ -26,6 +26,10 @@ class DutyController extends Controller
     public function index()
     {
         $event = Event::whereDate('start_time', Carbon::today())->first();
+
+        if (!$event) {
+            return redirect()->route('home')->with('message', 'No event has been created yet.');
+        }
         $eventParticipants = EventParticipant::where('event_id', $event->id)->get()->load('user.data', 'division');
         $units = Unit::all()->load('vehicle', 'callsign', 'users');
         $vehicles = Vehicle::all();

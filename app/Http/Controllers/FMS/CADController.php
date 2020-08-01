@@ -59,9 +59,9 @@ class CADController extends Controller
         } elseif (!$event) {
             return view('fms.app');
         } elseif ($event->isParticipant(Auth::user())) {
-            return redirect()->back()->with('message', 'You have not been assigned a position, please contact your chain of command');
+            return redirect()->route('home')->with('message', 'You have not been assigned a position, please contact your chain of command');
         } else {
-            return redirect()->back()->with('message', 'You are not booked on for this patrol. Please book on before proceeding.');
+            return redirect()->route('home')->with('message', 'You are not booked on for this patrol. Please book on before proceeding.');
         }
     }
 
