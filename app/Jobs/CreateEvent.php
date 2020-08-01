@@ -30,7 +30,7 @@ class CreateEvent implements ShouldQueue
    */
   public function handle()
   {
-    $startTime = strtotime('today 7pm');
+    $startTime = strtotime('today 7:30 pm');
     $endTime = strtotime('today 10pm');
 
     $event = new Event();
