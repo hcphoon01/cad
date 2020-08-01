@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\ClearControllers;
+use App\Jobs\ClearUnits;
 use App\Models\FMS\Unit;
 use App\Jobs\CreateEvent;
 use Illuminate\Support\Facades\DB;
@@ -32,11 +33,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->job(new CreateEvent)->dailyAt('12:00');
-        $schedule->call(function () {
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            Unit::truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        })->dailyAt('00:00');
+        $schedule->job(new ClearUnits)->dailyAt('00:00');
         $schedule->job(new ClearControllers)->dailyAt('00:00');
     }
 
