@@ -23,7 +23,7 @@ class VehicleRequest extends FormRequest
    */
   public function rules()
   {
-    if ($this->has('status') && $this->status == 0) {
+    if ($this->status == 0 && $this->return != null) {
       $rules['return'] = 'date';
     }
     $rules['class'] = 'required';
