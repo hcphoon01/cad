@@ -129,6 +129,12 @@ class DutyController extends Controller
     public function delete($id)
     {
         $unit = Unit::find($id);
+        if ($unit->users) {
+            foreach ($unit->users as $user) {
+                $user->unit_id = null;
+                $user->save();
+            }
+        }
         $unit->delete();
         return redirect()->back();
     }
