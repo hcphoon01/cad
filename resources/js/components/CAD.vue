@@ -420,9 +420,9 @@ import AvailableUnits from "./CAD/Available-Units";
 export default {
   components: {
     Autocomplete,
-    AvailableUnits
+    AvailableUnits,
   },
-  data: function() {
+  data: function () {
     return {
       time: "00:00:00:000",
       units: [],
@@ -434,48 +434,48 @@ export default {
       states: [
         {
           id: 0,
-          name: "Emergency Assisstance"
+          name: "Emergency Assisstance",
         },
         {
           id: 2,
-          name: "On Patrol"
+          name: "On Patrol",
         },
         {
           id: 4,
-          name: "Refreshments"
+          name: "Refreshments",
         },
         {
           id: 5,
-          name: "En Route"
+          name: "En Route",
         },
         {
           id: 6,
-          name: "At Scene"
+          name: "At Scene",
         },
         {
           id: 7,
-          name: "Other Assignment"
+          name: "Other Assignment",
         },
         {
           id: 8,
-          name: "Stop"
+          name: "Stop",
         },
         {
           id: 9,
-          name: "Prisoner Transport"
+          name: "Prisoner Transport",
         },
         {
           id: 11,
-          name: "Off Duty"
-        }
+          name: "Off Duty",
+        },
       ],
-      remark: ""
+      remark: "",
     };
   },
-  created: function() {
+  created: function () {
     this.fetchData();
   },
-  mounted: function() {
+  mounted: function () {
     this.timeBegan = null;
     this.timeStopped = null;
     this.stoppedDuration = 0;
@@ -483,42 +483,42 @@ export default {
     this.running = false;
     this.currentTime();
     Echo.private("fms-channel")
-      .listen(".newRemark", data => {
+      .listen(".newRemark", (data) => {
         if (data.remark.controller_id == this.position.id) return;
         if (data.remark.cad_id == this.activeCad.id) {
           this.activeCad.remarks.push(data.remark);
         }
-        this.cads.find(cad => {
+        this.cads.find((cad) => {
           if (cad.id == data.remark.cad_id) {
             cad.remarks.push(data.remark);
           }
         });
       })
-      .listen(".unitAssigned", data => {
+      .listen(".unitAssigned", (data) => {
         if (data.controller.id == this.position.id) return;
         console.log(data);
       })
-      .listen(".unitDetached", data => {
+      .listen(".unitDetached", (data) => {
         if (data.controller != null && data.controller.id == this.position.id)
           return;
         this.detachUnit(data.unit);
       })
-      .listen(".updateState", data => {
-        this.units.find(unit => {
+      .listen(".updateState", (data) => {
+        this.units.find((unit) => {
           if (unit.id == data.unit.id) {
             unit.state = data.unit.state;
           }
         });
         if (data.unit.assigned_cad == this.activeCad.id) {
-          this.activeCad.units.find(unit => {
+          this.activeCad.units.find((unit) => {
             if (unit.id == data.unit.id) {
               unit.state = data.unit.state;
             }
           });
         } else {
-          this.cads.find(cad => {
+          this.cads.find((cad) => {
             if (cad.id == data.unit.assigned_cad) {
-              cad.units.find(unit => {
+              cad.units.find((unit) => {
                 if (unit.id == data.unit.id) {
                   unit.state = data.unit.state;
                 }
@@ -527,18 +527,18 @@ export default {
           });
         }
       })
-      .listen(".newCad", data => {
+      .listen(".newCad", (data) => {
         this.cads.push(data.cad);
       });
-    pncChannel.onmessage = msg => {
+    pncChannel.onmessage = (msg) => {
       document.getElementById("remark").value = msg;
     };
   },
-  destroyed: function() {
+  destroyed: function () {
     this.reset();
   },
   methods: {
-    pncPopup: function() {
+    pncPopup: function () {
       let route = this.$router.resolve({ path: "/pnc" });
       window.open(
         route.href,
@@ -546,10 +546,13 @@ export default {
         "width=600,height=550,top=100,left=200"
       );
     },
-    createCad: function(e) {
+    createCad: function (e) {
       e.preventDefault();
       var timestamp = this.$moment().format("YYYY/MM/DD HH:mm:ss");
-      var cadNumber = this.activeCad.cad_number;
+      var cadNumber = 1;
+      if(this.activeCad) {
+          cadNumber = this.activeCad.cad_number;
+      }
       for (let i = 0; i < this.cads.length; i++) {
         const cad = this.cads[i];
         if (cad.cad_number > cadNumber) {
@@ -559,10 +562,7 @@ export default {
       var displayName =
         (cadNumber + 1).toString().padStart(5, "0") +
         "/" +
-        this.$moment()
-          .format("DDMMMYY")
-          .toUpperCase()
-          .replace(".", "");
+        this.$moment().format("DDMMMYY").toUpperCase().replace(".", "");
 
       this.$api
         .post("/api/cad/create", {
@@ -573,20 +573,18 @@ export default {
           display_name: displayName,
           vrm: e.target.elements.vrm.value,
           description: e.target.elements.description.value,
-          dateTime: timestamp
+          dateTime: timestamp,
         })
-        .then(response => {
+        .then((response) => {
           this.cads.push(response.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response.data);
         });
       $("#createModal").modal("hide");
-      $("#createCadForm")
-        .get(0)
-        .reset();
+      $("#createCadForm").get(0).reset();
     },
-    editCad: function(e) {
+    editCad: function (e) {
       e.preventDefault();
       this.$api
         .post("/api/cad/update", {
@@ -595,40 +593,40 @@ export default {
           location: e.target.elements.location.value,
           response_level: e.target.elements.response.value,
           vrm: e.target.elements.vrm2.value,
-          description: e.target.elements.description.value
+          description: e.target.elements.description.value,
         })
-        .then(response => {
+        .then((response) => {
           this.activeCad = response.data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
       $("#editModal").modal("hide");
     },
-    closeCad: function() {
+    closeCad: function () {
       var oldCad = this.activeCad;
       var newCad = this.cads.splice(0, 1);
       this.activeCad = newCad[0];
       this.$api
         .post("/api/cad/close", {
-          id: oldCad.id
+          id: oldCad.id,
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
-    formatDate: function(date, format) {
+    formatDate: function (date, format) {
       if (date) {
         return this.$moment(String(date)).format(format);
       }
     },
-    formatRemark: function(remark) {
+    formatRemark: function (remark) {
       return remark.replace(/(?:\r\n|\r|\n)/g, "<br>");
     },
-    stateTextColour: function(state) {
+    stateTextColour: function (state) {
       switch (state) {
         case 0:
           return "text-danger";
@@ -648,22 +646,22 @@ export default {
           return "text-secondary";
       }
     },
-    remarkAdd: function(id, remark) {
+    remarkAdd: function (id, remark) {
       this.$api
         .post(`/api/cad/remark`, {
           id: id,
           remark: remark,
-          unit: this.position.id
+          unit: this.position.id,
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response.data);
         });
     },
-    fetchData: function() {
+    fetchData: function () {
       this.cads = this.units = null;
       this.$api
         .get("/api/cad/index")
-        .then(response => {
+        .then((response) => {
           this.cads = response.data.cads;
           this.activeCad = this.cads[0];
           this.cads.shift();
@@ -671,23 +669,23 @@ export default {
           this.position = response.data.controller;
           this.isLoading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           this.cads = [];
           this.units = [];
           this.fetched = false;
         });
     },
-    displayName: function(name) {
+    displayName: function (name) {
       const initial = name.substr(0, 1);
       const lastName = name.split(" ")[1];
       return `${initial}.${lastName}`;
     },
-    triggerTimer: function() {
+    triggerTimer: function () {
       if (this.running) return this.stop();
       if (this.timeStopped) return this.reset();
       return this.start();
     },
-    start: function() {
+    start: function () {
       if (this.running) return;
 
       if (this.timeBegan === null) {
@@ -701,12 +699,12 @@ export default {
       this.started = setInterval(this.clockRunning, 10);
       this.running = true;
     },
-    stop: function() {
+    stop: function () {
       this.running = false;
       this.timeStopped = new Date();
       clearInterval(this.started);
     },
-    reset: function() {
+    reset: function () {
       this.running = false;
       clearInterval(this.started);
       this.stoppedDuration = 0;
@@ -714,7 +712,7 @@ export default {
       this.timeStopped = null;
       this.time = "00:00:00.000";
     },
-    clockRunning: function() {
+    clockRunning: function () {
       var currentTime = new Date(),
         timeElapsed = new Date(
           currentTime - this.timeBegan - this.stoppedDuration
@@ -733,53 +731,53 @@ export default {
         "." +
         this.zeroPrefix(ms, 3);
     },
-    currentTime: function() {
+    currentTime: function () {
       this.dateNow = this.$moment().format("DD/MM/YYYY HH:mm");
 
       setTimeout(this.currentTime, 1000);
     },
-    zeroPrefix: function(num, digit) {
+    zeroPrefix: function (num, digit) {
       var zero = "";
       for (var i = 0; i < digit; i++) {
         zero += "0";
       }
       return (zero + num).slice(-digit);
     },
-    clickList: function(cad, index) {
+    clickList: function (cad, index) {
       this.cads.splice(index, 1);
       this.cads.push(this.activeCad);
       this.activeCad = cad;
     },
-    addRemark: function(event, id) {
+    addRemark: function (event, id) {
       if (event.target.value.length > 0) {
         const remark = {
           created_at: this.$moment().format(),
           unit: {
             callsign: {
-              callsign: this.position.callsign.callsign
-            }
+              callsign: this.position.callsign.callsign,
+            },
           },
-          remark: event.target.value
+          remark: event.target.value,
         };
         this.remark = "";
         this.activeCad.remarks.push(remark);
         this.remarkAdd(id, event.target.value);
       }
     },
-    assignUnit: function(selectedUnit) {
+    assignUnit: function (selectedUnit) {
       if (!selectedUnit || selectedUnit.assigned_cad == this.activeCad.id)
         return;
       this.$refs.searchUnit.value = "";
       this.activeCad.units.push(selectedUnit);
-      this.cads.find(cad => {
+      this.cads.find((cad) => {
         if (cad.id == selectedUnit.assigned_cad) {
-          const unitArr = cad.units.filter(obj => {
+          const unitArr = cad.units.filter((obj) => {
             return obj.id !== selectedUnit.id;
           });
           cad.units = unitArr;
         }
       });
-      var assignedUnit = this.units.find(unit => {
+      var assignedUnit = this.units.find((unit) => {
         if (unit.id == selectedUnit.id) {
           unit.state = 5;
           unit.assigned_cad = this.activeCad.id;
@@ -789,14 +787,14 @@ export default {
       this.$api
         .post(`/api/cad/assign`, {
           unit: assignedUnit,
-          cad: this.activeCad
+          cad: this.activeCad,
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
-    detachUnit: function(unit) {
-      var units = this.activeCad.units.find(obj => {
+    detachUnit: function (unit) {
+      var units = this.activeCad.units.find((obj) => {
         return obj.id != unit.id;
       });
       if (units == undefined) {
@@ -804,7 +802,7 @@ export default {
       } else {
         this.activeCad.units = [units];
       }
-      this.units.find(obj => {
+      this.units.find((obj) => {
         if (obj.id == unit.id) {
           obj.state = 2;
           obj.assigned_cad = null;
@@ -812,18 +810,18 @@ export default {
       });
       this.$refs.availableUnits.stateSelect(2, unit);
     },
-    unitAssigned: function(unit, cad) {
+    unitAssigned: function (unit, cad) {
       if (unit.assigned_cad == cad.id) {
         return true;
       } else {
         return false;
       }
     },
-    unitSearch: function(input) {
+    unitSearch: function (input) {
       if (input.length < 1) {
         return [];
       }
-      return this.units.filter(unit => {
+      return this.units.filter((unit) => {
         if (!this.unitAssigned(unit, this.activeCad)) {
           return unit.callsign.callsign
             .toLowerCase()
@@ -831,10 +829,10 @@ export default {
         }
       });
     },
-    getUnitCallsign: function(unit) {
+    getUnitCallsign: function (unit) {
       return unit.callsign.callsign;
-    }
-  }
+    },
+  },
 };
 </script>
 
